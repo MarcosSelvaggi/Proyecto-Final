@@ -1,0 +1,97 @@
+﻿:root {
+    --variable-collection-primary-color: rgba(191, 28, 28, 1);
+    --variable-collection-secondary-color: rgba(25, 26, 35, 1);
+    --variable-collection-background-color: rgba(217, 217, 217, 1);
+    --variable-collection-color: rgba(255, 255, 255, 1);
+    --variable-collection-whatsapp: rgba(37, 211, 102, 1);
+}
+
+/** -- Root -- */
+
+h1 {
+    font-family: "Space Grotesk", Helvetica;
+    font-weight: 500;
+    font-size: 36px;
+    text-align: center;
+}
+
+h2 {
+    font-family: "Space Grotesk", Helvetica;
+    font-weight: 500;
+    font-size: 24px;
+    text-align: center;
+}
+
+h3 {
+    font-family: "Space Grotesk", Helvetica;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+}
+
+h4 {
+    font-family: "Space Grotesk", Helvetica;
+    font-weight: 500;
+    font-size: 16px;
+    text-align: center;
+}
+
+
+/* -- Navbar -- */
+#brand-logo {
+    margin-left: 50px;
+    width: 50px;
+    height: 50px;
+}
+
+#registro-navbar-small-screen {
+    display: none;
+}
+
+a {
+    font-family: "Space Grotesk", Helvetica;
+    text-decoration: none;
+    color: rgba(0,0,0,.9);
+}
+
+/* -- Media 578px -- */
+@media (max-width: 578px) {
+
+    #registro-navbar-small-screen {
+        display: initial;
+    }
+
+    .registro-navbar-lg-screen {
+        display: none;
+    }
+}
+
+.hover-underline {
+    position: relative;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+    .hover-underline::after,
+    .hover-underline::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(to right, #ff0000, #00ffff);
+        bottom: -5px;
+        left: 0;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.4s ease-out;
+    }
+
+    .hover-underline::before {
+        top: -5px;
+        transform-origin: left;
+    }
+
+    .hover-underline:hover::after,
+    .hover-underline:hover::before {
+        transform: scaleX(1);
+    }

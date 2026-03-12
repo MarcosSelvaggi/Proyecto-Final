@@ -1,0 +1,126 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|c:\\users\\marcos\\documents\\facultad\\trabajo final integrador\\tercera parte\\p\u00E1gina\\fixnet\\masterpage.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
+      "RelativeMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|solutionrelative:masterpage.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|c:\\users\\marcos\\documents\\facultad\\trabajo final integrador\\tercera parte\\p\u00E1gina\\fixnet\\logearse.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|solutionrelative:logearse.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|c:\\users\\marcos\\documents\\facultad\\trabajo final integrador\\tercera parte\\p\u00E1gina\\fixnet\\styles\\styleregistro.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|solutionrelative:styles\\styleregistro.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|c:\\users\\marcos\\documents\\facultad\\trabajo final integrador\\tercera parte\\p\u00E1gina\\fixnet\\styles\\stylesmasterpage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|solutionrelative:styles\\stylesmasterpage.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|c:\\users\\marcos\\documents\\facultad\\trabajo final integrador\\tercera parte\\p\u00E1gina\\fixnet\\default.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|solutionrelative:default.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|c:\\users\\marcos\\documents\\facultad\\trabajo final integrador\\tercera parte\\p\u00E1gina\\fixnet\\registro.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{3B088158-2C0E-47B4-B853-0EA1C3E1F4C9}|Fixnet.csproj|solutionrelative:registro.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "StylesMasterPage.css",
+              "DocumentMoniker": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\styles\\StylesMasterPage.css",
+              "RelativeDocumentMoniker": "styles\\StylesMasterPage.css",
+              "ToolTip": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\styles\\StylesMasterPage.css",
+              "RelativeToolTip": "styles\\StylesMasterPage.css",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAswFAAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-03-12T20:53:06.024Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Logearse.aspx",
+              "DocumentMoniker": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\Logearse.aspx",
+              "RelativeDocumentMoniker": "Logearse.aspx",
+              "ToolTip": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\Logearse.aspx",
+              "RelativeToolTip": "Logearse.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-03-12T21:06:58.223Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "StyleRegistro.css",
+              "DocumentMoniker": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\styles\\StyleRegistro.css",
+              "RelativeDocumentMoniker": "styles\\StyleRegistro.css",
+              "ToolTip": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\styles\\StyleRegistro.css",
+              "RelativeToolTip": "styles\\StyleRegistro.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-03-12T20:11:57.6Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Registro.aspx",
+              "DocumentMoniker": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\Registro.aspx",
+              "RelativeDocumentMoniker": "Registro.aspx",
+              "ToolTip": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\Registro.aspx",
+              "RelativeToolTip": "Registro.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-03-12T20:06:29.912Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Default.aspx",
+              "DocumentMoniker": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\Default.aspx",
+              "RelativeDocumentMoniker": "Default.aspx",
+              "ToolTip": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\Default.aspx",
+              "RelativeToolTip": "Default.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-03-12T19:41:14.4Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MasterPage.Master",
+              "DocumentMoniker": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\MasterPage.Master",
+              "RelativeDocumentMoniker": "MasterPage.Master",
+              "ToolTip": "C:\\Users\\Marcos\\Documents\\Facultad\\Trabajo Final Integrador\\Tercera parte\\P\u00E1gina\\Fixnet\\MasterPage.Master",
+              "RelativeToolTip": "MasterPage.Master",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-03-12T19:17:10.825Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
