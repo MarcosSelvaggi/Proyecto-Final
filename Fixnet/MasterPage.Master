@@ -22,16 +22,23 @@
         <div>
             <header>
                 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+
                     <a class="navbar-brand mb-0" href="/Default.aspx">
                         <img src="assets/logo.png" alt="Logo" id="brand-logo">
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#narbarNav"
-                        aria-controls="narbarNav" aria-expanded="false" id="navbarTogglerIcon" aria-label="Boton menú">
-                        <span
-                            class="navbar-toggler-icon"></span>
+
+                    <!-- Botón hamburguesa -->
+                    <button class="navbar-toggler ms-auto me-3" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false"
+                        aria-label="Boton menú">
+                        <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse justify-content-center" id="narbarNav">
-                        <ul class="navbar-nav align-items-end px-3">
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+
+                        <!-- Menú central -->
+                        <ul class="navbar-nav mx-auto text-center text-lg-start">
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="#hero">Publica tus servicios</a>
                             </li>
@@ -45,7 +52,9 @@
                                 <a class="nav-link active hover-underline" href="#contact">Contáctanos</a>
                             </li>
                         </ul>
-                        <ul class="navbar-nav align-items-end" style="margin-right: 15px;">
+
+                        <!-- Menú derecho -->
+                        <ul class="navbar-nav ms-lg-auto me-3 text-center text-lg-start">
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="/Registro.aspx">Registrarse</a>
                             </li>
@@ -53,7 +62,9 @@
                                 <a class="nav-link active hover-underline" href="/Logearse.aspx">Iniciar sesión</a>
                             </li>
                         </ul>
+
                     </div>
+
                 </nav>
             </header>
 
