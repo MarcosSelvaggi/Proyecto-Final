@@ -91,11 +91,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="assets\ddd 1.png" />
     <Content Include="assets\favicon.ico" />
     <Content Include="assets\img-proveedor-1.png" />
@@ -299,6 +294,7 @@
     <Content Include="packages\System.ValueTuple.4.6.1\lib\net47\System.ValueTuple.dll" />
     <Content Include="packages\System.ValueTuple.4.6.1\lib\net47\System.ValueTuple.xml" />
     <Content Include="Registro.aspx" />
+    <Content Include="styles\StyleDefault.css" />
     <Content Include="styles\StyleRegistro.css" />
     <Content Include="styles\StylesMasterPage.css" />
     <Content Include="Web.config" />
