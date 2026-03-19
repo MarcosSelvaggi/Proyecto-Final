@@ -22,10 +22,10 @@ create table MetodosPago(
 
 create table Usuario(
 	IdUsuario int primary key identity(1,1) not null, 
-	Email nvarchar(256) not null, 
+	Email nvarchar(256) not null unique, 
 	PasswordHash nvarchar (256) not null, 
-	FechaRegistro datetime not null,
-	Activo bit not null, 
+	FechaRegistro datetime not null default getdate(),
+	Activo bit not null default 1, 
 	Nombre nvarchar(100) not null,
 	Apellido nvarchar (100) not null,
 	Telefono nvarchar (20) not null
@@ -54,7 +54,7 @@ create table PrestadorServicio(
 	IdPrestadorServicio int primary key identity(1,1) not null,
 	IdPrestador int foreign key references Prestador(IdPrestador) not null,
 	IdServicio int foreign key references Servicios(IdServicio) not null,
-	PrecioHora money not null
+	PrecioHora money not null check (PrecioHora > 0)
 ); 
 
 create table PrestadorMetodoPago(
@@ -66,12 +66,15 @@ create table PrestadorMetodoPago(
 create table Disponibilidad(
 	IdDisponibilidad int primary key identity(1,1) not null, 
 	IdPrestador int foreign key references Prestador(IdPrestador) not null,
-	Descripcion nvarchar(400) not null
+	DiaSemana int not null check (DiaSemana BETWEEN 1 AND 7),
+	HoraInicio time not null,
+	HoraFin time not null,
 );
 
-create table turnos(
+create table Turno(
 	IdTurno int primary key identity(1,1) not null, 
 	IdCliente int foreign key references Cliente(IdCliente) not null, 
 	IdPrestador int foreign key references Prestador(IdPrestador) not null, 
-	DiaTurno datetime not null
+	FechaHoraInicio datetime not null,
+	FechaHoraFin datetime not null,
 );

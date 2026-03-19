@@ -36,12 +36,12 @@
 
                 <div class="col-md-12">
                     <label class="form-label">Contraseña</label>
-                    <asp:TextBox ID="txtContraseña" CssClass="form-control" runat="server" TextMode="Password"></asp:TextBox>
+                    <asp:TextBox ID="txtPassword" CssClass="form-control" runat="server" TextMode="Password"></asp:TextBox>
                 </div>
 
                 <div class="col-12 text-center mt-4">
                     <div class="btnEnviar">
-                        <asp:Button ID="btnRegistro" runat="server" Text="Registrarse" CssClass="BtnEnviar" /><%--Va dentro del btn OnClick="btnRegistro_Click"--%>
+                        <asp:Button ID="btnRegistro" runat="server" Text="Registrarse" CssClass="BtnEnviar" OnClick="BtnRegistro_Click"/>
                     </div>
                 </div>
             </div>

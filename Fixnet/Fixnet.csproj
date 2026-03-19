@@ -294,7 +294,9 @@
     <Content Include="packages\System.ValueTuple.4.6.1\lib\net47\System.ValueTuple.dll" />
     <Content Include="packages\System.ValueTuple.4.6.1\lib\net47\System.ValueTuple.xml" />
     <Content Include="Registro.aspx" />
+    <Content Include="SeleccionarPerfil.aspx" />
     <Content Include="styles\StyleDefault.css" />
+    <Content Include="styles\StylePerfiles.css" />
     <Content Include="styles\StyleRegistro.css" />
     <Content Include="styles\StylesMasterPage.css" />
     <Content Include="Web.config" />
@@ -331,6 +333,13 @@
     </Compile>
     <Compile Include="Registro.aspx.designer.cs">
       <DependentUpon>Registro.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SeleccionarPerfil.aspx.cs">
+      <DependentUpon>SeleccionarPerfil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SeleccionarPerfil.aspx.designer.cs">
+      <DependentUpon>SeleccionarPerfil.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -454,6 +463,16 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dominio\Dominio.csproj">
+      <Project>{124a9a66-dd3c-4ba0-9f95-7c48315d09f2}</Project>
+      <Name>Dominio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Negocio\Negocio.csproj">
+      <Project>{5aeb7f31-2945-4c0c-96a1-924ef499d250}</Project>
+      <Name>Negocio</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
