@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿using Dominio;
 using Negocio;
-using Dominio;
+using System;
+using System.Data.SqlClient;
+using System.Web.UI;
 
 namespace Fixnet
 {
@@ -21,42 +15,65 @@ namespace Fixnet
 
         protected void BtnRegistro_Click(object sender, EventArgs e)
         {
-            if (RevisarTxTs())
+            if (!RevisarTxTs())
             {
-                Usuario Usuario = new Usuario();
-                UsuarioManager UsuarioManager = new UsuarioManager();
-
-                Usuario.NombreUsuario = txtNombre.Text;
-                Usuario.ApellidoUsuario = txtApellido.Text;
-                Usuario.TelefonoUsuario = txtTeléfono.Text;
-                Usuario.EmailUsuario = txtEmail.Text;
-                Usuario.PasswordUsuario = txtPassword.Text;
-
-                if (UsuarioManager.RegistrarUsuario(Usuario) != 0)
-                {
-                    Session.Add("Usuario", Usuario);
-                    Response.Redirect("/SeleccionarPerfil.aspx");
-                }
-                else
-                {
-                    Response.Redirect("Default.aspx");
-                }
+                lblError.Text = "Nombre y Apellido son campos obligatorios.";
+                lblError.Visible = true;
+                return;
             }
 
-
-        }
-        public bool RevisarTxTs() //Si hay un txt null o vacío devuelve false, caso contrario devuelve true
-        {
-            if (!string.IsNullOrWhiteSpace(txtNombre.Text) || (!string.IsNullOrWhiteSpace(txtApellido.Text)) ||
-                (!string.IsNullOrWhiteSpace(txtTeléfono.Text)) || (!string.IsNullOrWhiteSpace(txtEmail.Text)) ||
-                (!string.IsNullOrWhiteSpace(txtPassword.Text)))
+            if (!Validaciones.ValidarTelefono(txtTeléfono.Text))
             {
-                return true;
+                lblError.Text = "El teléfono debe tener exactamente 8 números juntos.";
+                lblError.Visible = true;
+                return;
+            }
+
+            if (!Validaciones.ValidarEmail(txtEmail.Text))
+            {
+                lblError.Text = "El email no tiene un formato válido.";
+                lblError.Visible = true;
+                return;
+            }
+
+            if (!Validaciones.ValidarPassword(txtPassword.Text))
+            {
+                lblError.Text = "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.";
+                lblError.Visible = true;
+                return;
+            }
+
+            Usuario Usuario = new Usuario();
+            UsuarioManager UsuarioManager = new UsuarioManager();
+
+            Usuario.NombreUsuario = txtNombre.Text;
+            Usuario.ApellidoUsuario = txtApellido.Text;
+            Usuario.TelefonoUsuario = txtTeléfono.Text;
+            Usuario.EmailUsuario = txtEmail.Text;
+            Usuario.PasswordUsuario = Usuario.PasswordUsuario = Hasher.HashPassword(txtPassword.Text);
+
+            if (UsuarioManager.RegistrarUsuario(Usuario) != 0)
+            {
+                Session.Add("Usuario", Usuario);
+                Response.Redirect("/SeleccionarPerfil.aspx");
             }
             else
             {
-                return false;
+                lblError.Text = "Ocurrió un error al registrar el usuario.";
+                lblError.Visible = true;
             }
+        }
+
+        public bool RevisarTxTs()
+        {
+            if (!string.IsNullOrWhiteSpace(txtNombre.Text) &&
+                !string.IsNullOrWhiteSpace(txtApellido.Text) )
+                
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -10,7 +10,8 @@ namespace Servicios
 {
     public class BD
     {
-        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+       // readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
         {
