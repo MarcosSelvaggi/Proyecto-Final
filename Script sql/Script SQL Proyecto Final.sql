@@ -10,11 +10,6 @@ go
 use Proyecto_Final_Integrador 
 go
 
-create table Zona(
-	IdZona int primary key identity(1,1) not null,
-	NombreZona nvarchar(100) not null
-);
-
 create table MetodosPago(
 	IdMetodoPago int primary key identity(1,1) not null,
 	NombreMetodoPago nvarchar(100) not null
@@ -34,6 +29,8 @@ create table Usuario(
 create table Cliente(
 	IdCliente int primary key identity(1,1) not null,                        
 	IdUsuario int foreign key references Usuario(IdUsuario) not null,
+	Provincia nvarchar (100) not null,
+	Localidad nvarchar (100) not null,
 	Direccion nvarchar(100) not null
 );
 
@@ -41,7 +38,6 @@ create table Prestador(
 	IdPrestador int primary key identity(1,1) not null, 
 	IdUsuario int foreign key references Usuario(IdUsuario) not null,
 	Descripcion nvarchar(400) not null,
-	IdZona int foreign key references Zona(IdZona) not null
 );
 
 create table Servicios(
@@ -78,3 +74,35 @@ create table Turno(
 	FechaHoraInicio datetime not null,
 	FechaHoraFin datetime not null,
 );
+
+create table ZonasPrestador(
+	IdZona int primary key identity(1,1) not null, 
+	IdPrestador int foreign key references Prestador(IdPrestador) not null,
+	IdLocalidad varchar(4086) not null
+)
+
+
+GO 
+Create or alter Procedure RegistrarUsuariosNuevos
+	@Email nvarchar(256),
+	@Password nvarchar(256),
+	@Nombre nvarchar(100),
+	@Apellido nvarchar(100),
+	@Telefono nvarchar(20)
+AS
+BEGIN 
+	Insert into Usuario (Email, PasswordHash, Nombre, Apellido, Telefono)
+	values (@Email, @Password, @Nombre, @Apellido, @Telefono);
+	
+	Declare @Id as int; 
+	Set @Id = SCOPE_IDENTITY();
+
+	Insert into Cliente (IdUsuario, Provincia, Localidad, Direccion) values (@Id, 'No ingresado', 'No ingresado', 'No ingresado');
+	Insert into Prestador (IdUsuario, Descripcion) values (@Id, 'No ingresado'); 
+	Insert into ZonasPrestador(IdPrestador, IdLocalidad) values (@Id, '');
+END; 
+
+
+	select U.Nombre, U.Apellido, U.Telefono, U.Activo, P.Descripcion, C.Direccion, C.Localidad, C.Provincia, U.Email
+	from Usuario U inner join Prestador P on U.IdUsuario = P.IdUsuario
+	inner join Cliente C on U.IdUsuario = C.IdUsuario where U.Email like '%@mail.com'

@@ -9,8 +9,6 @@ namespace Dominio
     public class Prestador
     {
         public int IdPrestador;
-        public int IdUsuario;
         public string DescripcionPrestador;
-        public int IdZona; 
     }
 }

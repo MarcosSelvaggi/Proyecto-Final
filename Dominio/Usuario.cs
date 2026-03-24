@@ -15,9 +15,13 @@ namespace Dominio
         public string NombreUsuario;
         public string ApellidoUsuario;
         public string TelefonoUsuario;
-
         public Cliente Cliente;
-        public Prestador Prestador; 
+        public Prestador Prestador;
 
+        public Usuario()
+        {
+            Cliente = new Cliente();
+            Prestador = new Prestador();
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace Fixnet
                 lblError.Visible = true;
                 return;
             }
-
+                    
             Usuario Usuario = new Usuario();
             UsuarioManager UsuarioManager = new UsuarioManager();
 
@@ -50,9 +50,11 @@ namespace Fixnet
             Usuario.ApellidoUsuario = txtApellido.Text;
             Usuario.TelefonoUsuario = txtTeléfono.Text;
             Usuario.EmailUsuario = txtEmail.Text;
-            Usuario.PasswordUsuario = Usuario.PasswordUsuario = Hasher.HashPassword(txtPassword.Text);
+            Usuario.PasswordUsuario = txtPassword.Text;
+            //Usuario.PasswordUsuario = Usuario.PasswordUsuario = Hasher.HashPassword(txtPassword.Text);
 
-            if (UsuarioManager.RegistrarUsuario(Usuario) != 0)
+            //if (UsuarioManager.RegistrarUsuario(Usuario) != 0)
+            if (UsuarioManager.RegistrarUsuario(Usuario) == 1)
             {
                 Session.Add("Usuario", Usuario);
                 Response.Redirect("/SeleccionarPerfil.aspx");

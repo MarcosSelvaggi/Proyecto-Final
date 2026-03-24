@@ -14,7 +14,7 @@
             <small id="contrasenaCorrectaMsj" class="valid-feedback"></small>
             <small id="contrasenaErrorMsj" class="text-danger"></small>
             <div class="btnEnviar">
-            <asp:Button id="BtnEnviar"  class="BtnEnviar" Text="Iniciar sesión"  runat="server" /> <%--OnClientClick="return validarCampos() OnClick="BtnEnviar_Click""--%>
+            <asp:Button id="BtnEnviar"  class="BtnEnviar" Text="Iniciar sesión"  runat="server" OnClick="BtnEnviar_Click" /> <%--OnClientClick="return validarCampos() OnClick="BtnEnviar_Click""--%>
             </div>
         </asp:Panel>
 

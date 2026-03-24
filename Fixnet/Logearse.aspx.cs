@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dominio;
+using Negocio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +14,20 @@ namespace Fixnet
         protected void Page_Load(object sender, EventArgs e)
         {
 
+        }
+
+        protected void BtnEnviar_Click(object sender, EventArgs e)
+        {
+            Usuario UsuarioLogeado = new Usuario();
+            UsuarioManager usuarioManager = new UsuarioManager();
+
+            UsuarioLogeado = usuarioManager.LogearUsuario(txtMail.Text, txtPass.Text);
+
+            if (UsuarioLogeado != null)
+            {
+                Session.Add("Usuario", UsuarioLogeado);
+                Response.Redirect("/SeleccionarPerfil.aspx", false);
+            }
         }
     }
 }

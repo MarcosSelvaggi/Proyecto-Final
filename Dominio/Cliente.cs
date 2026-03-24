@@ -9,7 +9,8 @@ namespace Dominio
     public class Cliente
     {
         public int IdCliente;
-        public int IdUsuario;
-        public string DireccionUsuario; 
+        public string DireccionCliente; 
+        public string Provincia; 
+        public string Localidad; 
     }
 }
