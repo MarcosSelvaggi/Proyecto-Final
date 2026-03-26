@@ -6,17 +6,28 @@
     <main>
     <div class="container2 needs-validation" novalidate="false">
         <h1>Inicie sesión</h1>
-        <asp:Panel ID="Panel" DefaultButton="BtnEnviar" runat="server">
-            <asp:TextBox ID="txtMail" class="input" TextMode="Email" ClientIDMode="Static" placeholder="Mail" runat="server" />
-            <small id="mailErrorMsj" class="text-danger"></small>
-            <small id="mailCorrectoMsj" class="valid-feedback"></small>
-            <asp:TextBox ID="txtPass" class="input" TextMode="Password" ClientIDMode="Static" placeholder="Contraseña" runat="server" />
-            <small id="contrasenaCorrectaMsj" class="valid-feedback"></small>
-            <small id="contrasenaErrorMsj" class="text-danger"></small>
-            <div class="btnEnviar">
-            <asp:Button id="BtnEnviar"  class="BtnEnviar" Text="Iniciar sesión"  runat="server" OnClick="BtnEnviar_Click" /> <%--OnClientClick="return validarCampos() OnClick="BtnEnviar_Click""--%>
-            </div>
-        </asp:Panel>
+       <asp:Panel ID="Panel" DefaultButton="BtnEnviar" runat="server">
+
+    <asp:TextBox ID="txtMail" class="input" TextMode="Email" ClientIDMode="Static" placeholder="Mail" runat="server" />
+    <small id="mailErrorMsj" class="text-danger"></small>
+    <small id="mailCorrectoMsj" class="valid-feedback"></small>
+
+    <asp:TextBox ID="txtPass" class="input" TextMode="Password" ClientIDMode="Static" placeholder="Contraseña" runat="server" />
+    <small id="contrasenaCorrectaMsj" class="valid-feedback"></small>
+    <small id="contrasenaErrorMsj" class="text-danger"></small>
+
+    <asp:Label 
+        ID="lblError" 
+        runat="server" 
+        CssClass="text-danger"
+        Visible="false">
+    </asp:Label>
+
+    <div class="btnEnviar">
+        <asp:Button id="BtnEnviar" class="BtnEnviar" Text="Iniciar sesión" runat="server" OnClick="BtnEnviar_Click" />
+    </div>
+
+</asp:Panel>
 
         <div>
             <span>Si olvidó su contraseña </span>

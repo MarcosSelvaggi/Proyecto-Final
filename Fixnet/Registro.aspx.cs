@@ -24,10 +24,27 @@ namespace Fixnet
 
             if (!Validaciones.ValidarTelefono(txtTeléfono.Text))
             {
-                lblError.Text = "El teléfono debe tener exactamente 8 números juntos.";
+                lblError.Text = "El teléfono debe tener exactamente 10 números juntos.";
                 lblError.Visible = true;
                 return;
             }
+
+            if (!Validaciones.ValidarTelefonoExiste(txtTeléfono.Text))
+            {
+                lblError.Text = "El teléfono ya está registrado.";
+                lblError.Visible = true;
+                return;
+            }
+
+
+            if (!Validaciones.ValidarEmailExiste(txtEmail.Text))
+            {
+                lblError.Text = "El email ya está registrado.";
+                lblError.Visible = true;
+                return;
+            }
+
+
 
             if (!Validaciones.ValidarEmail(txtEmail.Text))
             {
@@ -51,10 +68,8 @@ namespace Fixnet
             Usuario.TelefonoUsuario = txtTeléfono.Text;
             Usuario.EmailUsuario = txtEmail.Text;
             Usuario.PasswordUsuario = txtPassword.Text;
-            //Usuario.PasswordUsuario = Usuario.PasswordUsuario = Hasher.HashPassword(txtPassword.Text);
 
-            //if (UsuarioManager.RegistrarUsuario(Usuario) != 0)
-            if (UsuarioManager.RegistrarUsuario(Usuario) == 1)
+            if (UsuarioManager.RegistrarUsuario(Usuario) == true)
             {
                 Session.Add("Usuario", Usuario);
                 Response.Redirect("/SeleccionarPerfil.aspx");

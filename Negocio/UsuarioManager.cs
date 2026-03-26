@@ -14,14 +14,13 @@ namespace Negocio
     {
         Usuario Usuario; 
 
-        public int RegistrarUsuario(Usuario Usuario)
+        public bool RegistrarUsuario(Usuario Usuario)
         {
-            //No es necesario crear una clase adicional para hashear la contraseña si usamos Bcrypt
+            
             Usuario.PasswordUsuario = BCrypt.Net.BCrypt.EnhancedHashPassword(Usuario.PasswordUsuario, 13);
             BD conexion = new BD();
-            return conexion.RegistrarUsuarioBD(Usuario); 
+            return conexion.RegistrarUsuarioBD(Usuario) > 0; 
         }
-
 
         
         public Usuario LogearUsuario(string Email, string Password)

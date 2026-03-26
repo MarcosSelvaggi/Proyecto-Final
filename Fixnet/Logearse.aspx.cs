@@ -2,6 +2,7 @@
 using Negocio;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -18,16 +19,48 @@ namespace Fixnet
 
         protected void BtnEnviar_Click(object sender, EventArgs e)
         {
-            Usuario UsuarioLogeado = new Usuario();
             UsuarioManager usuarioManager = new UsuarioManager();
 
-            UsuarioLogeado = usuarioManager.LogearUsuario(txtMail.Text, txtPass.Text);
-
-            if (UsuarioLogeado != null)
+            
+            if (string.IsNullOrWhiteSpace(txtMail.Text))
             {
-                Session.Add("Usuario", UsuarioLogeado);
+                lblError.Text = "Debe ingresar un mail.";
+                lblError.Visible = true;
+                return;
+            }
+
+            
+            if (string.IsNullOrWhiteSpace(txtPass.Text))
+            {
+                lblError.Text = "Debe ingresar una contraseña.";
+                lblError.Visible = true;
+                return;
+            }
+
+            
+            if (Validaciones.ValidarEmailExiste(txtMail.Text))
+            {
+                lblError.Text = "No existe mail.";
+                lblError.Visible = true;
+                return;
+            }
+
+            Usuario usuarioLogeado = usuarioManager.LogearUsuario(txtMail.Text, txtPass.Text);
+
+            if (usuarioLogeado != null)
+            {
+                Session.Add("Usuario", usuarioLogeado);
                 Response.Redirect("/SeleccionarPerfil.aspx", false);
             }
+            else
+            {
+                lblError.Text = "Contraseña incorrecta.";
+                lblError.Visible = true;
+            }
         }
+
+
+
+
     }
 }
