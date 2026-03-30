@@ -8,7 +8,7 @@ namespace Dominio
 {
     public class Prestador
     {
-        public int IdPrestador;
-        public string DescripcionPrestador;
+        public int IdPrestador {  get; set; }
+        public string DescripcionPrestador {  set; get; }
     }
 }

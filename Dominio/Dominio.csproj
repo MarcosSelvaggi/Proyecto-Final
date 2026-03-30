@@ -42,7 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cliente.cs" />
+    <Compile Include="Localidades.cs" />
+    <Compile Include="Departamentos.cs" />
     <Compile Include="Prestador.cs" />
+    <Compile Include="Provincias.cs" />
     <Compile Include="Turno.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

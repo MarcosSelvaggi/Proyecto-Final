@@ -25,9 +25,16 @@ namespace Negocio
         
         public Usuario LogearUsuario(string Email, string Password)
         {
-            BD BD = new BD();
+            BD conexion = new BD();
 
-            return BD.LogearUsuario(Email, Password);
+            return conexion.LogearUsuario(Email, Password);
+        }
+
+        public bool ActualizarDireccionCliente(Usuario UsuarioActualizado)
+        {
+            BD conexion = new BD();
+
+            return conexion.actualizarDireccionCliente(UsuarioActualizado);
         }
 
     }

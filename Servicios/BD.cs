@@ -11,8 +11,8 @@ namespace Servicios
 {
     public class BD
     {
-        // readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
         {
@@ -52,6 +52,7 @@ namespace Servicios
                         P.Descripcion,
                         C.Direccion,
                         C.Localidad,
+                        C.Departamento,
                         C.Provincia,
                         U.Email
                     FROM Usuario U
@@ -77,8 +78,8 @@ namespace Servicios
                         {
                             Usuario usuario = new Usuario();
 
-                            usuario.Prestador = new Prestador();
-                            usuario.Cliente = new Cliente();
+                            //usuario.Prestador = new Prestador();
+                            //usuario.Cliente = new Cliente();
 
                             usuario.NombreUsuario = reader["Nombre"].ToString();
                             usuario.ApellidoUsuario = reader["Apellido"].ToString();
@@ -86,6 +87,16 @@ namespace Servicios
                             usuario.UsuarioActivo = (bool)reader["Activo"];
                             usuario.EmailUsuario = reader["Email"].ToString();
 
+                            usuario.Prestador.DescripcionPrestador = reader["Descripcion"].ToString();
+
+                            usuario.Cliente.Provincia = reader["Provincia"].ToString();
+                            usuario.Cliente.Departamento = reader["Departamento"].ToString();
+                            usuario.Cliente.Localidad = reader["Localidad"].ToString();
+                            usuario.Cliente.DireccionCliente = reader["Direccion"].ToString();
+
+
+                            //El stored procedure ya carga el valor 'No ingresado' a los clientes y prestadores
+                            /*
                             if (reader["Descripcion"] != DBNull.Value)
                                 usuario.Prestador.DescripcionPrestador = reader["Descripcion"].ToString();
 
@@ -97,7 +108,7 @@ namespace Servicios
 
                             if (reader["Provincia"] != DBNull.Value)
                                 usuario.Cliente.Provincia = reader["Provincia"].ToString();
-
+                            */
                             return usuario;
                         }
                     }
@@ -133,8 +144,6 @@ namespace Servicios
             }
         }
 
-
-
         public bool TelefonoExiste(string telefono)
         {
             string query = "SELECT COUNT(*) FROM Usuario WHERE Telefono = @Telefono";
@@ -157,13 +166,34 @@ namespace Servicios
             }
         }
 
+        public bool actualizarDireccionCliente(Usuario UsuarioActualizado)
+        {
+            string query = "update Cliente set Provincia = @Provincia, Departamento = @Departamento," +
+                " Localidad = @Localidad, Direccion = @Direccion";
 
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query, sqlConnection))
+            {
+                try
+                {
+                    command.Parameters.AddWithValue("@Provincia", UsuarioActualizado.Cliente.Provincia);
+                    command.Parameters.AddWithValue("@Departamento", UsuarioActualizado.Cliente.Departamento);
+                    command.Parameters.AddWithValue("@Localidad", UsuarioActualizado.Cliente.Localidad);
+                    command.Parameters.AddWithValue("@Direccion", UsuarioActualizado.Cliente.DireccionCliente);
+
+                    sqlConnection.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            return true; 
+        }
 
     }
 }
-
-
-
 
 
 

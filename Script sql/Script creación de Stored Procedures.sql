@@ -15,7 +15,7 @@ BEGIN
 	Declare @Id as int; 
 	Set @Id = SCOPE_IDENTITY();
 
-	Insert into Cliente (IdUsuario, Provincia, Localidad, Direccion) values (@Id, 'No ingresado', 'No ingresado', 'No ingresado');
+	Insert into Cliente (IdUsuario, Provincia, Departamento, Localidad, Direccion) values (@Id, 'No ingresado', 'No ingresado','No ingresado', 'No ingresado');
 	Insert into Prestador (IdUsuario, Descripcion) values (@Id, 'No ingresado'); 
 	Insert into ZonasPrestador(IdPrestador, IdLocalidad) values (@Id, '');
 END; 

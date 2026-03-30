@@ -30,6 +30,7 @@ create table Cliente(
 	IdCliente int primary key identity(1,1) not null,                        
 	IdUsuario int foreign key references Usuario(IdUsuario) not null,
 	Provincia nvarchar (100) not null,
+	Departamento nvarchar(100) not null,
 	Localidad nvarchar (100) not null,
 	Direccion nvarchar(100) not null
 );
