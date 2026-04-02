@@ -8,3 +8,9 @@ insert into Servicios values ('Técnico de aires acondicionados', 'Trabaja arreg
 insert into Servicios values ('Albañil', 'Trabaja con tu casa')
 
 select * from Servicios
+
+insert into MetodosPago values('Efectivo')
+insert into MetodosPago values('Transferencia')
+insert into MetodosPago values('Mercado Pago')
+
+select * from MetodosPago

@@ -44,6 +44,7 @@ namespace Servicios
         public Usuario LogearUsuario(string email, string password)
         {
             string query = @"SELECT 
+                        U.IdUsuario,
                         U.Nombre,
                         U.Apellido,
                         U.Telefono,
@@ -80,7 +81,7 @@ namespace Servicios
 
                             //usuario.Prestador = new Prestador();
                             //usuario.Cliente = new Cliente();
-
+                            usuario.IdUsuario = Int32.Parse(reader["IdUsuario"].ToString());
                             usuario.NombreUsuario = reader["Nombre"].ToString();
                             usuario.ApellidoUsuario = reader["Apellido"].ToString();
                             usuario.TelefonoUsuario = reader["Telefono"].ToString();

@@ -18,4 +18,5 @@ BEGIN
 	Insert into Cliente (IdUsuario, Provincia, Departamento, Localidad, Direccion) values (@Id, 'No ingresado', 'No ingresado','No ingresado', 'No ingresado');
 	Insert into Prestador (IdUsuario, Descripcion) values (@Id, 'No ingresado'); 
 	Insert into ZonasPrestador(IdPrestador, IdLocalidad) values (@Id, '');
+	insert into ZonasPrestador(IdPrestador, IdZona) values (@Id,'No ingresado')
 END; 

@@ -55,6 +55,9 @@
                         </ul>
 
                         <!-- Menú derecho -->
+                        <% if (Session["Usuario"] == null)
+                            {
+                        %>
                         <ul class="navbar-nav ms-lg-auto me-3 text-center text-lg-start">
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="/Registro.aspx">Registrarse</a>
@@ -63,7 +66,19 @@
                                 <a class="nav-link active hover-underline" href="/Logearse.aspx">Iniciar sesión</a>
                             </li>
                         </ul>
+                        <%
+                            }
+                            else
+                            {
+                                Dominio.Usuario Usuario = (Dominio.Usuario)Session["Usuario"];
+                                %>
 
+                        <ul class="navbar-nav ms-lg-auto me-3 text-center text-lg-start">
+                            <li class="nav-item">
+                                <h3><%=Usuario.NombreUsuario %></h3>
+                            </li>
+                        </ul>
+                            <%}%>
                     </div>
 
                 </nav>
