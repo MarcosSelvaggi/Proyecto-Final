@@ -9,36 +9,43 @@ CREATE OR ALTER PROCEDURE RegistrarUsuariosNuevos
     @Telefono NVARCHAR(20)
 AS
 BEGIN
-    SET NOCOUNT OFF;  -- para que devuelva filas afectadas
+    SET NOCOUNT ON;
 
     BEGIN TRY
         BEGIN TRANSACTION;
-       
+
+        -- 1. Insert Usuario
         INSERT INTO Usuario (Email, PasswordHash, Nombre, Apellido, Telefono)
         VALUES (@Email, @Password, @Nombre, @Apellido, @Telefono);
 
-        DECLARE @Id INT;
-        SET @Id = SCOPE_IDENTITY();
-     
+        DECLARE @IdUsuario INT = SCOPE_IDENTITY();
+
+        -- 2. Insert Cliente
         INSERT INTO Cliente (IdUsuario, Provincia, Departamento, Localidad, Direccion)
-        VALUES (@Id, 'No ingresado', 'No ingresado', 'No ingresado', 'No ingresado');
+        VALUES (@IdUsuario, 'No ingresado', 'No ingresado', 'No ingresado', 'No ingresado');
 
+        -- 3. Insert Prestador
         INSERT INTO Prestador (IdUsuario, Descripcion)
-        VALUES (@Id, 'No ingresado');
+        VALUES (@IdUsuario, 'No ingresado');
 
+        DECLARE @IdPrestador INT = SCOPE_IDENTITY();
+
+        -- 4. Insert ZonasPrestador (solo lo válido)
         INSERT INTO ZonasPrestador (IdPrestador, IdLocalidad)
-        VALUES (@Id, 'No ingresado');
-
-        INSERT INTO ZonasPrestador (IdPrestador, IdZona)
-        VALUES (@Id, 'No ingresado');
+        VALUES (@IdPrestador, 'No ingresado');
 
         COMMIT TRANSACTION;
-      
-        SELECT 1 AS FilasAfectadas;
+
+        RETURN 1; -- éxito
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
-        
-        SELECT 0 AS FilasAfectadas;
+
+        -- Opcional: podés ver el error real
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrorMessage, 16, 1);
+
+        RETURN 0; -- error
     END CATCH
 END;
+GO

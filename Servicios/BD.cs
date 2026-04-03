@@ -28,13 +28,20 @@ namespace Servicios
                 command.Parameters.Add("@Apellido", SqlDbType.NVarChar).Value = NuevoUsuario.ApellidoUsuario.ToString();
                 command.Parameters.Add("@Telefono", SqlDbType.NVarChar).Value = NuevoUsuario.TelefonoUsuario.ToString();
 
+                SqlParameter returnValue = new SqlParameter();
+                returnValue.Direction = ParameterDirection.ReturnValue;
+                command.Parameters.Add(returnValue);
+
                 try
                 {
                     sqlConnection.Open();
-                    return command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
+
+                    return (int)returnValue.Value; 
                 }
-                catch (SqlException)
+                catch (SqlException ex)
                 {
+                    Console.WriteLine(ex.Message);
                     return 0;
                 }
             }
@@ -77,10 +84,12 @@ namespace Servicios
 
                         if (BCrypt.Net.BCrypt.EnhancedVerify(password, passwordHash))
                         {
-                            Usuario usuario = new Usuario();
 
-                            //usuario.Prestador = new Prestador();
-                            //usuario.Cliente = new Cliente();
+
+                            Usuario usuario = new Usuario();
+                            usuario.Prestador = new Prestador();
+                            usuario.Cliente = new Cliente();
+
                             usuario.IdUsuario = Int32.Parse(reader["IdUsuario"].ToString());
                             usuario.NombreUsuario = reader["Nombre"].ToString();
                             usuario.ApellidoUsuario = reader["Apellido"].ToString();
@@ -169,8 +178,12 @@ namespace Servicios
 
         public bool actualizarDireccionCliente(Usuario UsuarioActualizado)
         {
-            string query = "update Cliente set Provincia = @Provincia, Departamento = @Departamento," +
-                " Localidad = @Localidad, Direccion = @Direccion";
+            string query = @"UPDATE Cliente 
+                     SET Provincia = @Provincia, 
+                         Departamento = @Departamento,
+                         Localidad = @Localidad, 
+                         Direccion = @Direccion
+                     WHERE IdUsuario = @IdUsuario";
 
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, sqlConnection))
@@ -181,17 +194,55 @@ namespace Servicios
                     command.Parameters.AddWithValue("@Departamento", UsuarioActualizado.Cliente.Departamento);
                     command.Parameters.AddWithValue("@Localidad", UsuarioActualizado.Cliente.Localidad);
                     command.Parameters.AddWithValue("@Direccion", UsuarioActualizado.Cliente.DireccionCliente);
+                    command.Parameters.AddWithValue("@IdUsuario", UsuarioActualizado.IdUsuario); // 👈 CLAVE
 
                     sqlConnection.Open();
-                    command.ExecuteNonQuery();
+                    return command.ExecuteNonQuery() > 0;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     return false;
                 }
             }
-            return true; 
+
+
         }
+
+
+        public int ObtenerIdUsuarioPorEmail(string email)
+        {
+            string query = "SELECT IdUsuario FROM Usuario WHERE Email = @Email";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Email", email);
+
+                try
+                {
+                    conn.Open();
+                    object resultado = cmd.ExecuteScalar(); 
+
+                    if (resultado != null && int.TryParse(resultado.ToString(), out int idUsuario))
+                    {
+                        return idUsuario; 
+                    }
+                    else
+                    {
+                        return 0; 
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine("Error al obtener IdUsuario: " + ex.Message);
+                    return 0;
+                }
+            }
+        }
+
+
+
 
     }
 }

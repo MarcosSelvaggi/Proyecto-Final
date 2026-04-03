@@ -68,9 +68,11 @@ namespace Fixnet
             Usuario.TelefonoUsuario = txtTeléfono.Text;
             Usuario.EmailUsuario = txtEmail.Text;
             Usuario.PasswordUsuario = txtPassword.Text;
+           
 
             if (UsuarioManager.RegistrarUsuario(Usuario) == true)
             {
+                Usuario.IdUsuario = UsuarioManager.BuscarUsuarioMail(Usuario);
                 Session.Add("Usuario", Usuario);
                 Response.Redirect("/SeleccionarPerfil.aspx");
             }

@@ -5,7 +5,10 @@
     <!-- Main content -->
     <div>
         <% Dominio.Usuario UsuarioLogeado = (Dominio.Usuario)Session["Usuario"];
-            if (UsuarioLogeado.Cliente.DireccionCliente == "No ingresado")
+            if (UsuarioLogeado == null ||
+    UsuarioLogeado.Cliente == null ||
+    string.IsNullOrEmpty(UsuarioLogeado.Cliente.DireccionCliente) ||
+    UsuarioLogeado.Cliente.DireccionCliente == "No ingresado")
             {
         %>
         <div class="container">
@@ -29,6 +32,7 @@
                 <div class="col-12">
                     <div>
                         <asp:Button ID="btnActualizarInformacion" runat="server" Text="Actualizar información" CssClass="BtnActualizar" OnClick="btnActualizarInformacion_Click" />
+                        <asp:Label ID="lblErrorDireccion" runat="server" CssClass="text-danger" Visible="false"></asp:Label>
                     </div>
                 </div>
             </div>

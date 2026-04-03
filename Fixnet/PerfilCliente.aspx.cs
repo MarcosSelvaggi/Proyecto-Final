@@ -154,23 +154,35 @@ namespace Fixnet
         //No tiene validaciones todavía
         protected void btnActualizarInformacion_Click(object sender, EventArgs e)
         {
+            Usuario usuarioSession = (Usuario)Session["Usuario"];
+
+            if (usuarioSession == null)
+            {
+                Response.Redirect("/Login.aspx");
+                return;
+            }
+
             Usuario usuario = new Usuario();
-            usuario.Cliente.Provincia = ddlProvincia.SelectedValue.ToString();
-            usuario.Cliente.Departamento = ddlDepartamento.SelectedValue.ToString();
-            usuario.Cliente.Localidad = ddlLocalidad.SelectedValue.ToString();
-            usuario.Cliente.DireccionCliente = txtDireccion.Text; 
+            usuario.IdUsuario = usuarioSession.IdUsuario;
+
+            usuario.Cliente = new Cliente(); // 👈 CLAVE
+
+            usuario.Cliente.Provincia = ddlProvincia.SelectedValue;
+            usuario.Cliente.Departamento = ddlDepartamento.SelectedValue;
+            usuario.Cliente.Localidad = ddlLocalidad.SelectedValue;
+            usuario.Cliente.DireccionCliente = txtDireccion.Text;
 
             UsuarioManager manager = new UsuarioManager();
-            
+
             if (manager.ActualizarDireccionCliente(usuario))
             {
                 Response.Redirect("/SeleccionarPerfil.aspx", false);
             }
             else
             {
-                //Algo
+                lblErrorDireccion.Text = " Ocurrió un error al actualizar la dirección.";
+                lblErrorDireccion.Visible = true;
             }
-
         }
     }
 }

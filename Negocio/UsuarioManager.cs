@@ -30,11 +30,16 @@ namespace Negocio
             return conexion.LogearUsuario(Email, Password);
         }
 
-        public bool ActualizarDireccionCliente(Usuario UsuarioActualizado)
+        public bool ActualizarDireccionCliente(Usuario usuario)
         {
             BD conexion = new BD();
+            return conexion.actualizarDireccionCliente(usuario);
+        }
 
-            return conexion.actualizarDireccionCliente(UsuarioActualizado);
+        public int BuscarUsuarioMail(Usuario usuario)
+        {
+            BD conexion = new BD();
+            return conexion.ObtenerIdUsuarioPorEmail(usuario.EmailUsuario);
         }
 
     }

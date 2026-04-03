@@ -18,7 +18,7 @@
                 <div class="mb-3">
                     <label for="ddlServicios" class="form-label">¿Qué servicios podés ofrecer?</label>
                     <asp:DropDownList ID="ddlServicios" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlServicios_SelectedIndexChanged"></asp:DropDownList> 
-                    <%if (Session["ServiciosOfrecidos" + !=  null])
+                    <%if (Session["ServiciosOfrecidos" !=  null])
                 {
 
                         } %>
