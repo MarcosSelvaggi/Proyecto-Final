@@ -4,7 +4,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    
+
     <!-- FORM -->
     <asp:Panel ID="pnlFormulario" runat="server">
         <div class="container">
@@ -28,7 +28,9 @@
 
                 <div class="mb-3">
                     <label class="form-label">Seleccionar Localidad</label>
-                    <asp:DropDownList runat="server" ID="ddlLocalidad">
+                    <asp:DropDownList runat="server" ID="ddlLocalidad"
+                        OnSelectedIndexChanged="ddlLocalidad_SelectedIndexChanged"
+                        AutoPostBack="true">
                     </asp:DropDownList>
                 </div>
 

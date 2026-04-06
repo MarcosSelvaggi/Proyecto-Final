@@ -66,9 +66,10 @@ namespace Fixnet
 
                     ddlProvincia.DataSource = Provincias;
                     ddlProvincia.DataValueField = "Nombre";
+                    
                     ddlProvincia.DataBind();
 
-                    ddlProvincia.Items.Insert(0, "-- Seleccionar una provincia --");
+                    ddlProvincia.Items.Insert(0, "-- Seleccionar una Provincia --");
                 }
             }
         }
@@ -79,12 +80,14 @@ namespace Fixnet
             {
                 ddlDepartamento.Enabled = false; 
                 ddlLocalidad.Enabled = false;
+                pnlOk.Visible = false;
+                LimpiarDdls();
             }
             else
             {
                 LimpiarDdls();
                 ddlDepartamento.Enabled = true; 
-                ProvinciaSeleccionada = ddlProvincia.SelectedValue.ToString();
+                ProvinciaSeleccionada = ddlProvincia.SelectedValue;
                 RegisterAsyncTask(new PageAsyncTask(CargarDepartamentos));
             }
 
@@ -101,7 +104,7 @@ namespace Fixnet
 
         protected async Task CargarDepartamentos()
         {
-            var url = "https://apis.datos.gob.ar/georef/api/v2.0/departamentos?provincia=" + ProvinciaSeleccionada;
+            var url = "https://apis.datos.gob.ar/georef/api/v2.0/departamentos?provincia=" + ddlProvincia.SelectedValue + "&max=5000";
             using (HttpClient httpClient = new HttpClient())
             {
                 var Respuesta = await httpClient.GetAsync(url);
@@ -118,7 +121,7 @@ namespace Fixnet
                     ddlDepartamento.DataValueField = "Nombre";
                     ddlDepartamento.DataBind();
 
-                    ddlDepartamento.Items.Insert(0, "-- Selecccionar una localidad");
+                    ddlDepartamento.Items.Insert(0, "-- Selecccionar un Municipio --");
                 }
             }
         }
@@ -128,13 +131,22 @@ namespace Fixnet
             if(ddlDepartamento.SelectedIndex == 0)
             {
                 ddlLocalidad.Enabled = false;
+                pnlOk.Visible = false;
+                ddlLocalidad.Items.Clear();
+                ddlLocalidad.Items.Insert(0, "-- Seleccionar una Localidad --");
             }
             else
             {
                 ddlLocalidad.Enabled = true;
-                MunicipioSeleccionado = ddlDepartamento.SelectedValue.ToString();
+                MunicipioSeleccionado = ddlDepartamento.SelectedValue;
                 RegisterAsyncTask(new PageAsyncTask(CargarLocalidades));
             }
+        }
+
+        protected void ddlLocalidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlLocalidad.SelectedIndex == 0)
+                pnlOk.Visible = false;
         }
 
         protected async Task CargarLocalidades()
@@ -162,7 +174,7 @@ namespace Fixnet
                     ddlLocalidad.DataValueField = "Nombre";
                     ddlLocalidad.DataBind();
 
-                    ddlLocalidad.Items.Insert(0, "-- Selecccionar una localidad");
+                    ddlLocalidad.Items.Insert(0, "-- Selecccionar una Localidad --");
                 }
 
             }
@@ -176,6 +188,14 @@ namespace Fixnet
             if (usuarioSession == null)
             {
                 Response.Redirect("/Login.aspx");
+                return;
+            }
+
+            // VALIDO QUE SE HAYA SELECCIONADO PROVINCIA, MUNICIPIO Y LOCALIDAD
+            if (ddlProvincia.SelectedIndex == 0 || ddlDepartamento.SelectedIndex == 0 || ddlLocalidad.SelectedIndex == 0)
+            {
+                lblErrorDireccion.Text = "Por favor, seleccione Provincia, Municipio y Localidad válidos.";
+                lblErrorDireccion.Visible = true;
                 return;
             }
 
