@@ -43,7 +43,7 @@ create table Prestador(
 
 create table Servicios(
 	IdServicio int primary key identity(1,1) not null, 
-	Nombre nvarchar(100) not null, 
+	Nombre nvarchar(100) unique not null, 
 	Descripcion nvarchar(400) not null
 );
 

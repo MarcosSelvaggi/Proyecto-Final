@@ -52,6 +52,7 @@ namespace Servicios
         {
             string query = @"SELECT 
                         U.IdUsuario,
+                        P.IdPrestador,
                         U.Nombre,
                         U.Apellido,
                         U.Telefono,
@@ -98,12 +99,23 @@ namespace Servicios
                             usuario.EmailUsuario = reader["Email"].ToString();
 
                             usuario.Prestador.DescripcionPrestador = reader["Descripcion"].ToString();
-
                             usuario.Cliente.Provincia = reader["Provincia"].ToString();
                             usuario.Cliente.Departamento = reader["Departamento"].ToString();
                             usuario.Cliente.Localidad = reader["Localidad"].ToString();
                             usuario.Cliente.DireccionCliente = reader["Direccion"].ToString();
 
+                            if (reader["IdPrestador"] != DBNull.Value)
+                            {
+                                usuario.Prestador.IdPrestador = Convert.ToInt32(reader["IdPrestador"]);
+                            }
+                            if (usuario.Prestador != null && usuario.Prestador.IdPrestador > 0)
+                            {
+                                usuario.Prestador.Servicios = TraerServiciosPrestador(usuario.Prestador.IdPrestador);
+                            }
+                            else
+                            {
+                                usuario.Prestador.Servicios = new List<ServiciosPrestador>();
+                            }
 
                             //El stored procedure ya carga el valor 'No ingresado' a los clientes y prestadores
                             /*
@@ -208,8 +220,131 @@ namespace Servicios
 
 
         }
+        public List<ServiciosPrestador> TraerServiciosPrestador(int idPrestador)
+        {
+            List<ServiciosPrestador> serviciosPrestador = new List<ServiciosPrestador>();
 
+            string query = "SELECT IdServicio, PrecioHora FROM PrestadorServicio WHERE IdPrestador = @IdPrestador";
 
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    serviciosPrestador.Add(new ServiciosPrestador
+                    {
+                        IdServicio = Convert.ToInt32(reader["IdServicio"]),
+                        Precio = Convert.ToDecimal(reader["PrecioHora"])
+                    });
+                }
+            }
+            return serviciosPrestador;
+        }
+        public List<Servicio> TraerServiciosBD()
+        {
+            List<Servicio> servicios = new List<Servicio>();
+            string query = "SELECT IdServicio, Nombre, Descripcion FROM Servicios ORDER BY Nombre";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    servicios.Add(new Servicio
+                    {
+                        IdServicio = Convert.ToInt32(reader["IdServicio"]),
+                        Nombre = reader["Nombre"].ToString(),
+                        Descripcion = reader["Descripcion"].ToString()
+                    });
+                }
+            }
+            return servicios;
+        }
+
+        public bool AsignarServiciosPrestador(int idPrestador, List<(int IdServicio, decimal PrecioHora)> servicios)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                foreach (var serv in servicios)
+                {
+                    string query = @"INSERT INTO PrestadorServicio (IdPrestador, IdServicio, PrecioHora)
+                             VALUES (@IdPrestador, @IdServicio, @PrecioHora)";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                    cmd.Parameters.AddWithValue("@IdServicio", serv.IdServicio);
+                    cmd.Parameters.AddWithValue("@PrecioHora", serv.PrecioHora);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            return true;
+        }
+        public int ActualizarPrestadorBD(Usuario usuario)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+                try
+                {
+                    string queryPrestador = @"
+                    IF EXISTS (SELECT 1 FROM Prestador WHERE IdUsuario = @IdUsuario)
+                    BEGIN
+                        UPDATE Prestador
+                        SET Descripcion = @Descripcion
+                        WHERE IdUsuario = @IdUsuario
+                    END
+                    ELSE
+                    BEGIN
+                        INSERT INTO Prestador (IdUsuario, Descripcion)
+                        VALUES (@IdUsuario, @Descripcion)
+                    END";
+
+                    SqlCommand cmdPrestador = new SqlCommand(queryPrestador, conn, transaction);
+                    cmdPrestador.Parameters.AddWithValue("@IdUsuario", usuario.IdUsuario);
+                    cmdPrestador.Parameters.AddWithValue("@Descripcion", usuario.Prestador.DescripcionPrestador ?? "No ingresado");
+                    cmdPrestador.ExecuteNonQuery();
+
+                    // Obtener IdPrestador
+                    string queryIdPrestador = "SELECT IdPrestador FROM Prestador WHERE IdUsuario = @IdUsuario";
+                    SqlCommand cmdId = new SqlCommand(queryIdPrestador, conn, transaction);
+                    cmdId.Parameters.AddWithValue("@IdUsuario", usuario.IdUsuario);
+                    int idPrestador = Convert.ToInt32(cmdId.ExecuteScalar());
+
+                    // Borrar servicios anteriores
+                    string deleteServicios = "DELETE FROM PrestadorServicio WHERE IdPrestador = @IdPrestador";
+                    SqlCommand cmdDelete = new SqlCommand(deleteServicios, conn, transaction);
+                    cmdDelete.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                    cmdDelete.ExecuteNonQuery();
+
+                    // Insertar servicios nuevos
+                    foreach (var serv in usuario.Prestador.Servicios)
+                    {
+                        string insertPrestadorServicio = @"
+                        INSERT INTO PrestadorServicio (IdPrestador, IdServicio, PrecioHora)
+                        VALUES (@IdPrestador, @IdServicio, @PrecioHora)";
+                        SqlCommand cmdInsert = new SqlCommand(insertPrestadorServicio, conn, transaction);
+                        cmdInsert.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                        cmdInsert.Parameters.AddWithValue("@IdServicio", serv.IdServicio);
+                        cmdInsert.Parameters.AddWithValue("@PrecioHora", serv.Precio);
+                        cmdInsert.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    return idPrestador;
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    return 0;
+                }
+            }
+        }
         public int ObtenerIdUsuarioPorEmail(string email)
         {
             string query = "SELECT IdUsuario FROM Usuario WHERE Email = @Email";

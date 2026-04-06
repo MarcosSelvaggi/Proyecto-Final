@@ -10,5 +10,8 @@ namespace Dominio
     {
         public int IdPrestador {  get; set; }
         public string DescripcionPrestador {  set; get; }
+
+        public List<int> IdServicios { get; set; }
+        public List<ServiciosPrestador> Servicios { get; set; }
     }
 }
