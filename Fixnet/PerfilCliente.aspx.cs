@@ -21,12 +21,29 @@ namespace Fixnet
         {
             if (!IsPostBack)
             {
+                Usuario usuario = (Usuario)Session["Usuario"];
+
+                if (usuario == null)
+                {
+                    Response.Redirect("/Login.aspx");
+                    return;
+                }
+
+                bool sinDatos = usuario.Cliente == null ||
+                                string.IsNullOrEmpty(usuario.Cliente.DireccionCliente) ||
+                                usuario.Cliente.DireccionCliente == "No ingresado";
+
+                pnlFormulario.Visible = true;
+                pnlOk.Visible = !sinDatos;
+
                 RegisterAsyncTask(new PageAsyncTask(CargarProvincias));
                 ddlDepartamento.Enabled = false;
                 ddlLocalidad.Enabled = false;
 
                 ddlDepartamento.Items.Insert(0, "-- Seleccionar Municipio --");
                 ddlLocalidad.Items.Insert(0, "-- Seleccionar Localidad --");
+
+                CargarDatosCliente();
             }
         }
 
@@ -122,7 +139,7 @@ namespace Fixnet
 
         protected async Task CargarLocalidades()
         {
-            var url = "https://apis.datos.gob.ar/georef/api/v2.0/localidades?provincia=" + ddlProvincia.SelectedItem.ToString() 
+            var url = "https://apis.datos.gob.ar/georef/api/v2.0/localidades?provincia=" + ddlProvincia.SelectedValue
                 + "&departamento=" + ddlDepartamento.SelectedItem.ToString() 
                 + "&max=200"; 
             using (HttpClient httpClient = new HttpClient())
@@ -176,12 +193,47 @@ namespace Fixnet
 
             if (manager.ActualizarDireccionCliente(usuario))
             {
+                usuarioSession.Cliente = usuario.Cliente;
+                Session["Usuario"] = usuarioSession;
+
                 Response.Redirect("/SeleccionarPerfil.aspx", false);
             }
             else
             {
-                lblErrorDireccion.Text = " Ocurrió un error al actualizar la dirección.";
+                lblErrorDireccion.Text = "Ocurrió un error al actualizar la dirección.";
                 lblErrorDireccion.Visible = true;
+            }
+        }
+
+        private void CargarDatosCliente()
+        {
+            Usuario usuario = (Usuario)Session["Usuario"];
+
+            if (usuario?.Cliente != null && !string.IsNullOrEmpty(usuario.Cliente.DireccionCliente))
+            {
+                // Dirección
+                txtDireccion.Text = usuario.Cliente.DireccionCliente;
+
+                // Provincia
+                ddlProvincia.SelectedValue = usuario.Cliente.Provincia;
+
+                // Activar departamento
+                ddlDepartamento.Enabled = true;
+                ProvinciaSeleccionada = usuario.Cliente.Provincia;
+
+                // Cargar departamentos y luego seleccionar
+                RegisterAsyncTask(new PageAsyncTask(async () =>
+                {
+                    await CargarDepartamentos();
+
+                    ddlDepartamento.SelectedValue = usuario.Cliente.Departamento;
+
+                    ddlLocalidad.Enabled = true;
+
+                    await CargarLocalidades();
+
+                    ddlLocalidad.SelectedValue = usuario.Cliente.Localidad;
+                }));
             }
         }
     }

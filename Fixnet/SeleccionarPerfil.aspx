@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-xl-6 col-md-12">
                 <div class="imgSeleccionarPerfil">
-                    <a href="/PerfilProveedor.aspx">
+                    <a href="/PerfilPrestador.aspx">
                         <img src="assets/img-proveedor-1.png" class="img-fluid" alt="Imagen proveedor" />
                     </a>
                 </div>

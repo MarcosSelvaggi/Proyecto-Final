@@ -15,6 +15,15 @@ namespace Fixnet
     {
 
         /// <summary>
+        /// Control pnlFormulario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFormulario;
+
+        /// <summary>
         /// Control ddlProvincia.
         /// </summary>
         /// <remarks>
@@ -67,5 +76,14 @@ namespace Fixnet
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblErrorDireccion;
+
+        /// <summary>
+        /// Control pnlOk.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlOk;
     }
 }

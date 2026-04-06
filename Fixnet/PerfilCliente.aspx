@@ -1,51 +1,63 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="PerfilCliente.aspx.cs" Inherits="Fixnet.PerfilCliente" Async="true" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <!-- Main content -->
-    <div>
-        <% Dominio.Usuario UsuarioLogeado = (Dominio.Usuario)Session["Usuario"];
-            if (UsuarioLogeado == null ||
-    UsuarioLogeado.Cliente == null ||
-    string.IsNullOrEmpty(UsuarioLogeado.Cliente.DireccionCliente) ||
-    UsuarioLogeado.Cliente.DireccionCliente == "No ingresado")
-            {
-        %>
+    
+    <!-- FORM -->
+    <asp:Panel ID="pnlFormulario" runat="server">
         <div class="container">
             <div class="row">
+
                 <div class="mb-3">
-                    <label for="ddlProvincia" class="form-label">Seleccionar Provincia</label>
-                    <asp:DropDownList runat="server" ID="ddlProvincia" OnSelectedIndexChanged="ddlProvincia_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+                    <label class="form-label">Seleccionar Provincia</label>
+                    <asp:DropDownList runat="server" ID="ddlProvincia"
+                        OnSelectedIndexChanged="ddlProvincia_SelectedIndexChanged"
+                        AutoPostBack="true">
+                    </asp:DropDownList>
                 </div>
+
                 <div class="mb-3">
-                    <label for="ddlDepartamento" class="form-label">Seleccionar Municipio</label>
-                    <asp:DropDownList runat="server" ID="ddlDepartamento" OnSelectedIndexChanged="ddlDepartamento_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+                    <label class="form-label">Seleccionar Municipio</label>
+                    <asp:DropDownList runat="server" ID="ddlDepartamento"
+                        OnSelectedIndexChanged="ddlDepartamento_SelectedIndexChanged"
+                        AutoPostBack="true">
+                    </asp:DropDownList>
                 </div>
+
                 <div class="mb-3">
-                    <label for="ddlLocalidad" class="form-label">Seleccionar Localidad</label>
-                    <asp:DropDownList runat="server" ID="ddlLocalidad"></asp:DropDownList>
+                    <label class="form-label">Seleccionar Localidad</label>
+                    <asp:DropDownList runat="server" ID="ddlLocalidad">
+                    </asp:DropDownList>
                 </div>
+
                 <div class="mb-3">
-                    <label for="txtDireccion" class="form-label">Dirección</label>
-                    <asp:TextBox runat="server" CssClass="form-control" ID="txtDireccion"></asp:TextBox>
+                    <label class="form-label">Dirección</label>
+                    <asp:TextBox runat="server" CssClass="form-control" ID="txtDireccion">
+                    </asp:TextBox>
                 </div>
+
                 <div class="col-12">
-                    <div>
-                        <asp:Button ID="btnActualizarInformacion" runat="server" Text="Actualizar información" CssClass="BtnActualizar" OnClick="btnActualizarInformacion_Click" />
-                        <asp:Label ID="lblErrorDireccion" runat="server" CssClass="text-danger" Visible="false"></asp:Label>
-                    </div>
+                    <asp:Button ID="btnActualizarInformacion" runat="server"
+                        Text="Actualizar información"
+                        CssClass="BtnActualizar"
+                        OnClick="btnActualizarInformacion_Click" />
+
+                    <asp:Label ID="lblErrorDireccion" runat="server"
+                        CssClass="text-danger"
+                        Visible="false">
+                    </asp:Label>
                 </div>
+
             </div>
         </div>
+    </asp:Panel>
 
-        <%
-            }
-            else
-            {
-                %>
-        <h1>Ta todo joya</h1>
-        <%
-            }
-        %>
-    </div>
+    <asp:Panel ID="pnlOk" runat="server">
+        <div class="container">
+            <h5 class="text-success mt-3">Datos cargados correctamente. Podés modificarlos cuando quieras.</h5>
+        </div>
+    </asp:Panel>
+
 </asp:Content>
