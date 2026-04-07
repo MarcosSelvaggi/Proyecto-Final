@@ -13,5 +13,12 @@ namespace Fixnet
         {
 
         }
+
+        protected void btn_CerrarSesion_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Response.Redirect("/Default.aspx", false);
+            return;
+        }
     }
 }

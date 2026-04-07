@@ -21,8 +21,8 @@ BEGIN
         DECLARE @IdUsuario INT = SCOPE_IDENTITY();
 
         -- 2. Insert Cliente
-        INSERT INTO Cliente (IdUsuario, Provincia, Departamento, Localidad, Direccion)
-        VALUES (@IdUsuario, 'No ingresado', 'No ingresado', 'No ingresado', 'No ingresado');
+        INSERT INTO Cliente (IdUsuario, Provincia, Departamento, Localidad, LocalidadId, Direccion)
+        VALUES (@IdUsuario, 'No ingresado', 'No ingresado', 'No ingresado', 'No ingresado', 'No ingresado');
 
         -- 3. Insert Prestador
         INSERT INTO Prestador (IdUsuario, Descripcion)

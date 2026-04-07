@@ -11,8 +11,8 @@ namespace Servicios
 {
     public class BD
     {
-        //readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
         {
@@ -61,12 +61,15 @@ namespace Servicios
                         P.Descripcion,
                         C.Direccion,
                         C.Localidad,
+                        C.LocalidadId,
                         C.Departamento,
                         C.Provincia,
-                        U.Email
+                        U.Email,
+                        ZP.IdLocalidad
                     FROM Usuario U
                     LEFT JOIN Prestador P ON U.IdUsuario = P.IdUsuario
                     LEFT JOIN Cliente C ON U.IdUsuario = C.IdUsuario
+                    Left Join ZonasPrestador ZP on ZP.IdPrestador = P.IdPrestador
                     WHERE U.Email = @Email";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -85,11 +88,9 @@ namespace Servicios
 
                         if (BCrypt.Net.BCrypt.EnhancedVerify(password, passwordHash))
                         {
-
-
                             Usuario usuario = new Usuario();
-                            usuario.Prestador = new Prestador();
-                            usuario.Cliente = new Cliente();
+                            //usuario.Prestador = new Prestador();
+                            //usuario.Cliente = new Cliente();
 
                             usuario.IdUsuario = Int32.Parse(reader["IdUsuario"].ToString());
                             usuario.NombreUsuario = reader["Nombre"].ToString();
@@ -99,9 +100,12 @@ namespace Servicios
                             usuario.EmailUsuario = reader["Email"].ToString();
 
                             usuario.Prestador.DescripcionPrestador = reader["Descripcion"].ToString();
+                            usuario.Prestador.ZonasPrestador = reader["IdLocalidad"].ToString(); 
+
                             usuario.Cliente.Provincia = reader["Provincia"].ToString();
                             usuario.Cliente.Departamento = reader["Departamento"].ToString();
                             usuario.Cliente.Localidad = reader["Localidad"].ToString();
+                            usuario.Cliente.IdLocalidad = reader["LocalidadId"].ToString();
                             usuario.Cliente.DireccionCliente = reader["Direccion"].ToString();
 
                             if (reader["IdPrestador"] != DBNull.Value)
@@ -193,7 +197,8 @@ namespace Servicios
             string query = @"UPDATE Cliente 
                      SET Provincia = @Provincia, 
                          Departamento = @Departamento,
-                         Localidad = @Localidad, 
+                         Localidad = @Localidad,
+                         LocalidadId = @LocalidadId,
                          Direccion = @Direccion
                      WHERE IdUsuario = @IdUsuario";
 
@@ -205,6 +210,7 @@ namespace Servicios
                     command.Parameters.AddWithValue("@Provincia", UsuarioActualizado.Cliente.Provincia);
                     command.Parameters.AddWithValue("@Departamento", UsuarioActualizado.Cliente.Departamento);
                     command.Parameters.AddWithValue("@Localidad", UsuarioActualizado.Cliente.Localidad);
+                    command.Parameters.AddWithValue("@LocalidadId", UsuarioActualizado.Cliente.IdLocalidad);
                     command.Parameters.AddWithValue("@Direccion", UsuarioActualizado.Cliente.DireccionCliente);
                     command.Parameters.AddWithValue("@IdUsuario", UsuarioActualizado.IdUsuario); // 👈 CLAVE
 
@@ -335,6 +341,12 @@ namespace Servicios
                         cmdInsert.ExecuteNonQuery();
                     }
 
+                    string ActualizarZonas = "Update ZonasPrestador set IdLocalidad = @IdLocalidad where IdPrestador = @IdPrestador";
+                    SqlCommand CmdZonas = new SqlCommand(ActualizarZonas, conn, transaction);
+                    CmdZonas.Parameters.AddWithValue("@IdLocalidad", usuario.Prestador.ZonasPrestador);
+                    CmdZonas.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                    CmdZonas.ExecuteNonQuery();
+
                     transaction.Commit();
                     return idPrestador;
                 }
@@ -376,8 +388,61 @@ namespace Servicios
             }
         }
 
+        public List<Usuario> DevolverPrestadores(Usuario usuario, int Servicio)
+        {
+            List<Usuario> PrestadoresEncontrados = new List<Usuario>();
 
+            string query = @"Select
+                        U.IdUsuario,
+                        U.Nombre,
+                        U.Apellido,
+                        U.Telefono,
+                        U.Activo,
+                        U.Email,
+                        P.Descripcion
+                    FROM Usuario U
+                    LEFT JOIN Prestador P ON U.IdUsuario = P.IdUsuario
+                    LEFT JOIN Cliente C ON U.IdUsuario = C.IdUsuario
+                    LEFT JOIN ZonasPrestador ZP ON ZP.IdPrestador = P.IdPrestador
+                    LEFT JOIN PrestadorServicio PS ON PS.IdPrestador = P.IdPrestador
+                    Where ZP.IdLocalidad LIKE @Localidad 
+                    AND PS.IdServicio = @IdServicio";
 
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlCommand Command = new SqlCommand(query, sqlConnection))
+            {
+                Command.Parameters.AddWithValue("@Localidad", "%" + usuario.Cliente.IdLocalidad + "%");
+                Command.Parameters.AddWithValue("IdServicio", Servicio);
+
+                try
+                {
+                    sqlConnection.Open();
+                    SqlDataReader Reader = Command.ExecuteReader();
+
+                    while (Reader.Read())
+                    {
+                        Usuario Usuario = new Usuario();
+
+                        usuario.IdUsuario = Int32.Parse(Reader["IdUsuario"].ToString());
+                        Usuario.NombreUsuario = Reader["Nombre"].ToString();
+                        Usuario.ApellidoUsuario = Reader["Apellido"].ToString();
+                        Usuario.TelefonoUsuario = Reader["Telefono"].ToString();
+                        Usuario.UsuarioActivo = (bool)Reader["Activo"];
+                        Usuario.EmailUsuario = Reader["Email"].ToString();
+                        
+                        Usuario.Prestador.DescripcionPrestador = Reader["Descripcion"].ToString();
+
+                        PrestadoresEncontrados.Add(Usuario);    
+                    }
+                }
+                catch (SqlException)
+                {
+                    return PrestadoresEncontrados;
+                }
+            }
+        
+            return PrestadoresEncontrados;
+        }
 
     }
 }

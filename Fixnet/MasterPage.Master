@@ -76,6 +76,7 @@
                         <ul class="navbar-nav ms-lg-auto me-3 text-center text-lg-start">
                             <li class="nav-item">
                                 <h3><%=Usuario.NombreUsuario %></h3>
+                                <h3><asp:button runat="server" Text="Cerrar sesión" ID="btn_CerrarSesion" OnClick="btn_CerrarSesion_Click"/></h3>
                             </li>
                         </ul>
                             <%}%>

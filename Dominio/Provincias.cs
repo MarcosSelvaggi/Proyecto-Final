@@ -12,7 +12,7 @@ namespace Dominio
         public string Nombre { get; set; } 
     }
 
-    public class Listadeprovincias
+    public class ListaDeProvincias
     {
         public List<Provincias> Provincias {  get; set; }
     }

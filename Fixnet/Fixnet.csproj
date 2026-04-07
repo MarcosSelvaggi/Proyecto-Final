@@ -103,6 +103,7 @@
     <Content Include="assets\img-usuario-2.png" />
     <Content Include="assets\img-usuario-3.png" />
     <Content Include="assets\logo.png" />
+    <Content Include="BuscarPrestadores.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -307,6 +308,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuscarPrestadores.aspx.cs">
+      <DependentUpon>BuscarPrestadores.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BuscarPrestadores.aspx.designer.cs">
+      <DependentUpon>BuscarPrestadores.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

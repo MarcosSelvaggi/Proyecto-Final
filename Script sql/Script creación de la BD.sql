@@ -32,6 +32,7 @@ create table Cliente(
 	Provincia nvarchar (100) not null,
 	Departamento nvarchar(100) not null,
 	Localidad nvarchar (100) not null,
+	LocalidadId nvarchar(100) not null,
 	Direccion nvarchar(100) not null
 );
 

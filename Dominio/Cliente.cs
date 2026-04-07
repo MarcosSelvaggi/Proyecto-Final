@@ -12,6 +12,7 @@ namespace Dominio
         public string Provincia {  get; set; }
         public string Departamento { get; set; }
         public string Localidad { get; set; }
+        public string IdLocalidad {  get; set; }
         public string DireccionCliente { get; set; }
     }
 }

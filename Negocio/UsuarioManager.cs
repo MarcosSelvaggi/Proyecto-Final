@@ -13,48 +13,44 @@ namespace Negocio
     public class UsuarioManager
     {
         Usuario Usuario;
-
+        BD Conexion = new BD();
         public bool RegistrarUsuario(Usuario Usuario)
         {
-
-            Usuario.PasswordUsuario = BCrypt.Net.BCrypt.EnhancedHashPassword(Usuario.PasswordUsuario, 13);
-            BD conexion = new BD();
-            return conexion.RegistrarUsuarioBD(Usuario) > 0;
+            Usuario.PasswordUsuario = BCrypt.Net.BCrypt.EnhancedHashPassword(Usuario.PasswordUsuario, 13);  
+            return Conexion.RegistrarUsuarioBD(Usuario) > 0;
         }
 
 
         public Usuario LogearUsuario(string Email, string Password)
         {
-            BD conexion = new BD();
-
-            return conexion.LogearUsuario(Email, Password);
+            return Conexion.LogearUsuario(Email, Password);
         }
 
         public bool ActualizarDireccionCliente(Usuario usuario)
         {
-            BD conexion = new BD();
-            return conexion.actualizarDireccionCliente(usuario);
+            return Conexion.actualizarDireccionCliente(usuario);
         }
 
         public int ActualizarDatosPrestador(Usuario usuario)
         {
-            BD conexion = new BD();
-            return conexion.ActualizarPrestadorBD(usuario);
+            return Conexion.ActualizarPrestadorBD(usuario);
         }
         public List<Servicio> TraerServicios()
-        {
-            BD conexion = new BD();
-            return conexion.TraerServiciosBD();
+        {  
+            return Conexion.TraerServiciosBD();
         }
         public List<ServiciosPrestador> TraerServiciosPrestador(int idPrestador)
         {
-            BD conexion = new BD();
-            return conexion.TraerServiciosPrestador(idPrestador);
+            return Conexion.TraerServiciosPrestador(idPrestador);
         }
         public int BuscarUsuarioMail(Usuario usuario)
+        {  
+            return Conexion.ObtenerIdUsuarioPorEmail(usuario.EmailUsuario);
+        }
+
+        public List<Usuario> TraerPrestadores(Usuario Usuario, int Servicio)
         {
-            BD conexion = new BD();
-            return conexion.ObtenerIdUsuarioPorEmail(usuario.EmailUsuario);
+            return Conexion.DevolverPrestadores(Usuario, Servicio);
         }
 
     }

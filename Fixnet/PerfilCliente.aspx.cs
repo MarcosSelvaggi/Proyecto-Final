@@ -15,8 +15,6 @@ namespace Fixnet
 {
     public partial class PerfilCliente : System.Web.UI.Page
     {
-        private string ProvinciaSeleccionada { get; set; }
-        private string MunicipioSeleccionado { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -58,7 +56,7 @@ namespace Fixnet
                 if (Respuesta.IsSuccessStatusCode)
                 {
                     var Data = await Respuesta.Content.ReadAsStringAsync();
-                    var ListaProvincias = JsonSerializer.Deserialize<Listadeprovincias>(Data,
+                    var ListaProvincias = JsonSerializer.Deserialize<ListaDeProvincias>(Data,
                         new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                     var Provincias = ListaProvincias.Provincias.OrderBy(p => p.Nombre).ToList();
@@ -66,7 +64,7 @@ namespace Fixnet
 
                     ddlProvincia.DataSource = Provincias;
                     ddlProvincia.DataValueField = "Nombre";
-                    
+
                     ddlProvincia.DataBind();
 
                     ddlProvincia.Items.Insert(0, "-- Seleccionar una Provincia --");
@@ -87,7 +85,6 @@ namespace Fixnet
             {
                 LimpiarDdls();
                 ddlDepartamento.Enabled = true; 
-                ProvinciaSeleccionada = ddlProvincia.SelectedValue;
                 RegisterAsyncTask(new PageAsyncTask(CargarDepartamentos));
             }
 
@@ -138,7 +135,6 @@ namespace Fixnet
             else
             {
                 ddlLocalidad.Enabled = true;
-                MunicipioSeleccionado = ddlDepartamento.SelectedValue;
                 RegisterAsyncTask(new PageAsyncTask(CargarLocalidades));
             }
         }
@@ -166,9 +162,13 @@ namespace Fixnet
 
 
                     var Localidades = ListaLocalidades.Localidades.OrderBy(p => p.Nombre).ToList();
-                    
+
+                    Session.Remove("Localidades");
+
                     //Con esto se eliminan duplicados, ya que hay departamentos con localidades "repetidas"
                     var LocalidadesSinDuplicadas = Localidades.GroupBy(x => x.Nombre).Select(x => x.First()).ToList();
+
+                    Session.Add("Localidades", LocalidadesSinDuplicadas);
 
                     ddlLocalidad.DataSource = LocalidadesSinDuplicadas;
                     ddlLocalidad.DataValueField = "Nombre";
@@ -202,11 +202,13 @@ namespace Fixnet
             Usuario usuario = new Usuario();
             usuario.IdUsuario = usuarioSession.IdUsuario;
 
-            usuario.Cliente = new Cliente(); // 👈 CLAVE
+            //usuario.Cliente = new Cliente(); // 👈 CLAVE -> El constructor vacío ya declara un nuevo Cliente y prestador 
 
             usuario.Cliente.Provincia = ddlProvincia.SelectedValue;
             usuario.Cliente.Departamento = ddlDepartamento.SelectedValue;
             usuario.Cliente.Localidad = ddlLocalidad.SelectedValue;
+            List<Localidades> localidades = (List<Localidades>)Session["Localidades"];
+            usuario.Cliente.IdLocalidad = localidades[ddlLocalidad.SelectedIndex - 1].Id.ToString(); 
             usuario.Cliente.DireccionCliente = txtDireccion.Text;
 
             UsuarioManager manager = new UsuarioManager();
@@ -229,7 +231,7 @@ namespace Fixnet
         {
             Usuario usuario = (Usuario)Session["Usuario"];
 
-            if (usuario?.Cliente != null && !string.IsNullOrEmpty(usuario.Cliente.DireccionCliente))
+            if (usuario?.Cliente != null && usuario.Cliente.DireccionCliente != "No ingresado")
             {
                 // Dirección
                 txtDireccion.Text = usuario.Cliente.DireccionCliente;
@@ -239,7 +241,6 @@ namespace Fixnet
 
                 // Activar departamento
                 ddlDepartamento.Enabled = true;
-                ProvinciaSeleccionada = usuario.Cliente.Provincia;
 
                 // Cargar departamentos y luego seleccionar
                 RegisterAsyncTask(new PageAsyncTask(async () =>
