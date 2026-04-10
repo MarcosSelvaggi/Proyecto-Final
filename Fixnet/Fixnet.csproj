@@ -306,6 +306,7 @@
     <Content Include="styles\StyleRegistro.css" />
     <Content Include="styles\StylesMasterPage.css" />
     <Content Include="Web.config" />
+    <Content Include="PerfilUsuario.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuscarPrestadores.aspx.cs">
@@ -367,6 +368,13 @@
     </Compile>
     <Compile Include="SeleccionarPerfil.aspx.designer.cs">
       <DependentUpon>SeleccionarPerfil.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PerfilUsuario.aspx.cs">
+      <DependentUpon>PerfilUsuario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PerfilUsuario.aspx.designer.cs">
+      <DependentUpon>PerfilUsuario.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

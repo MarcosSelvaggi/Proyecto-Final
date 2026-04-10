@@ -11,8 +11,8 @@ namespace Servicios
 {
     public class BD
     {
-        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
         {
@@ -89,8 +89,8 @@ namespace Servicios
                         if (BCrypt.Net.BCrypt.EnhancedVerify(password, passwordHash))
                         {
                             Usuario usuario = new Usuario();
-                            //usuario.Prestador = new Prestador();
-                            //usuario.Cliente = new Cliente();
+                            usuario.Prestador = new Prestador();
+                            usuario.Cliente = new Cliente();
 
                             usuario.IdUsuario = Int32.Parse(reader["IdUsuario"].ToString());
                             usuario.NombreUsuario = reader["Nombre"].ToString();

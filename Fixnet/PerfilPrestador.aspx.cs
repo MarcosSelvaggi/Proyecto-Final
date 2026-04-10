@@ -393,7 +393,7 @@ namespace Fixnet
                 // Actualizo IdPrestador en sesión
                 usuarioSession.Prestador.IdPrestador = idPrestador;
                 Session["Usuario"] = usuarioSession;
-                Response.Redirect("/SeleccionarPerfil.aspx", false);
+                Response.Redirect("/PerfilUsuario.aspx", false);
             }
             else
             {

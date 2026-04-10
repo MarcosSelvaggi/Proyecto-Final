@@ -218,7 +218,7 @@ namespace Fixnet
                 usuarioSession.Cliente = usuario.Cliente;
                 Session["Usuario"] = usuarioSession;
 
-                Response.Redirect("/SeleccionarPerfil.aspx", false);
+                Response.Redirect("/PerfilUsuario.aspx", false);
             }
             else
             {
