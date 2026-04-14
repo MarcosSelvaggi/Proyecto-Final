@@ -39,20 +39,40 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
 
                         <!-- Menú central -->
-                        <ul class="navbar-nav mx-auto text-center text-lg-start">
-                            <li class="nav-item">
-                                <a class="nav-link active hover-underline" href="#hero">Publica tus servicios</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active hover-underline" href="#services">Buscar profesionales</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active hover-underline" href="#about-us">Sobre Fixnet</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active hover-underline" href="#contact">Contáctanos</a>
-                            </li>
-                        </ul>
+    <ul class="navbar-nav mx-auto text-center text-lg-start">
+                            
+    <% if (Session["Usuario"] == null) { %>
+
+    <!-- NO logueado -->
+    <li class="nav-item">
+        <a class="nav-link active hover-underline" href="#hero">Publica tus servicios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active hover-underline" href="#services">Buscar profesionales</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active hover-underline" href="#about-us">Sobre Fixnet</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active hover-underline" href="#contact">Contáctanos</a>
+    </li>
+
+<% } else { %>
+
+    <!-- LOGUEADO -->
+    <li class="nav-item">
+        <a class="nav-link active hover-underline" href="/BuscarPrestadores.aspx">Buscar profesionales</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active hover-underline" href="/MisTurnos.aspx">Mis turnos</a>
+    </li>
+     <li class="nav-item">
+     <a class="nav-link active hover-underline" href="/TurnosSolicitados.aspx">Turnos Solicitados</a>
+ </li>
+
+<% } %>
+
+ </ul>
 
                         <!-- Menú derecho -->
                         <% if (Session["Usuario"] == null)
@@ -75,7 +95,11 @@
 
                         <ul class="navbar-nav ms-lg-auto me-3 text-center text-lg-start">
                             <li class="nav-item">
-                                <h3><%=Usuario.NombreUsuario %></h3>
+                                
+                                  <a href="/PerfilUsuario.aspx" class="nav-link fw-bold">
+                                  <%= Usuario.NombreUsuario %>
+                                  </a>
+
                                 <h3><asp:button runat="server" Text="Cerrar sesión" ID="btn_CerrarSesion" OnClick="btn_CerrarSesion_Click"/></h3>
                             </li>
                         </ul>

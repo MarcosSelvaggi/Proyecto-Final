@@ -55,7 +55,7 @@
                             </button>
                         </div>
                         <div class="btnPublicarServicios py-2">
-                            <a href="/Registro.aspx" class="PublicarServicios">Publicar servicios</a>
+                            <a href="/Logearse.aspx" class="PublicarServicios">Publicar servicios</a>
 
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                             </button>
                         </div>
                         <div class="btnPublicarServicios py-2">
-                            <a href="/Registro.aspx" class="PublicarServicios">Buscar profesionales</a>
+                            <a href="/Logearse.aspx" class="PublicarServicios">Buscar profesionales</a>
                         </div>
                     </div>
                 </div>
