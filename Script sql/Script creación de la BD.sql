@@ -64,9 +64,7 @@ create table PrestadorMetodoPago(
 create table Disponibilidad(
 	IdDisponibilidad int primary key identity(1,1) not null, 
 	IdPrestador int foreign key references Prestador(IdPrestador) not null,
-	DiaSemana int not null check (DiaSemana BETWEEN 1 AND 7),
-	HoraInicio time not null,
-	HoraFin time not null,
+	DisponibilidadPrestador varchar(300) not null
 );
 
 create table Turno(

@@ -11,7 +11,11 @@ namespace Fixnet
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["Usuario"] != null)
+            {   
+                //Esto refresca el tiempo de la sesión cada vez que el usuario interactua con alguna página, para evitar que lo eche cuando está usando la app
+                Session.Timeout = 20; 
+            }
         }
 
         protected void btn_CerrarSesion_Click(object sender, EventArgs e)

@@ -31,7 +31,11 @@ namespace Fixnet
 
                 if (usuario.Prestador != null)
                 {
-                    txtDescripcion.Text = usuario.Prestador.DescripcionPrestador;
+                    //Para que la descripción no diga "No ingresado"
+                    if (usuario.Prestador.DescripcionPrestador != "No ingresado")
+                    {
+                        txtDescripcion.Text = usuario.Prestador.DescripcionPrestador;
+                    }
                     btnGuardarPrestador.Text = "Actualizar";
 
                     Session.Remove("Localidades_Seleccionadas_Por_Prestador");
@@ -42,6 +46,8 @@ namespace Fixnet
                         Session.Add("Localidades_Ya_Ingresadas", Lista);
                         RegisterAsyncTask(new PageAsyncTask(RecuperarLocalidades));
                     }
+
+                    CargarHorariosPrestador(usuario.Prestador.HorariosPrestador); 
                 }
 
                 RegisterAsyncTask(new PageAsyncTask(CargarProvincias));
@@ -293,8 +299,6 @@ namespace Fixnet
             rptLocalidades.DataBind();
         }
 
-
-
         private void CargarServicios()
         {
             Usuario usuario = (Usuario)Session["Usuario"];
@@ -337,6 +341,233 @@ namespace Fixnet
             }
         }
 
+        protected void CbxChecked(object sender, EventArgs e)
+        {
+            ActivarHorarios();
+        }
+
+        //Habilita los Text donde van los horarios, si el check se saca, pone en 0 los valores de las horas
+        protected void ActivarHorarios()
+        {
+            if (CbxDomingo.Checked)
+            {
+                HorariosDomingos.Visible = true;
+            }
+            else
+            {
+                HorariosDomingos.Visible = false;
+                HorarioInicioDomingo.Text = "0";
+                HorarioFinDomingo.Text = "0";
+            }
+
+            if (CbxLunes.Checked)
+            {
+                HorariosLunes.Visible = true;
+            }
+            else
+            {
+                HorariosLunes.Visible = false;
+                HorarioInicioLunes.Text = "0";
+                HorarioFinLunes.Text = "0";
+            }
+
+            if (CbxMartes.Checked)
+            {
+                HorariosMartes.Visible = true;
+            }
+            else
+            {
+                HorariosMartes.Visible = false;
+                HorarioInicioMartes.Text = "0";
+                HorarioFinMartes.Text = "0";
+            }
+
+            if (CbxMiercoles.Checked)
+            {
+                HorariosMiercoles.Visible = true;
+            }
+            else
+            {
+                HorariosMiercoles.Visible = false;
+                HorarioInicioMiercoles.Text = "0";
+                HorarioFinMiercoles.Text = "0";
+            }
+
+            if (CbxJueves.Checked)
+            {
+                HorariosJueves.Visible = true;
+            }
+            else
+            {
+                HorariosJueves.Visible = false;
+                HorarioInicioJueves.Text = "0";
+                HorarioFinJueves.Text = "0";
+            }
+
+            if (CbxViernes.Checked)
+            {
+                HorariosViernes.Visible = true;
+            }
+            else
+            {
+                HorariosViernes.Visible = false;
+                HorarioInicioViernes.Text = "0";
+                HorarioFinViernes.Text = "0";
+            }
+
+            if (CbxSabados.Checked)
+            {
+                HorariosSabados.Visible = true;
+            }
+            else
+            {
+                HorariosSabados.Visible = false;
+                HorarioInicioSabados.Text = "0";
+                HorarioFinSabados.Text = "0";
+            }
+        }
+
+     
+        protected void CargarHorariosPrestador(string Horarios)
+        {
+            string[] HorariosPrestador = Horarios.Split(',');
+            for (int i = 0; HorariosPrestador.Length > i; i = i+4)
+            {
+                if (HorariosPrestador[i + 1].Trim() != "0")
+                {
+                    if (HorariosPrestador[i].Trim() == "Domingos")
+                    {
+                        CbxDomingo.Checked = true; 
+                        HorarioInicioDomingo.Text = HorariosPrestador[i + 2].Trim();
+                        HorarioFinDomingo.Text = HorariosPrestador[i + 3].Trim();
+                    }
+                    else if (HorariosPrestador[i].Trim() == "Lunes")
+                    {
+                        CbxLunes.Checked = true;
+                        HorarioInicioLunes.Text = HorariosPrestador[i + 2].Trim();
+                        HorarioFinLunes.Text = HorariosPrestador[i + 3].Trim();
+                    }
+                    else if (HorariosPrestador[i].Trim() == "Martes")
+                    {
+                        CbxMartes.Checked = true;
+                        HorarioInicioMartes.Text = HorariosPrestador[i + 2].Trim();
+                        HorarioFinMartes.Text = HorariosPrestador[i + 3].Trim();
+                    }
+                    else if (HorariosPrestador[i].Trim() == "Miércoles")
+                    {
+                        CbxMiercoles.Checked = true;
+                        HorarioInicioMiercoles.Text = HorariosPrestador[i + 2].Trim();
+                        HorarioFinMiercoles.Text = HorariosPrestador[i + 3].Trim();
+                    }
+                    else if (HorariosPrestador[i].Trim() == "Jueves")
+                    {
+                        CbxJueves.Checked = true;
+                        HorarioInicioJueves.Text = HorariosPrestador[i + 2].Trim();
+                        HorarioFinJueves.Text = HorariosPrestador[i + 3].Trim();
+                    }
+                    else if (HorariosPrestador[i].Trim() == "Viernes")
+                    {
+                        CbxViernes.Checked = true;
+                        HorarioInicioViernes.Text = HorariosPrestador[i + 2].Trim();
+                        HorarioFinViernes.Text = HorariosPrestador[i + 3].Trim();
+                    }
+                    else if (HorariosPrestador[i].Trim() == "Sábados")
+                    {
+                        CbxSabados.Checked = true;
+                        HorarioInicioSabados.Text = HorariosPrestador[i + 2].Trim();
+                        HorarioFinSabados.Text = HorariosPrestador[i + 3].Trim();
+                    }
+                }
+            }
+            ActivarHorarios();
+        }
+
+        protected bool NingunDiaSeleccionado()
+        {
+            return CbxDomingo.Checked == false && CbxLunes.Checked == false && CbxMartes.Checked == false &&
+                 CbxMiercoles.Checked == false && CbxJueves.Checked == false && CbxViernes.Checked == false && CbxSabados.Checked == false;
+        }
+
+        protected bool VerificarHorariosCargados()
+        {
+            int Verificador = 0;
+            if (VerificarTxt(HorarioInicioDomingo, HorarioFinDomingo) == false)
+            {
+                Verificador++;
+            }
+            if (VerificarTxt(HorarioInicioLunes, HorarioFinLunes) == false) 
+            { 
+                Verificador++; 
+            }
+
+            if (VerificarTxt(HorarioInicioMartes, HorarioFinMartes) == false) 
+            { 
+                Verificador++;
+            }
+
+            if (VerificarTxt(HorarioInicioMiercoles, HorarioFinMiercoles) == false) 
+            { 
+                Verificador++; 
+            }
+
+            if (VerificarTxt(HorarioInicioJueves, HorarioFinJueves) == false) 
+            { 
+                Verificador++; 
+            }
+
+            if (VerificarTxt(HorarioInicioViernes, HorarioFinViernes) == false) 
+            { 
+                Verificador++; 
+            }
+
+            if (VerificarTxt(HorarioInicioSabados, HorarioFinSabados) == false) 
+            { 
+                Verificador++; 
+            }
+
+            return Verificador > 0;
+
+        }
+
+        protected bool VerificarTxt(TextBox HorarioInicio, TextBox HorarioFin)
+        {
+            if (!String.IsNullOrEmpty(HorarioInicio.Text) || !String.IsNullOrEmpty(HorarioFin.Text))
+            {
+                try
+                {
+                    int HoraInicio = Int32.Parse(HorarioInicio.Text);
+                    int HoraFin = Int32.Parse(HorarioFin.Text);
+
+                    if (HoraInicio == 0 && HoraFin == 0)
+                    {
+                        return true;
+                    }
+
+                    return HoraInicio < HoraFin;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        protected string EscribirHorarios()
+        {
+            string horarios = String.Format("Domingos, {0},{1},{2}, Lunes, {3}, {4}, {5}, Martes, {6}, {7}, {8}, " +
+                                            "Miércoles, {9}, {10}, {11}, Jueves, {12}, {13}, {14}, Viernes, {15}, {16}, {17}, " +
+                                            "Sábados, {18}, {19}, {20}", 
+                                            Convert.ToInt32(CbxDomingo.Checked), HorarioInicioDomingo.Text, HorarioFinDomingo.Text,
+                                            Convert.ToInt32(CbxLunes.Checked), HorarioInicioLunes.Text, HorarioFinLunes.Text,
+                                            Convert.ToInt32(CbxMartes.Checked), HorarioInicioMartes.Text, HorarioFinMartes.Text, 
+                                            Convert.ToInt32(CbxMiercoles.Checked), HorarioInicioMiercoles.Text, HorarioFinMiercoles.Text,
+                                            Convert.ToInt32(CbxJueves.Checked), HorarioInicioJueves.Text, HorarioFinJueves.Text,
+                                            Convert.ToInt32(CbxViernes.Checked), HorarioInicioViernes.Text, HorarioFinViernes.Text,
+                                            Convert.ToInt32(CbxSabados.Checked), HorarioInicioSabados.Text, HorarioFinSabados.Text);
+            return horarios; 
+        }
+
         protected void btnGuardarPrestador_Click(object sender, EventArgs e)
         {
             Usuario usuarioSession = (Usuario)Session["Usuario"];
@@ -368,19 +599,42 @@ namespace Fixnet
                     }
                 }
             }
-            
+
             //Limpió el Zonas Prestador sino se sigue agregando lo viejo
             usuarioSession.Prestador.ZonasPrestador = "";
 
-            if (Session["Localidades_Seleccionadas_Por_Prestador"] != null){
+            if (Session["Localidades_Seleccionadas_Por_Prestador"] != null)
+            {
                 var ListaLocalidadesAux = (List<Localidades>)Session["Localidades_Seleccionadas_Por_Prestador"];
                 foreach (Localidades localidad in ListaLocalidadesAux)
                 {
                     usuarioSession.Prestador.ZonasPrestador += localidad.Id + ',';
                 }
             }
+            else
+            {
+                LblErrorLocalidades.Visible = true;
+                LblErrorLocalidades.InnerText = "Tenés que seleccionar al menos una localidad";
+                return;
+            }
             usuarioSession.Prestador.ZonasPrestador = usuarioSession.Prestador.ZonasPrestador.Remove(usuarioSession.Prestador.ZonasPrestador.Length - 1, 1);
-             
+
+            if (NingunDiaSeleccionado())
+            {
+                LblErrorHorariosPrestador.Visible = true;
+                LblErrorHorariosPrestador.InnerText = "Debes seleccionar al menos un día";
+                return;
+            }
+            else if (VerificarHorariosCargados())
+            {
+                LblErrorHorariosPrestador.Visible = true;
+                LblErrorHorariosPrestador.InnerText = "Error al cargar los horarios";
+                return;
+            }
+            else
+            {
+                usuarioSession.Prestador.HorariosPrestador = EscribirHorarios();
+            }
 
             usuarioSession.Prestador.Servicios = servicios;
             usuarioSession.Prestador.DescripcionPrestador = txtDescripcion.Text;
@@ -401,7 +655,6 @@ namespace Fixnet
                 lblErrorPrestador.Visible = true;
             }
         }
-
 
         //private void CargarLocalidades(Usuario usuario)
         //{

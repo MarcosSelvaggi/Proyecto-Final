@@ -34,6 +34,11 @@ BEGIN
         INSERT INTO ZonasPrestador (IdPrestador, IdLocalidad)
         VALUES (@IdPrestador, 'No ingresado');
 
+        -- 5. Insert Disponibilidad
+        INSERT INTO Disponibilidad (IdPrestador, DisponibilidadPrestador)
+        VALUES (@IdPrestador, 'Domingos,0,0,0,Lunes,0,0,0,Martes,0,0,0,Miércoles,0,0,0,Jueves,0,0,0,Viernes,0,0,0,Sábados,0,0,0') 
+        --El primer 0 es del check, los otros son el horario de inicio y fin en ese orden
+
         COMMIT TRANSACTION;
 
         RETURN 1; -- éxito

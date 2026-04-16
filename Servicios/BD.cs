@@ -65,11 +65,13 @@ namespace Servicios
                         C.Departamento,
                         C.Provincia,
                         U.Email,
-                        ZP.IdLocalidad
+                        ZP.IdLocalidad,
+                        D.DisponibilidadPrestador
                     FROM Usuario U
                     LEFT JOIN Prestador P ON U.IdUsuario = P.IdUsuario
                     LEFT JOIN Cliente C ON U.IdUsuario = C.IdUsuario
-                    Left Join ZonasPrestador ZP on ZP.IdPrestador = P.IdPrestador
+                    LEFT JOIN ZonasPrestador ZP on ZP.IdPrestador = P.IdPrestador
+                    LEFT JOIN Disponibilidad D on D.IdPrestador = P.IdPrestador
                     WHERE U.Email = @Email";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -101,6 +103,7 @@ namespace Servicios
 
                             usuario.Prestador.DescripcionPrestador = reader["Descripcion"].ToString();
                             usuario.Prestador.ZonasPrestador = reader["IdLocalidad"].ToString(); 
+                            usuario.Prestador.HorariosPrestador = reader["DisponibilidadPrestador"].ToString();
 
                             usuario.Cliente.Provincia = reader["Provincia"].ToString();
                             usuario.Cliente.Departamento = reader["Departamento"].ToString();
@@ -346,6 +349,12 @@ namespace Servicios
                     CmdZonas.Parameters.AddWithValue("@IdLocalidad", usuario.Prestador.ZonasPrestador);
                     CmdZonas.Parameters.AddWithValue("@IdPrestador", idPrestador);
                     CmdZonas.ExecuteNonQuery();
+
+                    string ActualizarHorarios = "Update Disponibilidad set DisponibilidadPrestador = @Disponibilidad where IdPrestador = @IdPrestador";
+                    SqlCommand CmdDisponibilidad = new SqlCommand(ActualizarHorarios, conn, transaction);
+                    CmdDisponibilidad.Parameters.AddWithValue("@Disponibilidad", usuario.Prestador.HorariosPrestador);
+                    CmdDisponibilidad.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                    CmdDisponibilidad.ExecuteNonQuery();
 
                     transaction.Commit();
                     return idPrestador;
