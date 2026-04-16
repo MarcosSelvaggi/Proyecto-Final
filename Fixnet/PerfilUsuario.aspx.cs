@@ -28,24 +28,34 @@ namespace Fixnet
                 return;
             }
 
-           
-            // DATOS USUARIO
-           
-            lblNombre.Text = usuario.NombreUsuario;
-            lblApellido.Text = usuario.ApellidoUsuario;
+            // =========================
+            // DATOS GENERALES
+            // =========================
+
+            lblNombreCompleto.Text = usuario.NombreUsuario + " " + usuario.ApellidoUsuario;
             lblEmail.Text = usuario.EmailUsuario;
             lblTelefono.Text = usuario.TelefonoUsuario;
 
+            // Iniciales
+            string inicialNombre = !string.IsNullOrEmpty(usuario.NombreUsuario) ? usuario.NombreUsuario.Substring(0, 1) : "";
+            string inicialApellido = !string.IsNullOrEmpty(usuario.ApellidoUsuario) ? usuario.ApellidoUsuario.Substring(0, 1) : "";
+            lblIniciales.Text = (inicialNombre + inicialApellido).ToUpper();
 
+
+            // =========================
             // CLIENTE
+            // =========================
 
             bool tieneCliente =
-     usuario.Cliente != null &&
-     !string.IsNullOrEmpty(usuario.Cliente.DireccionCliente) &&
-     usuario.Cliente.DireccionCliente != "No ingresado";
+                usuario.Cliente != null &&
+                TieneTextoValido(usuario.Cliente.DireccionCliente);
 
             pnlClienteDatos.Visible = tieneCliente;
             pnlClienteVacio.Visible = !tieneCliente;
+
+            // Badge cliente
+            pnlBadgeClienteOk.Visible = tieneCliente;
+            pnlBadgeClienteVacio.Visible = !tieneCliente;
 
             if (tieneCliente)
             {
@@ -56,15 +66,20 @@ namespace Fixnet
             }
 
 
+            // =========================
             // PRESTADOR
+            // =========================
 
             bool tienePrestador =
-            usuario.Prestador != null &&
-           !string.IsNullOrEmpty(usuario.Prestador.DescripcionPrestador) &&
-           usuario.Prestador.DescripcionPrestador != "No ingresado";
+                usuario.Prestador != null &&
+                TieneTextoValido(usuario.Prestador.DescripcionPrestador);
 
             pnlPrestadorDatos.Visible = tienePrestador;
             pnlPrestadorVacio.Visible = !tienePrestador;
+
+            // Badge prestador
+            pnlBadgePrestadorOk.Visible = tienePrestador;
+            pnlBadgePrestadorVacio.Visible = !tienePrestador;
 
             if (tienePrestador)
             {
@@ -73,9 +88,15 @@ namespace Fixnet
             }
         }
 
-        
+        private bool TieneTextoValido(string valor)
+        {
+            return !string.IsNullOrWhiteSpace(valor) && valor != "No ingresado";
+        }
+
+        // =========================
         // BOTONES CLIENTE
-       
+        // =========================
+
         protected void btnEditarCliente_Click(object sender, EventArgs e)
         {
             Response.Redirect("/PerfilCliente.aspx");
@@ -86,8 +107,10 @@ namespace Fixnet
             Response.Redirect("/PerfilCliente.aspx");
         }
 
+        // =========================
         // BOTONES PRESTADOR
-        
+        // =========================
+
         protected void btnEditarPrestador_Click(object sender, EventArgs e)
         {
             Response.Redirect("/PerfilPrestador.aspx");

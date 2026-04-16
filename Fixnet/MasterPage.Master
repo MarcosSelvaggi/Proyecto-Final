@@ -45,16 +45,16 @@
 
     <!-- NO logueado -->
     <li class="nav-item">
-        <a class="nav-link active hover-underline" href="#hero">Publica tus servicios</a>
+        <a class="nav-link active hover-underline" href="Logearse.aspx">Publica tus servicios</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active hover-underline" href="#services">Buscar profesionales</a>
+        <a class="nav-link active hover-underline" href="Logearse.aspx">Buscar profesionales</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active hover-underline" href="#about-us">Sobre Fixnet</a>
+        <a class="nav-link active hover-underline" href="/SobreFixnet.aspx">Sobre Fixnet</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active hover-underline" href="#contact">Contáctanos</a>
+        <a class="nav-link active hover-underline" href="/Contactanos.aspx">Contáctanos</a>
     </li>
 
 <% } else { %>

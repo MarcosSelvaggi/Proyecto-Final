@@ -104,6 +104,7 @@
     <Content Include="assets\img-usuario-3.png" />
     <Content Include="assets\logo.png" />
     <Content Include="BuscarPrestadores.aspx" />
+    <Content Include="Contactanos.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -301,6 +302,7 @@
     <Content Include="PerfilPrestador.aspx" />
     <Content Include="Registro.aspx" />
     <Content Include="SeleccionarPerfil.aspx" />
+    <Content Include="SobreFixnet.aspx" />
     <Content Include="styles\StyleDefault.css" />
     <Content Include="styles\StylePerfiles.css" />
     <Content Include="styles\StyleRegistro.css" />
@@ -315,6 +317,13 @@
     </Compile>
     <Compile Include="BuscarPrestadores.aspx.designer.cs">
       <DependentUpon>BuscarPrestadores.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Contactanos.aspx.cs">
+      <DependentUpon>Contactanos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Contactanos.aspx.designer.cs">
+      <DependentUpon>Contactanos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -375,6 +384,13 @@
     </Compile>
     <Compile Include="PerfilUsuario.aspx.designer.cs">
       <DependentUpon>PerfilUsuario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SobreFixnet.aspx.cs">
+      <DependentUpon>SobreFixnet.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SobreFixnet.aspx.designer.cs">
+      <DependentUpon>SobreFixnet.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
