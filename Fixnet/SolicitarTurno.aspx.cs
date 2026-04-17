@@ -1,0 +1,148 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Dominio;
+
+namespace Fixnet
+{
+    public partial class SolicitarTurno : Page
+    {
+        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Session["Usuario"] == null)
+            {
+                Response.Redirect("~/Login.aspx");
+                return;
+            }
+
+            if (!IsPostBack)
+            {
+                int idUsuario;
+                if (!int.TryParse(Request.QueryString["id"], out idUsuario))
+                {
+                    Response.Redirect("~/BuscarPrestadores.aspx");
+                    return;
+                }
+
+                CargarPerfil(idUsuario);
+            }
+        }
+
+        private void CargarPerfil(int idUsuario)
+        {
+            string query = @"
+                SELECT
+                    U.Nombre, U.Apellido, U.Email, U.Telefono,
+                    P.IdPrestador, P.Descripcion,
+                    ZP.IdLocalidad,
+                    D.DisponibilidadPrestador
+                FROM Usuario U
+                INNER JOIN Prestador P ON U.IdUsuario = P.IdUsuario
+                LEFT JOIN ZonasPrestador ZP ON ZP.IdPrestador = P.IdPrestador
+                LEFT JOIN Disponibilidad D ON D.IdPrestador = P.IdPrestador
+                WHERE U.IdUsuario = @IdUsuario";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (!reader.Read())
+                {
+                    Response.Redirect("~/BuscarPrestadores.aspx");
+                    return;
+                }
+
+                string nombre = reader["Nombre"].ToString();
+                string apellido = reader["Apellido"].ToString();
+                int idPrestador = Convert.ToInt32(reader["IdPrestador"]);
+
+               
+                LblIniciales.Text = ObtenerIniciales(nombre, apellido);
+                LblNombre.Text = nombre + " " + apellido;
+                LblEmail.Text = reader["Email"].ToString();
+                LblTelefono.Text = reader["Telefono"].ToString();
+                LblDescripcion.Text = reader["Descripcion"].ToString();
+
+                
+                string zonaRaw = reader["IdLocalidad"].ToString();
+                var zonas = zonaRaw.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                RptZonas.DataSource = zonas;
+                RptZonas.DataBind();
+
+                // Horarios — PARSE DE LOS HORARIOS CON COMA DE MARCOS
+                string horarioRaw = reader["DisponibilidadPrestador"].ToString();
+                RptHorarios.DataSource = ParsearHorarios(horarioRaw);
+                RptHorarios.DataBind();
+
+                reader.Close();
+
+                // S query separada con nombre del servicio
+                CargarServicios(idPrestador);
+            }
+        }
+
+        private void CargarServicios(int idPrestador)
+        {
+            string query = @"
+                SELECT S.Nombre AS NombreServicio, PS.PrecioHora AS Precio
+                FROM PrestadorServicio PS
+                INNER JOIN Servicios S ON S.IdServicio = PS.IdServicio
+                WHERE PS.IdPrestador = @IdPrestador";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                conn.Open();
+
+                var tabla = new DataTable();
+                tabla.Load(cmd.ExecuteReader());
+                RptServicios.DataSource = tabla;
+                RptServicios.DataBind();
+            }
+        }
+
+        
+        private List<HorarioVista> ParsearHorarios(string raw)
+        {
+            var result = new List<HorarioVista>();
+            if (string.IsNullOrWhiteSpace(raw)) return result;
+
+            var partes = raw.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Cada día ocupa 4 tokens: nombre, trabaja, horaInicio, horaFin
+            for (int i = 0; i + 3 < partes.Length; i += 4)
+            {
+                result.Add(new HorarioVista
+                {
+                    Dia = partes[i].Trim(),
+                    Trabaja = partes[i + 1].Trim() == "1",
+                    HoraInicio = partes[i + 2].Trim(),
+                    HoraFin = partes[i + 3].Trim()
+                });
+            }
+
+            return result;
+        }
+
+        private string ObtenerIniciales(string nombre, string apellido)
+        {
+            string ini = "";
+            if (!string.IsNullOrEmpty(nombre)) ini += nombre[0];
+            if (!string.IsNullOrEmpty(apellido)) ini += apellido[0];
+            return ini.ToUpper();
+        }
+    }
+
+    
+}

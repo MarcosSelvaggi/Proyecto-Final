@@ -398,31 +398,33 @@ namespace Servicios
             }
         }
 
+
         public List<Usuario> DevolverPrestadores(Usuario usuario, int Servicio)
         {
             List<Usuario> PrestadoresEncontrados = new List<Usuario>();
 
-            string query = @"Select
+            string query = @"SELECT
                         U.IdUsuario,
                         U.Nombre,
                         U.Apellido,
                         U.Telefono,
                         U.Activo,
                         U.Email,
-                        P.Descripcion
+                        P.IdPrestador,
+                        P.Descripcion,
+                        PS.PrecioHora
                     FROM Usuario U
-                    LEFT JOIN Prestador P ON U.IdUsuario = P.IdUsuario
-                    LEFT JOIN Cliente C ON U.IdUsuario = C.IdUsuario
-                    LEFT JOIN ZonasPrestador ZP ON ZP.IdPrestador = P.IdPrestador
-                    LEFT JOIN PrestadorServicio PS ON PS.IdPrestador = P.IdPrestador
-                    Where ZP.IdLocalidad LIKE @Localidad 
+                    INNER JOIN Prestador P ON U.IdUsuario = P.IdUsuario
+                    INNER JOIN ZonasPrestador ZP ON ZP.IdPrestador = P.IdPrestador
+                    INNER JOIN PrestadorServicio PS ON PS.IdPrestador = P.IdPrestador
+                    WHERE ZP.IdLocalidad LIKE @Localidad
                     AND PS.IdServicio = @IdServicio";
 
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             using (SqlCommand Command = new SqlCommand(query, sqlConnection))
             {
                 Command.Parameters.AddWithValue("@Localidad", "%" + usuario.Cliente.IdLocalidad + "%");
-                Command.Parameters.AddWithValue("IdServicio", Servicio);
+                Command.Parameters.AddWithValue("@IdServicio", Servicio); // ← faltaba el @
 
                 try
                 {
@@ -433,26 +435,39 @@ namespace Servicios
                     {
                         Usuario Usuario = new Usuario();
 
-                        usuario.IdUsuario = Int32.Parse(Reader["IdUsuario"].ToString());
+                        Usuario.IdUsuario = Convert.ToInt32(Reader["IdUsuario"]);  // ← era usuario (minúscula)
                         Usuario.NombreUsuario = Reader["Nombre"].ToString();
                         Usuario.ApellidoUsuario = Reader["Apellido"].ToString();
                         Usuario.TelefonoUsuario = Reader["Telefono"].ToString();
                         Usuario.UsuarioActivo = (bool)Reader["Activo"];
                         Usuario.EmailUsuario = Reader["Email"].ToString();
-                        
+
+                        Usuario.Prestador.IdPrestador = Convert.ToInt32(Reader["IdPrestador"]);
                         Usuario.Prestador.DescripcionPrestador = Reader["Descripcion"].ToString();
 
-                        PrestadoresEncontrados.Add(Usuario);    
+                        // Precio del servicio filtrado, listo para el slider
+                        Usuario.Prestador.Servicios = new List<ServiciosPrestador>
+                {
+                    new ServiciosPrestador
+                    {
+                        IdServicio = Servicio,
+                        Precio = Convert.ToDecimal(Reader["PrecioHora"])
+                    }
+                };
+
+                        PrestadoresEncontrados.Add(Usuario);
                     }
                 }
-                catch (SqlException)
+                catch (SqlException ex)
                 {
+                    Console.WriteLine(ex.Message);
                     return PrestadoresEncontrados;
                 }
             }
-        
+
             return PrestadoresEncontrados;
         }
+
 
     }
 }

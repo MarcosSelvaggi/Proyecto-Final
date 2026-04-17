@@ -309,6 +309,7 @@
     <Content Include="styles\StylesMasterPage.css" />
     <Content Include="Web.config" />
     <Content Include="PerfilUsuario.aspx" />
+    <Content Include="SolicitarTurno.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuscarPrestadores.aspx.cs">
@@ -391,6 +392,13 @@
     </Compile>
     <Compile Include="SobreFixnet.aspx.designer.cs">
       <DependentUpon>SobreFixnet.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SolicitarTurno.aspx.cs">
+      <DependentUpon>SolicitarTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SolicitarTurno.aspx.designer.cs">
+      <DependentUpon>SolicitarTurno.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

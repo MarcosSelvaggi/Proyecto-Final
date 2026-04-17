@@ -15,7 +15,7 @@ Inherits="Fixnet.PerfilUsuario" %>
 
 <div class="container py-4" style="max-width:900px;">
 
-    <!-- HERO -->
+    
     <div class="card text-white bg-primary mb-4 shadow-sm">
         <div class="card-body d-flex align-items-center gap-3">
             
