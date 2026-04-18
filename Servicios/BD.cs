@@ -493,6 +493,38 @@ namespace Servicios
             }
         }
 
+        public DataTable TraerTurnosCliente(int idCliente)
+        {
+            string query = @"SELECT 
+                        T.IdTurno,
+                        T.FechaSolicitud,
+                        T.Mensaje,
+                        S.Nombre AS Servicio,
+                        U.Nombre,
+                        U.Apellido,
+                        U.Telefono,
+                        U.Email,
+                        P.Descripcion
+                    FROM Turno T
+                    INNER JOIN Prestador P ON P.IdPrestador = T.IdPrestador
+                    INNER JOIN Usuario U ON U.IdUsuario = P.IdUsuario
+                    INNER JOIN Servicios S ON S.IdServicio = T.IdServicio
+                    WHERE T.IdCliente = @IdCliente
+                    ORDER BY T.FechaSolicitud DESC";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdCliente", idCliente);
+
+                conn.Open();
+                DataTable tabla = new DataTable();
+                tabla.Load(cmd.ExecuteReader());
+
+                return tabla;
+            }
+        }
+
 
     }
 }

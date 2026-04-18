@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
@@ -30,7 +31,10 @@ namespace Negocio
         {
             return Conexion.actualizarDireccionCliente(usuario);
         }
-
+        public DataTable TraerTurnosCliente(int idCliente)
+        {
+            return Conexion.TraerTurnosCliente(idCliente);
+        }
         public int ActualizarDatosPrestador(Usuario usuario)
         {
             return Conexion.ActualizarPrestadorBD(usuario);
