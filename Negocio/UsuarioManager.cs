@@ -46,6 +46,11 @@ namespace Negocio
         {  
             return Conexion.TraerServiciosBD();
         }
+
+        public bool ActualizarEstadoTurno(int idTurno, string estado)
+        {
+            return Conexion.ActualizarEstadoTurno(idTurno, estado);
+        }
         public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
         {
             return Conexion.CrearSolicitudTurno(idCliente, idPrestador, idServicio, mensaje);

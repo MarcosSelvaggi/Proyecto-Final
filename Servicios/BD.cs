@@ -497,6 +497,7 @@ namespace Servicios
         {
             string query = @"SELECT 
                         T.IdTurno,
+                        T.Estado,
                         T.FechaSolicitud,
                         T.Mensaje,
                         S.Nombre AS Servicio,
@@ -530,6 +531,7 @@ namespace Servicios
             string query = @"SELECT 
                         T.IdTurno,
                         T.FechaSolicitud,
+                        T.Estado,
                         T.Mensaje,
                         S.Nombre AS Servicio,
                         U.Nombre,
@@ -557,6 +559,31 @@ namespace Servicios
                 tabla.Load(cmd.ExecuteReader());
 
                 return tabla;
+            }
+        }
+
+        public bool ActualizarEstadoTurno(int idTurno, string estado)
+        {
+            string query = @" UPDATE Turno 
+                              SET Estado = @Estado
+                              WHERE IdTurno = @IdTurno
+                              AND Estado = 'Pendiente'";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Estado", estado);
+                cmd.Parameters.AddWithValue("@IdTurno", idTurno);
+
+                try
+                {
+                    conn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
         }
 

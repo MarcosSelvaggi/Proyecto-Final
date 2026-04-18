@@ -38,5 +38,16 @@ namespace Fixnet
             rptTurnos.DataSource = tabla;
             rptTurnos.DataBind();
         }
+
+        protected string ObtenerClaseEstado(string estado)
+        {
+            switch (estado)
+            {
+                case "Aceptado": return "bg-success";
+                case "Rechazado": return "bg-danger";
+                case "Pendiente": return "bg-warning text-dark";
+                default: return "bg-secondary";
+            }
+        }
     }
 }

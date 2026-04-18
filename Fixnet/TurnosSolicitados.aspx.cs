@@ -38,5 +38,35 @@ namespace Fixnet
             rptTurnos.DataSource = tabla;
             rptTurnos.DataBind();
         }
+
+        protected void AceptarTurno(object sender, CommandEventArgs e)
+        {
+            int idTurno = Convert.ToInt32(e.CommandArgument);
+            CambiarEstadoTurno(idTurno, "Aceptado");
+        }
+
+        protected void RechazarTurno(object sender, CommandEventArgs e)
+        {
+            int idTurno = Convert.ToInt32(e.CommandArgument);
+            CambiarEstadoTurno(idTurno, "Rechazado");
+        }
+
+        private void CambiarEstadoTurno(int idTurno, string estado)
+        {
+            UsuarioManager bd = new UsuarioManager();
+            bd.ActualizarEstadoTurno(idTurno, estado);
+            CargarTurnos();
+        }
+
+        protected string ObtenerClaseEstado(string estado)
+        {
+            switch (estado)
+            {
+                case "Aceptado": return "bg-success";
+                case "Rechazado": return "bg-danger";
+                case "Pendiente": return "bg-warning text-dark";
+                default: return "bg-secondary";
+            }
+        }
     }
 }

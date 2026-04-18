@@ -73,7 +73,8 @@ create table Turno(
 	IdPrestador int foreign key references Prestador(IdPrestador) not null, 
 	IdServicio int foreign key references Servicios(IdServicio) not null,
 	Mensaje nvarchar(500) null,
-	FechaSolicitud datetime default getdate()
+	FechaSolicitud datetime default getdate(),
+	Estado nvarchar(50) default 'Pendiente'
 );
 
 create table ZonasPrestador(
