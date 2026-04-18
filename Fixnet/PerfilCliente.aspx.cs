@@ -199,7 +199,7 @@ namespace Fixnet
                 return;
             }
 
-            Usuario usuario = new Usuario();
+            /*Usuario usuario = new Usuario();
             usuario.IdUsuario = usuarioSession.IdUsuario;
 
             //usuario.Cliente = new Cliente(); // 👈 CLAVE -> El constructor vacío ya declara un nuevo Cliente y prestador 
@@ -209,6 +209,16 @@ namespace Fixnet
             usuario.Cliente.Localidad = ddlLocalidad.SelectedValue;
             List<Localidades> localidades = (List<Localidades>)Session["Localidades"];
             usuario.Cliente.IdLocalidad = localidades[ddlLocalidad.SelectedIndex - 1].Id.ToString(); 
+            usuario.Cliente.DireccionCliente = txtDireccion.Text;*/
+
+            Usuario usuario = (Usuario)Session["Usuario"];
+
+            usuario.Cliente.Provincia = ddlProvincia.SelectedValue;
+            usuario.Cliente.Departamento = ddlDepartamento.SelectedValue;
+            usuario.Cliente.Localidad = ddlLocalidad.SelectedValue;
+
+            List<Localidades> localidades = (List<Localidades>)Session["Localidades"];
+            usuario.Cliente.IdLocalidad = localidades[ddlLocalidad.SelectedIndex - 1].Id.ToString();
             usuario.Cliente.DireccionCliente = txtDireccion.Text;
 
             UsuarioManager manager = new UsuarioManager();

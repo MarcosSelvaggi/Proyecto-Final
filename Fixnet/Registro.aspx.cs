@@ -68,12 +68,22 @@ namespace Fixnet
             Usuario.TelefonoUsuario = txtTeléfono.Text;
             Usuario.EmailUsuario = txtEmail.Text;
             Usuario.PasswordUsuario = txtPassword.Text;
-           
+
+            string passwordPlano = Usuario.PasswordUsuario;
 
             if (UsuarioManager.RegistrarUsuario(Usuario) == true)
             {
-                Usuario.IdUsuario = UsuarioManager.BuscarUsuarioMail(Usuario);
+                //Usuario.IdUsuario = UsuarioManager.BuscarUsuarioMail(Usuario);
+
+                /*Usuario = UsuarioManager.LogearUsuario(Usuario.EmailUsuario, Usuario.PasswordUsuario);
+
                 Session.Add("Usuario", Usuario);
+                */
+
+                Usuario usuarioCompleto = UsuarioManager.LogearUsuario(Usuario.EmailUsuario, passwordPlano);
+
+                Session["Usuario"] = usuarioCompleto;
+
                 Response.Redirect("/SeleccionarPerfil.aspx");
             }
             else

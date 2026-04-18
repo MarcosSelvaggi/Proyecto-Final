@@ -430,52 +430,56 @@ namespace Fixnet
      
         protected void CargarHorariosPrestador(string Horarios)
         {
-            string[] HorariosPrestador = Horarios.Split(',');
-            for (int i = 0; HorariosPrestador.Length > i; i = i+4)
+            if (Horarios != null)
             {
-                if (HorariosPrestador[i + 1].Trim() != "0")
+                string[] HorariosPrestador = Horarios.Split(',');
+
+                for (int i = 0; HorariosPrestador.Length > i; i = i + 4)
                 {
-                    if (HorariosPrestador[i].Trim() == "Domingos")
+                    if (HorariosPrestador[i + 1].Trim() != "0")
                     {
-                        CbxDomingo.Checked = true; 
-                        HorarioInicioDomingo.Text = HorariosPrestador[i + 2].Trim();
-                        HorarioFinDomingo.Text = HorariosPrestador[i + 3].Trim();
-                    }
-                    else if (HorariosPrestador[i].Trim() == "Lunes")
-                    {
-                        CbxLunes.Checked = true;
-                        HorarioInicioLunes.Text = HorariosPrestador[i + 2].Trim();
-                        HorarioFinLunes.Text = HorariosPrestador[i + 3].Trim();
-                    }
-                    else if (HorariosPrestador[i].Trim() == "Martes")
-                    {
-                        CbxMartes.Checked = true;
-                        HorarioInicioMartes.Text = HorariosPrestador[i + 2].Trim();
-                        HorarioFinMartes.Text = HorariosPrestador[i + 3].Trim();
-                    }
-                    else if (HorariosPrestador[i].Trim() == "Miércoles")
-                    {
-                        CbxMiercoles.Checked = true;
-                        HorarioInicioMiercoles.Text = HorariosPrestador[i + 2].Trim();
-                        HorarioFinMiercoles.Text = HorariosPrestador[i + 3].Trim();
-                    }
-                    else if (HorariosPrestador[i].Trim() == "Jueves")
-                    {
-                        CbxJueves.Checked = true;
-                        HorarioInicioJueves.Text = HorariosPrestador[i + 2].Trim();
-                        HorarioFinJueves.Text = HorariosPrestador[i + 3].Trim();
-                    }
-                    else if (HorariosPrestador[i].Trim() == "Viernes")
-                    {
-                        CbxViernes.Checked = true;
-                        HorarioInicioViernes.Text = HorariosPrestador[i + 2].Trim();
-                        HorarioFinViernes.Text = HorariosPrestador[i + 3].Trim();
-                    }
-                    else if (HorariosPrestador[i].Trim() == "Sábados")
-                    {
-                        CbxSabados.Checked = true;
-                        HorarioInicioSabados.Text = HorariosPrestador[i + 2].Trim();
-                        HorarioFinSabados.Text = HorariosPrestador[i + 3].Trim();
+                        if (HorariosPrestador[i].Trim() == "Domingos")
+                        {
+                            CbxDomingo.Checked = true;
+                            HorarioInicioDomingo.Text = HorariosPrestador[i + 2].Trim();
+                            HorarioFinDomingo.Text = HorariosPrestador[i + 3].Trim();
+                        }
+                        else if (HorariosPrestador[i].Trim() == "Lunes")
+                        {
+                            CbxLunes.Checked = true;
+                            HorarioInicioLunes.Text = HorariosPrestador[i + 2].Trim();
+                            HorarioFinLunes.Text = HorariosPrestador[i + 3].Trim();
+                        }
+                        else if (HorariosPrestador[i].Trim() == "Martes")
+                        {
+                            CbxMartes.Checked = true;
+                            HorarioInicioMartes.Text = HorariosPrestador[i + 2].Trim();
+                            HorarioFinMartes.Text = HorariosPrestador[i + 3].Trim();
+                        }
+                        else if (HorariosPrestador[i].Trim() == "Miércoles")
+                        {
+                            CbxMiercoles.Checked = true;
+                            HorarioInicioMiercoles.Text = HorariosPrestador[i + 2].Trim();
+                            HorarioFinMiercoles.Text = HorariosPrestador[i + 3].Trim();
+                        }
+                        else if (HorariosPrestador[i].Trim() == "Jueves")
+                        {
+                            CbxJueves.Checked = true;
+                            HorarioInicioJueves.Text = HorariosPrestador[i + 2].Trim();
+                            HorarioFinJueves.Text = HorariosPrestador[i + 3].Trim();
+                        }
+                        else if (HorariosPrestador[i].Trim() == "Viernes")
+                        {
+                            CbxViernes.Checked = true;
+                            HorarioInicioViernes.Text = HorariosPrestador[i + 2].Trim();
+                            HorarioFinViernes.Text = HorariosPrestador[i + 3].Trim();
+                        }
+                        else if (HorariosPrestador[i].Trim() == "Sábados")
+                        {
+                            CbxSabados.Checked = true;
+                            HorarioInicioSabados.Text = HorariosPrestador[i + 2].Trim();
+                            HorarioFinSabados.Text = HorariosPrestador[i + 3].Trim();
+                        }
                     }
                 }
             }

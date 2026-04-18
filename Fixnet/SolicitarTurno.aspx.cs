@@ -7,6 +7,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Dominio;
+using Negocio;
+
 
 namespace Fixnet
 {
@@ -86,6 +88,10 @@ namespace Fixnet
 
                 reader.Close();
 
+
+                ViewState["IdPrestador"] = idPrestador;
+
+
                 // S query separada con nombre del servicio
                 CargarServicios(idPrestador);
             }
@@ -94,7 +100,7 @@ namespace Fixnet
         private void CargarServicios(int idPrestador)
         {
             string query = @"
-                SELECT S.Nombre AS NombreServicio, PS.PrecioHora AS Precio
+                SELECT S.IdServicio, S.Nombre AS NombreServicio, PS.PrecioHora AS Precio
                 FROM PrestadorServicio PS
                 INNER JOIN Servicios S ON S.IdServicio = PS.IdServicio
                 WHERE PS.IdPrestador = @IdPrestador";
@@ -142,6 +148,113 @@ namespace Fixnet
             if (!string.IsNullOrEmpty(apellido)) ini += apellido[0];
             return ini.ToUpper();
         }
+
+        protected void BtnSolicitar_Click(object sender, EventArgs e)
+        {
+            int? idServicioSeleccionado = null;
+
+            foreach (RepeaterItem item in RptServicios.Items)
+            {
+                RadioButton rb = (RadioButton)item.FindControl("rbServicio");
+                HiddenField hf = (HiddenField)item.FindControl("hfIdServicio");
+
+                if (rb.Checked)
+                {
+                    idServicioSeleccionado = int.Parse(hf.Value);
+                    break;
+                }
+            }
+
+            if (idServicioSeleccionado == null)
+            {
+                MostrarModal("Seleccioná un servicio", "warning");
+                return;
+            }
+
+            ViewState["IdServicio"] = idServicioSeleccionado;
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(),
+            "abrirModal",
+            "var myModal = new bootstrap.Modal(document.getElementById('modalMensaje')); myModal.show();",
+            true);
+        }
+
+        protected void BtnConfirmarSolicitud_Click(object sender, EventArgs e)
+        {
+            Usuario usuario = (Usuario)Session["Usuario"];
+
+            if (usuario == null || usuario.Cliente == null || usuario.Cliente.IdCliente <= 0)
+            {
+                Response.Redirect("~/Logearse.aspx");
+                return;
+            }
+
+            if (ViewState["IdPrestador"] == null || ViewState["IdServicio"] == null)
+            {
+                MostrarModal("Error en la solicitud", "error");
+                return;
+            }
+
+            int idCliente = usuario.Cliente.IdCliente;
+            int idPrestador = (int)ViewState["IdPrestador"];
+            int idServicio = (int)ViewState["IdServicio"];
+
+            string mensaje = txtMensaje.Text;
+
+            UsuarioManager bd = new UsuarioManager();
+            bool ok = bd.CrearSolicitudTurno(idCliente, idPrestador, idServicio, mensaje);
+
+            if (ok)
+            {
+                MostrarModal("Solicitud enviada correctamente", "success");
+            }
+            else
+            {
+                MostrarModal("Error al enviar solicitud", "warning");
+            }
+        }
+
+        private void MostrarModal(string mensaje, string tipo)
+        {
+            LblMensajeSistema.Text = mensaje;
+
+            string color = "bg-primary";
+            string icono = "ℹ️";
+
+            switch (tipo)
+            {
+                case "success":
+                    color = "bg-success";
+                    icono = "✔️";
+                    break;
+
+                case "error":
+                    color = "bg-danger";
+                    icono = "❌";
+                    break;
+
+                case "warning":
+                    color = "bg-warning text-dark";
+                    icono = "⚠️";
+                    break;
+
+                case "info":
+                    color = "bg-primary";
+                    icono = "ℹ️";
+                    break;
+            }
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(),
+                "modalSistema",
+                $@"
+                var modal = document.getElementById('modalMensajeSistema');
+                document.getElementById('modalHeader').className = 'modal-header text-white {color}';
+                document.getElementById('modalIcon').innerText = '{icono}';
+                new bootstrap.Modal(modal).show();
+                ",
+                true);
+        }
+
     }
 
     

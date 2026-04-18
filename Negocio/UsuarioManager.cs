@@ -39,12 +39,16 @@ namespace Negocio
         {  
             return Conexion.TraerServiciosBD();
         }
+        public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
+        {
+            return Conexion.CrearSolicitudTurno(idCliente, idPrestador, idServicio, mensaje);
+        }
         public List<ServiciosPrestador> TraerServiciosPrestador(int idPrestador)
         {
             return Conexion.TraerServiciosPrestador(idPrestador);
         }
         public int BuscarUsuarioMail(Usuario usuario)
-        {  
+        {
             return Conexion.ObtenerIdUsuarioPorEmail(usuario.EmailUsuario);
         }
 

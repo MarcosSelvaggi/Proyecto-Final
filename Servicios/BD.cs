@@ -51,7 +51,7 @@ namespace Servicios
 
         public Usuario LogearUsuario(string email, string password)
         {
-            string query = @"SELECT 
+            string query = @"SELECT
                         U.IdUsuario,
                         P.IdPrestador,
                         U.Nombre,
@@ -63,6 +63,7 @@ namespace Servicios
                         C.Direccion,
                         C.Localidad,
                         C.LocalidadId,
+                        C.IdCliente,
                         C.Departamento,
                         C.Provincia,
                         U.Email,
@@ -112,6 +113,11 @@ namespace Servicios
                             usuario.Cliente.IdLocalidad = reader["LocalidadId"].ToString();
                             usuario.Cliente.DireccionCliente = reader["Direccion"].ToString();
 
+
+                            if (reader["IdCliente"] != DBNull.Value)
+                            {
+                                usuario.Cliente.IdCliente = Convert.ToInt32(reader["IdCliente"]);
+                            }
                             if (reader["IdPrestador"] != DBNull.Value)
                             {
                                 usuario.Prestador.IdPrestador = Convert.ToInt32(reader["IdPrestador"]);
@@ -216,7 +222,7 @@ namespace Servicios
                     command.Parameters.AddWithValue("@Localidad", UsuarioActualizado.Cliente.Localidad);
                     command.Parameters.AddWithValue("@LocalidadId", UsuarioActualizado.Cliente.IdLocalidad);
                     command.Parameters.AddWithValue("@Direccion", UsuarioActualizado.Cliente.DireccionCliente);
-                    command.Parameters.AddWithValue("@IdUsuario", UsuarioActualizado.IdUsuario); // 👈 CLAVE
+                    command.Parameters.AddWithValue("@IdUsuario", UsuarioActualizado.IdUsuario);
 
                     sqlConnection.Open();
                     return command.ExecuteNonQuery() > 0;
@@ -466,6 +472,25 @@ namespace Servicios
             }
 
             return PrestadoresEncontrados;
+        }
+
+        public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
+        {
+            string query = @"INSERT INTO Turno 
+                    (IdCliente, IdPrestador, IdServicio, Mensaje)
+                    VALUES (@IdCliente, @IdPrestador, @IdServicio, @Mensaje)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdCliente", idCliente);
+                cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                cmd.Parameters.AddWithValue("@IdServicio", idServicio);
+                cmd.Parameters.AddWithValue("@Mensaje", (object)mensaje ?? DBNull.Value);
+
+                conn.Open();
+                return cmd.ExecuteNonQuery() > 0;
+            }
         }
 
 

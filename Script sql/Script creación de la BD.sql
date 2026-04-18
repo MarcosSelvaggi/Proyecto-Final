@@ -71,8 +71,9 @@ create table Turno(
 	IdTurno int primary key identity(1,1) not null, 
 	IdCliente int foreign key references Cliente(IdCliente) not null, 
 	IdPrestador int foreign key references Prestador(IdPrestador) not null, 
-	FechaHoraInicio datetime not null,
-	FechaHoraFin datetime not null,
+	IdServicio int foreign key references Servicios(IdServicio) not null,
+	Mensaje nvarchar(500) null,
+	FechaSolicitud datetime default getdate()
 );
 
 create table ZonasPrestador(
