@@ -308,6 +308,7 @@
     <Content Include="styles\StylePerfiles.css" />
     <Content Include="styles\StyleRegistro.css" />
     <Content Include="styles\StylesMasterPage.css" />
+    <Content Include="TurnosSolicitados.aspx" />
     <Content Include="Web.config" />
     <Content Include="PerfilUsuario.aspx" />
     <Content Include="SolicitarTurno.aspx" />
@@ -407,6 +408,13 @@
     </Compile>
     <Compile Include="SolicitarTurno.aspx.designer.cs">
       <DependentUpon>SolicitarTurno.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TurnosSolicitados.aspx.cs">
+      <DependentUpon>TurnosSolicitados.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TurnosSolicitados.aspx.designer.cs">
+      <DependentUpon>TurnosSolicitados.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

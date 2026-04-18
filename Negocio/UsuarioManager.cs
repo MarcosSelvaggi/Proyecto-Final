@@ -13,7 +13,6 @@ namespace Negocio
 {
     public class UsuarioManager
     {
-        Usuario Usuario;
         BD Conexion = new BD();
         public bool RegistrarUsuario(Usuario Usuario)
         {
@@ -34,6 +33,10 @@ namespace Negocio
         public DataTable TraerTurnosCliente(int idCliente)
         {
             return Conexion.TraerTurnosCliente(idCliente);
+        }
+        public DataTable TraerTurnosPrestador(int idPrestador)
+        {
+            return Conexion.TraerTurnosPrestador(idPrestador);
         }
         public int ActualizarDatosPrestador(Usuario usuario)
         {
