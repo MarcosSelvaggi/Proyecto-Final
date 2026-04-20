@@ -15,6 +15,10 @@ namespace Dominio
         public List<int> IdServicios { get; set; }
         public List<ServiciosPrestador> Servicios { get; set; }
         
+        public Prestador()
+        {
+            Servicios = new List<ServiciosPrestador>();
+        }
 
     }
 }

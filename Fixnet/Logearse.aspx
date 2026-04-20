@@ -28,10 +28,10 @@
     </div>
 
 </asp:Panel>
-
+        
         <div>
             <span>Si olvidó su contraseña </span>
-            <a href="/Usuario/Contrasenaolvidada.aspx" class="hover-underline">Haga click aquí</a>
+            <a href="/ContraseñaOlvidada.aspx" class="hover-underline">Haga click aquí</a>
             <p></p>
         </div>
         <div>

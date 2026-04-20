@@ -91,6 +91,15 @@ namespace Fixnet
 
             RptPrestadores.DataSource = vista;
             RptPrestadores.DataBind();
+
+            if (RptPrestadores.Items.Count == 0)
+            {
+                PrestadoresNoEncontrados.Visible = true;
+            }
+            else
+            {
+                PrestadoresNoEncontrados.Visible = false;
+            }
         }
 
         protected string ObtenerIniciales(string nombre, string apellido)

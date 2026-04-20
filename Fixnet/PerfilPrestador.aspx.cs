@@ -47,6 +47,11 @@ namespace Fixnet
                         RegisterAsyncTask(new PageAsyncTask(RecuperarLocalidades));
                     }
 
+                    //Si no tiene ZonasPrestador trae la default que es todo en 0, es para los usuarios que entran al Perfil recién registrados
+                    if (usuario.Prestador.ZonasPrestador == null)
+                    {
+                        usuario.Prestador.ZonasPrestador = ArreglarHorarioDePrestadorNuevo();
+                    }
                     CargarHorariosPrestador(usuario.Prestador.HorariosPrestador); 
                 }
 
@@ -572,6 +577,14 @@ namespace Fixnet
             return horarios; 
         }
 
+
+        //Método auxiliar para cuando recién se registran los prestadores
+        protected string ArreglarHorarioDePrestadorNuevo()
+        {
+            return "Domingos,0,0,0,Lunes,0,0,0,Martes,0,0,0,Miércoles,0,0,0,Jueves,0,0,0,Viernes,0,0,0,Sábados,0,0,0";
+        }
+
+
         protected void btnGuardarPrestador_Click(object sender, EventArgs e)
         {
             Usuario usuarioSession = (Usuario)Session["Usuario"];
@@ -659,6 +672,9 @@ namespace Fixnet
                 lblErrorPrestador.Visible = true;
             }
         }
+
+
+
 
         //private void CargarLocalidades(Usuario usuario)
         //{

@@ -24,7 +24,20 @@ namespace Fixnet
         protected global::System.Web.UI.WebControls.DropDownList DdlServicio;
 
         /// <summary>
+<<<<<<< HEAD
+        /// PrestadoresNoEncontrados control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl PrestadoresNoEncontrados;
+
+        /// <summary>
+        /// RptPrestadores control.
+=======
         /// Control contenedorSlider.
+>>>>>>> 54628ab3e481c7da900087c5cf98ebbba1261e75
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.

@@ -68,6 +68,15 @@ namespace Negocio
         {
             return Conexion.DevolverPrestadores(Usuario, Servicio);
         }
+    
+        public int TraerIdUsuario(string Email)
+        {
+            return Conexion.ObtenerIdUsuarioPorEmail(Email);
+        }
 
+        public bool CambiarContraseña(string EmailUsuario, string PasswordNueva)
+        {
+            return Conexion.CambiarPassword(EmailUsuario, BCrypt.Net.BCrypt.EnhancedHashPassword(PasswordNueva, 13)); 
+        }
     }
 }
