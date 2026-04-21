@@ -416,13 +416,10 @@ namespace Servicios
                         U.Telefono,
                         U.Activo,
                         U.Email,
-<<<<<<< HEAD
                         P.Descripcion,
                         PS.IdServicio,
-=======
                         P.IdPrestador,
                         P.Descripcion,
->>>>>>> 54628ab3e481c7da900087c5cf98ebbba1261e75
                         PS.PrecioHora
                     FROM Usuario U
                     INNER JOIN Prestador P ON U.IdUsuario = P.IdUsuario
@@ -452,11 +449,7 @@ namespace Servicios
                         Usuario.TelefonoUsuario = Reader["Telefono"].ToString();
                         Usuario.UsuarioActivo = (bool)Reader["Activo"];
                         Usuario.EmailUsuario = Reader["Email"].ToString();
-
-<<<<<<< HEAD
-=======
                         Usuario.Prestador.IdPrestador = Convert.ToInt32(Reader["IdPrestador"]);
->>>>>>> 54628ab3e481c7da900087c5cf98ebbba1261e75
                         Usuario.Prestador.DescripcionPrestador = Reader["Descripcion"].ToString();
                         Dominio.ServiciosPrestador servicio = new Dominio.ServiciosPrestador()
                         {
@@ -488,7 +481,6 @@ namespace Servicios
             return PrestadoresEncontrados;
         }
 
-<<<<<<< HEAD
         public bool CambiarPassword (string EmailUsuario,  string Password)
         {
             string query = "Update Usuario set PasswordHash = @Password where Email = @Email";
@@ -512,8 +504,6 @@ namespace Servicios
 
             }
         }
-
-=======
         public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
         {
             string query = @"INSERT INTO Turno 
@@ -626,9 +616,6 @@ namespace Servicios
                 }
             }
         }
-
-
->>>>>>> 54628ab3e481c7da900087c5cf98ebbba1261e75
     }
 }
 

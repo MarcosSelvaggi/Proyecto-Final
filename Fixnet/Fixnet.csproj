@@ -104,11 +104,8 @@
     <Content Include="assets\img-usuario-3.png" />
     <Content Include="assets\logo.png" />
     <Content Include="BuscarPrestadores.aspx" />
-<<<<<<< HEAD
     <Content Include="ContraseñaOlvidada.aspx" />
-=======
     <Content Include="Contactanos.aspx" />
->>>>>>> 54628ab3e481c7da900087c5cf98ebbba1261e75
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -307,11 +304,8 @@
     <Content Include="PerfilPrestador.aspx" />
     <Content Include="Registro.aspx" />
     <Content Include="SeleccionarPerfil.aspx" />
-<<<<<<< HEAD
     <Content Include="styles\StyleContacto.css" />
-=======
     <Content Include="SobreFixnet.aspx" />
->>>>>>> 54628ab3e481c7da900087c5cf98ebbba1261e75
     <Content Include="styles\StyleDefault.css" />
     <Content Include="styles\StylePerfiles.css" />
     <Content Include="styles\StyleRegistro.css" />
@@ -329,21 +323,19 @@
     <Compile Include="BuscarPrestadores.aspx.designer.cs">
       <DependentUpon>BuscarPrestadores.aspx</DependentUpon>
     </Compile>
-<<<<<<< HEAD
     <Compile Include="ContraseñaOlvidada.aspx.cs">
       <DependentUpon>ContraseñaOlvidada.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ContraseñaOlvidada.aspx.designer.cs">
-      <DependentUpon>ContraseñaOlvidada.aspx</DependentUpon>
-=======
+	  <Compile Include="ContraseñaOlvidada.aspx.designer.cs">
+		  <DependentUpon>ContraseñaOlvidada.aspx</DependentUpon>
+	  </Compile>
     <Compile Include="Contactanos.aspx.cs">
       <DependentUpon>Contactanos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Contactanos.aspx.designer.cs">
       <DependentUpon>Contactanos.aspx</DependentUpon>
->>>>>>> 54628ab3e481c7da900087c5cf98ebbba1261e75
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

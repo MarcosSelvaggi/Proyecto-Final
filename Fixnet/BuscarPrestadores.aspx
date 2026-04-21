@@ -16,41 +16,9 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-<<<<<<< HEAD
-    <asp:ScriptManager runat="server" />
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <h3>Seleccioná el servicio</h3>
-            </div>
-            <div class="col-8">
-                <asp:DropDownList runat="server" ID="DdlServicio" OnSelectedIndexChanged="DdlServicio_SelectedIndexChanged" AutoPostBack="true">
-                </asp:DropDownList>
-            </div>
-            <asp:UpdatePanel runat="server">
-                <ContentTemplate>
-                    <div class="row">
-                        <div class="col-12">
-                            <div id="PrestadoresNoEncontrados" runat="server" visible="false">
-                                <h3> 
-                                    No se han encontrado prestadores en dicha categoria que trabajen en tu área.
-                                </h3>
-                            </div>
-                        </div>
-                        <asp:Repeater runat="server" ID="RptPrestadores">
-                            <ItemTemplate>
-                                <div class="col-12 text-start">
-                                    <h3>
-                                        <p><%# Eval("Nombre") %> <%# Eval("Apellido") %></p>
-                                    </h3>
-                                </div>
-                            </ItemTemplate>
-                        </asp:Repeater>
-                    </div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-=======
 
+    <asp:ScriptManager runat="server" />
+   
     <div class="container py-4">
 
         <div class="row g-3 align-items-end mb-4">
@@ -77,7 +45,6 @@
             <div class="col-md-3 text-md-end">
                 <asp:Label runat="server" ID="LblContador" CssClass="badge bg-primary fs-6" Visible="false" />
             </div>
->>>>>>> 54628ab3e481c7da900087c5cf98ebbba1261e75
         </div>
 
         <!-- REPEATER PRESTADORES -->

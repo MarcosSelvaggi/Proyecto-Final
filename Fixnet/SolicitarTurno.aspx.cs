@@ -14,7 +14,8 @@ namespace Fixnet
 {
     public partial class SolicitarTurno : Page
     {
-        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         protected void Page_Load(object sender, EventArgs e)
         {
