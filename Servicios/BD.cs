@@ -1,9 +1,11 @@
 ﻿using Dominio;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,7 +49,6 @@ namespace Servicios
                 }
             }
         }
-
 
         public Usuario LogearUsuario(string email, string password)
         {
@@ -233,9 +234,8 @@ namespace Servicios
                     return false;
                 }
             }
-
-
         }
+
         public List<ServiciosPrestador> TraerServiciosPrestador(int idPrestador)
         {
             List<ServiciosPrestador> serviciosPrestador = new List<ServiciosPrestador>();
@@ -404,7 +404,6 @@ namespace Servicios
             }
         }
 
-
         public List<Usuario> DevolverPrestadores(Usuario usuario, int Servicio)
         {
             List<Usuario> PrestadoresEncontrados = new List<Usuario>();
@@ -491,8 +490,9 @@ namespace Servicios
                 try
                 {
                     Command.Parameters.AddWithValue("Email", EmailUsuario);
-                    Command.Parameters.AddWithValue("Password", Password);  
+                    Command.Parameters.AddWithValue("Password", Password);
 
+                    Connection.Open();
                     Command.ExecuteNonQuery();
 
                     return true;
@@ -504,23 +504,86 @@ namespace Servicios
 
             }
         }
+        //public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
+        //{
+        //    string query = @"INSERT INTO Turno 
+        //            (IdCliente, IdPrestador, IdServicio, Mensaje)
+        //            VALUES (@IdCliente, @IdPrestador, @IdServicio, @Mensaje)";
+        //
+        //    using (SqlConnection conn = new SqlConnection(connectionString))
+        //    using (SqlCommand cmd = new SqlCommand(query, conn))
+        //    {
+        //        cmd.Parameters.AddWithValue("@IdCliente", idCliente);
+        //        cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
+        //        cmd.Parameters.AddWithValue("@IdServicio", idServicio);
+        //        cmd.Parameters.AddWithValue("@Mensaje", (object)mensaje ?? DBNull.Value);
+        //
+        //        conn.Open();
+        //        return cmd.ExecuteNonQuery() > 0;
+        //    }
+        //}
         public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
         {
-            string query = @"INSERT INTO Turno 
+            bool Turno = false;
+
+            using (SqlConnection Connection = new SqlConnection(connectionString))
+            {
+                Connection.Open();
+                SqlTransaction SqlTransaction = Connection.BeginTransaction();
+                try
+                {
+                    string Query = @"INSERT INTO Turno 
                     (IdCliente, IdPrestador, IdServicio, Mensaje)
                     VALUES (@IdCliente, @IdPrestador, @IdServicio, @Mensaje)";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@IdCliente", idCliente);
-                cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
-                cmd.Parameters.AddWithValue("@IdServicio", idServicio);
-                cmd.Parameters.AddWithValue("@Mensaje", (object)mensaje ?? DBNull.Value);
+                    SqlCommand Command = new SqlCommand(Query, Connection, SqlTransaction);
 
-                conn.Open();
-                return cmd.ExecuteNonQuery() > 0;
+                    Command.Parameters.AddWithValue("@IdCliente", idCliente);
+                    Command.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                    Command.Parameters.AddWithValue("@IdServicio", idServicio);
+                    Command.Parameters.AddWithValue("@Mensaje", (object)mensaje ?? DBNull.Value);
+
+
+                    if (Command.ExecuteNonQuery() > 0)
+                    {
+
+                        string QueryDatosPrestador = @"Select 
+                                                       U.Nombre, U.Email
+                                                       from usuario U 
+                                                       Inner join Prestador P On P.IdUsuario = U.IdUsuario
+                                                       where U.IdUsuario = @IdUsuario";
+
+                        SqlCommand CommandDatosPrestador = new SqlCommand(QueryDatosPrestador, Connection, SqlTransaction);
+                        CommandDatosPrestador.Parameters.AddWithValue("@IdUsuario", idPrestador);
+
+                        try
+                        {
+                            SqlDataReader SqlDataReader = CommandDatosPrestador.ExecuteReader();
+
+                            if (SqlDataReader.Read())
+                            {
+                                EmailService EmailService = new EmailService();
+                                EmailService.EnviarMailAlPrestador(SqlDataReader["Nombre"].ToString(), SqlDataReader["Email"].ToString(), mensaje);
+                                SqlDataReader.Close(); 
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+                            Turno = false;
+                        }
+                    }
+                    SqlTransaction.Commit();
+                    Turno = true;
+                }
+                catch (Exception)
+                {
+                    SqlTransaction.Rollback();
+                    Turno = false;
+                }
             }
+
+            return Turno;
         }
 
         public DataTable TraerTurnosCliente(int idCliente)
@@ -592,8 +655,34 @@ namespace Servicios
             }
         }
 
-        public bool ActualizarEstadoTurno(int idTurno, string estado)
+        //public bool ActualizarEstadoTurno(int idTurno, string estado)
+        //{
+        //    string query = @" UPDATE Turno 
+        //                      SET Estado = @Estado
+        //                      WHERE IdTurno = @IdTurno
+        //                      AND Estado = 'Pendiente'";
+
+        //    using (SqlConnection conn = new SqlConnection(connectionString))
+        //    using (SqlCommand cmd = new SqlCommand(query, conn))
+        //    {
+        //        cmd.Parameters.AddWithValue("@Estado", estado);
+        //        cmd.Parameters.AddWithValue("@IdTurno", idTurno);
+
+        //        try
+        //        {
+        //            conn.Open();
+        //            return cmd.ExecuteNonQuery() > 0;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw ex;
+        //        }
+        //    }
+        //}
+
+        public bool ActualizarEstadoTurno(int idTurno, string estado, string NombrePrestador)
         {
+            bool Turno = false; 
             string query = @" UPDATE Turno 
                               SET Estado = @Estado
                               WHERE IdTurno = @IdTurno
@@ -608,11 +697,74 @@ namespace Servicios
                 try
                 {
                     conn.Open();
-                    return cmd.ExecuteNonQuery() > 0;
+                    if (cmd.ExecuteNonQuery() > 0)
+                    {
+                        string QueryDatosCliente = @"Select U.Nombre, U.Email
+                                                   From Usuario U 
+                                                   Inner join Cliente C on C.IdUsuario = U.IdUsuario
+                                                   Inner Join Turno T on T.IdCliente = C.IdCliente
+                                                   Where IdTurno = @IdTurno";
+                        using (SqlConnection Connection = new SqlConnection(connectionString))
+                        using (SqlCommand Command = new SqlCommand(QueryDatosCliente, Connection))
+                        {
+                            Command.Parameters.AddWithValue("@IdTurno", idTurno);
+                            Connection.Open();
+
+                            try
+                            {
+                                SqlDataReader SqlDataReader = Command.ExecuteReader();
+
+                                while (SqlDataReader.Read())
+                                {
+                                    EmailService EmailService = new EmailService();
+                                    if (EmailService.EnviarMailAlCliente(SqlDataReader["Nombre"].ToString(), NombrePrestador, SqlDataReader["Email"].ToString()))
+                                    {
+                                        Turno = true; 
+                                    }
+                                }
+                                     
+                            }
+                            catch (Exception)
+                            {
+                                Turno = false; 
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    Turno = false; 
+                }
+            }
+            return Turno; 
+        }
+
+        public bool ActualiarInformacionUsuario(Usuario UsuarioModificado)
+        {
+            string Query = @"Update Usuario Set
+                           Email = @Email,
+                           Nombre = @Nombre,                            
+                           Apellido = @Apellido,
+                           Telefono = @Telefono
+                           Where IdUsuario = @IdUsuario";
+
+            using (SqlConnection Connection = new SqlConnection(connectionString))
+            using (SqlCommand Command = new SqlCommand(Query, Connection))
+            {
+                Command.Parameters.AddWithValue("@Email", UsuarioModificado.EmailUsuario);
+                Command.Parameters.AddWithValue("@Nombre", UsuarioModificado.NombreUsuario);
+                Command.Parameters.AddWithValue("@Apellido", UsuarioModificado.ApellidoUsuario);
+                Command.Parameters.AddWithValue("@Telefono", UsuarioModificado.TelefonoUsuario);
+                Command.Parameters.AddWithValue("@IdUsuario", UsuarioModificado.IdUsuario);
+
+                try
+                {
+                    Connection.Open();
+                    return Command.ExecuteNonQuery() > 0;
+                }
+                catch (Exception)
+                {
+                    return false; 
                 }
             }
         }

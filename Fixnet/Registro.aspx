@@ -11,7 +11,7 @@
             <h2 class="text-center mb-4"><i class="bi bi-caret-right-fill"></i>Registro <i class="bi bi-caret-left-fill"></i></h2>
 
             <div class="row g-3">
-
+                <asp:Panel runat="server" DefaultButton="BtnRegistro">
                 <div class="col-md-6">
                     <label class="form-label">Nombre</label>
                     <asp:TextBox ID="txtNombre" CssClass="form-control" runat="server"></asp:TextBox>
@@ -43,7 +43,7 @@
                 <div class="col-12 text-center mt-4">
 
                     <div class="btnEnviar">
-                        <asp:Button ID="btnRegistro" runat="server" Text="Registrarse" CssClass="BtnEnviar" OnClick="BtnRegistro_Click"/>
+                        <asp:Button ID="BtnRegistro" runat="server" Text="Registrarse" CssClass="BtnEnviar" OnClick="BtnRegistro_Click"/>
                     </div>
 
                     <!-- MENSAJE DE ERROR -->
@@ -57,7 +57,7 @@
                     </asp:Label>
 
                 </div>
-
+                </asp:Panel>
             </div>
         </div>
     </div>

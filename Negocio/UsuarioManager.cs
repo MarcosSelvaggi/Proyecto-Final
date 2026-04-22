@@ -47,9 +47,13 @@ namespace Negocio
             return Conexion.TraerServiciosBD();
         }
 
-        public bool ActualizarEstadoTurno(int idTurno, string estado)
+        //public bool ActualizarEstadoTurno(int idTurno, string estado)
+        //{
+        //    return Conexion.ActualizarEstadoTurno(idTurno, estado);
+        //}
+        public bool ActualizarEstadoTurno(int idTurno, string estado, string NombrePrestador)
         {
-            return Conexion.ActualizarEstadoTurno(idTurno, estado);
+            return Conexion.ActualizarEstadoTurno(idTurno, estado, NombrePrestador);
         }
         public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
         {
@@ -77,6 +81,11 @@ namespace Negocio
         public bool CambiarContraseña(string EmailUsuario, string PasswordNueva)
         {
             return Conexion.CambiarPassword(EmailUsuario, BCrypt.Net.BCrypt.EnhancedHashPassword(PasswordNueva, 13)); 
+        }
+
+        public bool ModificarUsuario(Usuario Usuario)
+        {
+            return Conexion.ActualiarInformacionUsuario(Usuario);
         }
     }
 }

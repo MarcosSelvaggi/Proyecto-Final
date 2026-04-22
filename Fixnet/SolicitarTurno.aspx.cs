@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Dominio;
+using Negocio;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Dominio;
-using Negocio;
 
 
 namespace Fixnet
@@ -77,10 +80,13 @@ namespace Fixnet
                 LblDescripcion.Text = reader["Descripcion"].ToString();
 
                 
-                string zonaRaw = reader["IdLocalidad"].ToString();
-                var zonas = zonaRaw.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                RptZonas.DataSource = zonas;
-                RptZonas.DataBind();
+                //string zonaRaw = reader["IdLocalidad"].ToString();
+                //var zonas = zonaRaw.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                //RptZonas.DataSource = zonas;
+                //RptZonas.DataBind();
+
+                Session.Add("ListaLocalidades", reader["IdLocalidad"].ToString());
+                RegisterAsyncTask(new PageAsyncTask(ListarLocalidades));
 
                 // Horarios — PARSE DE LOS HORARIOS CON COMA DE MARCOS
                 string horarioRaw = reader["DisponibilidadPrestador"].ToString();
@@ -95,6 +101,37 @@ namespace Fixnet
 
                 // S query separada con nombre del servicio
                 CargarServicios(idPrestador);
+            }
+        }
+
+        protected async Task ListarLocalidades()
+        {
+            string ListaLocalidades = (string)Session["ListaLocalidades"];
+            var url = "https://apis.datos.gob.ar/georef/api/v2.0/localidades?id=" + ListaLocalidades + "&campos=basico";
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var Respuesta = await httpClient.GetAsync(url);
+
+                if (Respuesta.IsSuccessStatusCode)
+                {
+                    var Data = await Respuesta.Content.ReadAsStringAsync();
+                    var Localidad = JsonSerializer.Deserialize<ListaDeLocalidades>(Data,
+                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+                    var Lista = Localidad;
+
+                    string zonaRaw = "";
+
+                    foreach (var item in Lista.Localidades)
+                    {
+                        zonaRaw += item.Nombre + ",";
+                    }
+
+                    var zonas = zonaRaw.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    RptZonas.DataSource = zonas;
+                    RptZonas.DataBind();
+                }
             }
         }
 

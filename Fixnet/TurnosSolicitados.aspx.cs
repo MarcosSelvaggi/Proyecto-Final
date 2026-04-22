@@ -53,8 +53,10 @@ namespace Fixnet
 
         private void CambiarEstadoTurno(int idTurno, string estado)
         {
+            Usuario Usuario = (Usuario)Session["Usuario"];
+
             UsuarioManager bd = new UsuarioManager();
-            bd.ActualizarEstadoTurno(idTurno, estado);
+            bd.ActualizarEstadoTurno(idTurno, estado, Usuario.NombreUsuario);
             CargarTurnos();
         }
 

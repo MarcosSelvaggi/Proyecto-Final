@@ -1,7 +1,11 @@
 ﻿using Dominio;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -18,13 +22,13 @@ namespace Fixnet
             }
         }
 
-        private void CargarUsuario()
+        private async Task CargarUsuario()
         {
             Usuario usuario = (Usuario)Session["Usuario"];
 
             if (usuario == null)
             {
-                Response.Redirect("/Login.aspx");
+                Response.Redirect("/Logearse.aspx");
                 return;
             }
 
@@ -84,9 +88,13 @@ namespace Fixnet
             if (tienePrestador)
             {
                 lblDescripcion.Text = usuario.Prestador.DescripcionPrestador;
-                lblZonas.Text = usuario.Prestador.ZonasPrestador;
+
+                Session.Add("ListaLocalidades", usuario.Prestador.ZonasPrestador);
+
+                RegisterAsyncTask(new PageAsyncTask(ListarLocalidades));
             }
         }
+
 
         private bool TieneTextoValido(string valor)
         {
@@ -120,5 +128,48 @@ namespace Fixnet
         {
             Response.Redirect("/PerfilPrestador.aspx");
         }
+
+        // BOTÓN MODIFICAR PERFIL
+
+        protected void ModificarInformacionPersonal_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/ModificarPerfil.aspx");
+        }
+        protected void ModificarContraseña_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/ModificarContraseña.aspx");
+        }
+
+        // LISTAR LAS LOCALIDADES 
+        protected async Task ListarLocalidades()
+        {
+            string ListaLocalidades = (string)Session["ListaLocalidades"]; 
+            var url = "https://apis.datos.gob.ar/georef/api/v2.0/localidades?id=" + ListaLocalidades + "&campos=basico";
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var Respuesta = await httpClient.GetAsync(url);
+
+                if (Respuesta.IsSuccessStatusCode)
+                {
+                    var Data = await Respuesta.Content.ReadAsStringAsync();
+                    var Localidad = JsonSerializer.Deserialize<ListaDeLocalidades>(Data,
+                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+                    var Lista = Localidad; 
+
+                    foreach (var item in Lista.Localidades)
+                    {
+                        lblZonas.Text += item.Nombre + ", "; 
+                    }
+
+                    lblZonas.Text = lblZonas.Text.Remove(lblZonas.Text.Count() - 2); 
+                }
+            }
+        }
+
     }
+
+
+
 }

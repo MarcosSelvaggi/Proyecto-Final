@@ -7,9 +7,9 @@
 
 <asp:ScriptManager runat="server" />
     <div class="container">
+        <asp:Panel runat="server" DefaultButton="btnGuardarPrestador">
         <div class="form">
             <div class="col-8 py-2 justify_content_center">
-
                 <h2>Configuración de tu perfil de prestador</h2>
 
                 <!-- Descripción que quiera utilizar el Prestador -->
@@ -200,6 +200,7 @@
 
             </div>
         </div>
+            </asp:Panel>
     </div>
 
 </asp:Content>

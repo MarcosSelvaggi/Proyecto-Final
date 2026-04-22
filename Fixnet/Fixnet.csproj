@@ -104,6 +104,7 @@
     <Content Include="assets\img-usuario-3.png" />
     <Content Include="assets\logo.png" />
     <Content Include="BuscarPrestadores.aspx" />
+    <Content Include="ModificarContraseña.aspx" />
     <Content Include="ContraseñaOlvidada.aspx" />
     <Content Include="Contactanos.aspx" />
     <Content Include="Default.aspx" />
@@ -111,6 +112,7 @@
     <Content Include="Global.asax" />
     <Content Include="Logearse.aspx" />
     <Content Include="MisTurnos.aspx" />
+    <Content Include="ModificarPerfil.aspx" />
     <Content Include="packages\Microsoft.Bcl.AsyncInterfaces.10.0.5\Icon.png" />
     <Content Include="packages\Microsoft.Bcl.AsyncInterfaces.10.0.5\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll" />
     <Content Include="packages\Microsoft.Bcl.AsyncInterfaces.10.0.5\lib\net462\Microsoft.Bcl.AsyncInterfaces.xml" />
@@ -323,13 +325,20 @@
     <Compile Include="BuscarPrestadores.aspx.designer.cs">
       <DependentUpon>BuscarPrestadores.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ModificarContraseña.aspx.cs">
+      <DependentUpon>ModificarContraseña.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ModificarContraseña.aspx.designer.cs">
+      <DependentUpon>ModificarContraseña.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ContraseñaOlvidada.aspx.cs">
       <DependentUpon>ContraseñaOlvidada.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-	  <Compile Include="ContraseñaOlvidada.aspx.designer.cs">
-		  <DependentUpon>ContraseñaOlvidada.aspx</DependentUpon>
-	  </Compile>
+    <Compile Include="ContraseñaOlvidada.aspx.designer.cs">
+      <DependentUpon>ContraseñaOlvidada.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Contactanos.aspx.cs">
       <DependentUpon>Contactanos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -367,6 +376,13 @@
     </Compile>
     <Compile Include="MisTurnos.aspx.designer.cs">
       <DependentUpon>MisTurnos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ModificarPerfil.aspx.cs">
+      <DependentUpon>ModificarPerfil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ModificarPerfil.aspx.designer.cs">
+      <DependentUpon>ModificarPerfil.aspx</DependentUpon>
     </Compile>
     <Compile Include="PerfilCliente.aspx.cs">
       <DependentUpon>PerfilCliente.aspx</DependentUpon>

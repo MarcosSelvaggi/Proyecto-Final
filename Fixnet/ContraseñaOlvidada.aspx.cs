@@ -117,7 +117,7 @@ namespace Fixnet
             Session.Remove("codigoRecuperacion");
             Session.Remove("UsuarioAModificar");
             Session.Remove("ModificarContraseña");
-            Response.Redirect("/Usuario/Logearse.aspx", false);
+            Response.Redirect("Logearse.aspx", false);
             return;
         }
 

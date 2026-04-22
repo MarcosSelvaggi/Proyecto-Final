@@ -23,19 +23,5 @@ namespace Dominio
             Cliente = new Cliente();
             Prestador = new Prestador();
         }
-
-
-        //Propiedades necesarias para el Eval en BuscarPrestadores.aspx, leer lo siguiente -> https://stackoverflow.com/questions/14901542/why-databinding-cant-find-a-property-which-exist
-        public string Nombre
-        {
-            get {  return NombreUsuario; }
-            set { NombreUsuario = value; }
-        }
-
-        public string Apellido
-        {
-            get { return ApellidoUsuario; }
-            set { ApellidoUsuario = value;}
-        }
     }
 }

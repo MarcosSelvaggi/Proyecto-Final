@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master"
 AutoEventWireup="true" CodeBehind="PerfilUsuario.aspx.cs"
-Inherits="Fixnet.PerfilUsuario" %>
+Inherits="Fixnet.PerfilUsuario" Async="true" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -33,9 +33,19 @@ Inherits="Fixnet.PerfilUsuario" %>
                     <asp:Label ID="lblTelefono" runat="server" />
                 </small>
             </div>
-
+        </div>
+        <div class="row px-2">
+            
+                <div class="col-md-8 col-4 py-1">
+                <asp:Button CssClass="btn btn-dark" Text="Editar información personal" ID="BtnModificarInformacionPersonal" runat="server" OnClick="ModificarInformacionPersonal_Click" />
+                </div>
+                <div class="col-md-6 col-3 py-1">
+                <asp:Button CssClass="btn btn-dark" Text="Modificar contraseña" ID="BtnModificarContraseña" runat="server" OnClick="ModificarContraseña_Click" />
+                </div>
+            
         </div>
     </div>
+   
 
     <div class="row g-3">
 

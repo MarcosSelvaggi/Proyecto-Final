@@ -6,51 +6,49 @@
     <asp:ScriptManager runat="server" />
 
     <!-- Panel Mail -->
-        <div class="container2" id="divIngresarMail" runat="server">
+    <div class="container2" id="divIngresarMail" runat="server">
+        <asp:Panel runat="server" DefaultButton="btnRecuperar">
             <h1>Ingrese su mail</h1>
             <div>
                 <asp:TextBox ID="txtMail" class="input" TextMode="Email" placeholder="Ingrese su mail" runat="server" />
                 <small id="mailNoEncontrado" class="text-danger" runat="server"></small>
                 <asp:Button ID="btnRecuperar" class="btnEnviar" Text="Recuperar contraseña" OnClick="btnRecuperar_Click" runat="server" />
             </div>
-            <div>
-                <br />
+            <div class="py-2">
                 <asp:Button ID="btnVolver" Text="Volver" CssClass="btn btn-outline-dark" OnClick="btnVolver_Click" runat="server" />
-                <p></p>
             </div>
-        </div>
+        </asp:Panel>
+    </div>
 
     <!-- Panel Código -->
-        <div class="container2" id="divIngresarCodigo" runat="server">
+    <div class="container2" id="divIngresarCodigo" runat="server">
+        <asp:Panel runat="server" DefaultButton="btnCodigoMail">
             <h1>Ingresar código</h1>
             <div>
                 <asp:TextBox ID="txtCodigoMail" ClientIDMode="Static" class="input" onkeypress="return soloNumeros(event)" MaxLength="6" runat="server" />
                 <small id="smallCodigoIncorrecto" class="text-danger" runat="server"></small>
                 <asp:Button ID="btnCodigoMail" class="btnEnviar" Text="Confirmar" OnClick="btnCodigoMail_Click" runat="server" />
             </div>
-            <div>
-                <br />
+            <div class="py-2">
                 <asp:Button Text="Volver" CssClass="btn btn-outline-dark" OnClick="btnVolver_Click" runat="server" />
             </div>
-            <div>
-            </div>
-        </div>
+        </asp:Panel>
+    </div>
 
     <!-- Panel Contraeña nueva-->
-        <div class="container2" id="divIngresarContraseña" runat="server">
+    <div class="container2" id="divIngresarContraseña" runat="server">
+        <asp:Panel runat="server" DefaultButton="btnCambiarContraseña">
             <h1>La nueva contraseña</h1>
             <div>
                 <asp:TextBox ID="txtContraseñaNueva" TextMode="Password" class="input" runat="server" />
                 <small id="SmallCotraseñaNueva" class="text-danger" runat="server"></small>
                 <asp:Button ID="btnCambiarContraseña" class="btnEnviar" Text="Confirmar" OnClick="btnCambiarContraseña_Click" runat="server" />
             </div>
-            <div>
-                <br />
+            <div class="py-2">
                 <asp:Button ID="btnCancelarCambioContrasena" Text="Volver" CssClass="btn btn-outline-dark" OnClick="btnVolver_Click" runat="server" />
             </div>
-            <div>
-            </div>
-        </div>
+        </asp:Panel>
+    </div>
 
     <div class="modal fade" id="contrasenaCambiadaModal" tabindex="-1" aria-labelledby="contrasenaCambiadaModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

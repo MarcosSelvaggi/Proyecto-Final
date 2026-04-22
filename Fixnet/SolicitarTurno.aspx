@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="SolicitarTurno.aspx.cs" Inherits="Fixnet.SolicitarTurno" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="SolicitarTurno.aspx.cs" Inherits="Fixnet.SolicitarTurno" Async="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
@@ -69,7 +69,7 @@
                         </div>
 
                         <span class="badge bg-light text-dark border fw-medium">$<%# Eval("Precio", "{0:N0}") %>/h
-            </span>
+                        </span>
 
                         <asp:HiddenField ID="hfIdServicio" runat="server"
                             Value='<%# Eval("IdServicio") %>' />
@@ -149,7 +149,6 @@
                         CssClass="btn btn-success"
                         OnClick="BtnConfirmarSolicitud_Click" />
                 </div>
-
             </div>
         </div>
     </div>
