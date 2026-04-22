@@ -14,8 +14,8 @@ namespace Servicios
 {
     public class BD
     {
-        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
         {
@@ -680,7 +680,7 @@ namespace Servicios
         //    }
         //}
 
-        public bool ActualizarEstadoTurno(int idTurno, string estado, string NombrePrestador)
+        /*public bool ActualizarEstadoTurno(int idTurno, string estado, string NombrePrestador)
         {
             bool Turno = false; 
             string query = @" UPDATE Turno 
@@ -717,9 +717,12 @@ namespace Servicios
                                 while (SqlDataReader.Read())
                                 {
                                     EmailService EmailService = new EmailService();
-                                    if (EmailService.EnviarMailAlCliente(SqlDataReader["Nombre"].ToString(), NombrePrestador, SqlDataReader["Email"].ToString()))
+                                    if (estado == "Aceptado")
                                     {
-                                        Turno = true; 
+                                        if (EmailService.EnviarMailAlCliente(SqlDataReader["Nombre"].ToString(), NombrePrestador, SqlDataReader["Email"].ToString()))
+                                        {
+                                            Turno = true;
+                                        }
                                     }
                                 }
                                      
@@ -738,7 +741,65 @@ namespace Servicios
             }
             return Turno; 
         }
+        */
 
+        public bool ActualizarEstadoTurno(int idTurno, string estado, string NombrePrestador)
+        {
+            bool actualizado = false;
+
+            string query = @"UPDATE Turno 
+                             SET Estado = @Estado
+                             WHERE IdTurno = @IdTurno
+                             AND Estado = 'Pendiente'";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Estado", estado);
+                cmd.Parameters.AddWithValue("@IdTurno", idTurno);
+
+                conn.Open();
+                actualizado = cmd.ExecuteNonQuery() > 0;
+            }
+
+            if (!actualizado)
+                return false;
+
+            try
+            {
+                string queryDatos = @"SELECT U.Nombre, U.Email
+                                      FROM Usuario U 
+                                      INNER JOIN Cliente C ON C.IdUsuario = U.IdUsuario
+                                      INNER JOIN Turno T ON T.IdCliente = C.IdCliente
+                                      WHERE T.IdTurno = @IdTurno";
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand(queryDatos, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IdTurno", idTurno);
+                    conn.Open();
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            EmailService email = new EmailService();
+
+                            if (estado == "Aceptado")
+                                email.EnviarMailAlCliente(reader["Nombre"].ToString(), NombrePrestador, reader["Email"].ToString());
+                            else if (estado == "Rechazado")
+                                email.EnviarRechazoMailAlCliente(reader["Nombre"].ToString(), NombrePrestador, reader["Email"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return true;
+        }
         public bool ActualiarInformacionUsuario(Usuario UsuarioModificado)
         {
             string Query = @"Update Usuario Set

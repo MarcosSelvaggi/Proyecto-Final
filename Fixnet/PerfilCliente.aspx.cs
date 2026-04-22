@@ -47,7 +47,7 @@ namespace Fixnet
 
         protected async Task CargarProvincias()
         {
-            var url = "https://apis.datos.gob.ar/georef/api/v2.0/provincias";
+            var url = "https://apis.datos.gob.ar/georef/api/provincias";
 
             using (HttpClient httpClient = new HttpClient())
             {
@@ -101,7 +101,7 @@ namespace Fixnet
 
         protected async Task CargarDepartamentos()
         {
-            var url = "https://apis.datos.gob.ar/georef/api/v2.0/departamentos?provincia=" + ddlProvincia.SelectedValue + "&max=5000";
+            var url = "https://apis.datos.gob.ar/georef/api/departamentos?provincia=" + ddlProvincia.SelectedValue + "&max=5000";
             using (HttpClient httpClient = new HttpClient())
             {
                 var Respuesta = await httpClient.GetAsync(url);
@@ -147,7 +147,7 @@ namespace Fixnet
 
         protected async Task CargarLocalidades()
         {
-            var url = "https://apis.datos.gob.ar/georef/api/v2.0/localidades?provincia=" + ddlProvincia.SelectedValue
+            var url = "https://apis.datos.gob.ar/georef/api/localidades?provincia=" + ddlProvincia.SelectedValue
                 + "&departamento=" + ddlDepartamento.SelectedItem.ToString() 
                 + "&max=200"; 
             using (HttpClient httpClient = new HttpClient())

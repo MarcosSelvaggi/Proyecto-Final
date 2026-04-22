@@ -64,7 +64,7 @@ namespace Fixnet
         //Famoso Ctrl + C / Ctrl + V desde PerfilCliente 
         protected async Task CargarProvincias()
         {
-            var url = "https://apis.datos.gob.ar/georef/api/v2.0/provincias";
+            var url = "https://apis.datos.gob.ar/georef/api/provincias";
 
             using (HttpClient httpClient = new HttpClient())
             {
@@ -117,7 +117,7 @@ namespace Fixnet
 
         protected async Task CargarDepartamentos()
         {
-            var url = "https://apis.datos.gob.ar/georef/api/v2.0/departamentos?provincia=" + ddlProvincia.SelectedValue + "&max=5000";
+            var url = "https://apis.datos.gob.ar/georef/api/departamentos?provincia=" + ddlProvincia.SelectedValue + "&max=5000";
             using (HttpClient httpClient = new HttpClient())
             {
                 var Respuesta = await httpClient.GetAsync(url);
@@ -158,7 +158,7 @@ namespace Fixnet
         {
             if(ddlProvincia.SelectedValue != null && ddlDepartamento.SelectedItem != null)
             {
-                var url = "https://apis.datos.gob.ar/georef/api/v2.0/localidades?provincia=" + ddlProvincia.SelectedValue
+                var url = "https://apis.datos.gob.ar/georef/api/localidades?provincia=" + ddlProvincia.SelectedValue
                 + "&departamento=" + ddlDepartamento.SelectedItem.ToString()
                 + "&max=200&campos=basico";
                 using (HttpClient httpClient = new HttpClient())
@@ -272,7 +272,7 @@ namespace Fixnet
 
             foreach (var item in Lista)
             {
-                var url = "https://apis.datos.gob.ar/georef/api/v2.0/localidades?id=" + item + "&campos=basico";
+                var url = "https://apis.datos.gob.ar/georef/api/localidades?id=" + item + "&campos=basico";
 
                 using (HttpClient httpClient = new HttpClient())
                 {

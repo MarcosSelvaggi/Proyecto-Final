@@ -17,8 +17,8 @@ namespace Fixnet
 {
     public partial class SolicitarTurno : Page
     {
-        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -107,7 +107,7 @@ namespace Fixnet
         protected async Task ListarLocalidades()
         {
             string ListaLocalidades = (string)Session["ListaLocalidades"];
-            var url = "https://apis.datos.gob.ar/georef/api/v2.0/localidades?id=" + ListaLocalidades + "&campos=basico";
+            var url = "https://apis.datos.gob.ar/georef/api/localidades?id=" + ListaLocalidades + "&campos=basico";
 
             using (HttpClient httpClient = new HttpClient())
             {
@@ -244,7 +244,22 @@ namespace Fixnet
 
             if (ok)
             {
-                MostrarModal("Solicitud enviada correctamente", "success");
+                //MostrarModal("Solicitud enviada correctamente", "success");
+                ScriptManager.RegisterStartupScript(this, this.GetType(),
+                "modalYRedirect",
+                @"
+                var modal = document.getElementById('modalMensajeSistema');
+                document.getElementById('modalHeader').className = 'modal-header text-white bg-success';
+                document.getElementById('modalIcon').innerText = '✔️';
+                modal.querySelector('.modal-body').innerText = 'Solicitud enviada correctamente. Serás redirigido a Mis Turnos...';
+                var m = new bootstrap.Modal(modal);
+                m.show();
+
+                setTimeout(function() {
+                    window.location.href = 'MisTurnos.aspx';
+                }, 3000);
+                ",
+                true);
             }
             else
             {

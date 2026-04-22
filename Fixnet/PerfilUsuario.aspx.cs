@@ -144,7 +144,7 @@ namespace Fixnet
         protected async Task ListarLocalidades()
         {
             string ListaLocalidades = (string)Session["ListaLocalidades"]; 
-            var url = "https://apis.datos.gob.ar/georef/api/v2.0/localidades?id=" + ListaLocalidades + "&campos=basico";
+            var url = "https://apis.datos.gob.ar/georef/api/localidades?id=" + ListaLocalidades + "&campos=basico";
 
             using (HttpClient httpClient = new HttpClient())
             {
