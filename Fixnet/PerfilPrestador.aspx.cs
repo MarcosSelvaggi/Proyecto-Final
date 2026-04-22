@@ -587,6 +587,20 @@ namespace Fixnet
 
         protected void btnGuardarPrestador_Click(object sender, EventArgs e)
         {
+            if (!chkAcepto.Checked)
+            {
+                lblErrorPrestador.Text = "Debes aceptar los términos y condiciones.";
+                lblErrorPrestador.Visible = true;
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(),
+                "abrirModal",
+                "var myModal = new bootstrap.Modal(document.getElementById('modalTerminos')); myModal.show();",
+                true);
+
+
+                return;
+            }
+
             Usuario usuarioSession = (Usuario)Session["Usuario"];
             if (usuarioSession == null)
                 Response.Redirect("/Login.aspx");

@@ -43,13 +43,18 @@ namespace Fixnet
                 Usuario.PasswordUsuario = txtPassword.Text;
                 UsuarioManager UsuarioManager = new UsuarioManager();
 
-                if (UsuarioManager.CambiarContraseña(Usuario.EmailUsuario, Usuario.EmailUsuario))
+                if (UsuarioManager.CambiarContraseña(Usuario.EmailUsuario, Usuario.PasswordUsuario))
                 {
                     Session["Usuario"] = Usuario;
 
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "ModificarContraseñaModal",
-                                "var modal = new bootstrap.Modal(document.getElementById('ModificarUsuarioModal')); modal.show();" +
-                                "setTimeout(function() { window.location.href = '/PerfilUsuario.aspx'; }, 5000);", true);
+                    ScriptManager.RegisterStartupScript(
+                    this,
+                    this.GetType(),
+                    "ModificarContraseñaModal",
+                    "var myModal = new bootstrap.Modal(document.getElementById('ModificarContraseñaModal')); myModal.show();" +
+                    "setTimeout(function() { window.location.href = '/PerfilUsuario.aspx'; }, 5000);",
+                    true
+                );
                 }
                 else
                 {

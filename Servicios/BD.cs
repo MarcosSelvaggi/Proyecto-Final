@@ -484,7 +484,7 @@ namespace Servicios
         {
             string query = "Update Usuario set PasswordHash = @Password where Email = @Email";
 
-            using (SqlConnection Connection = new SqlConnection())
+            using (SqlConnection Connection = new SqlConnection(connectionString))
             using (SqlCommand Command = new SqlCommand(query, Connection))
             {
                 try

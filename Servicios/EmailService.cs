@@ -107,7 +107,7 @@ namespace Servicios
 
                     <p>
                         Podés revisarla en la sección 
-                        <strong>Solicitudes de trabajo</strong> dentro de la plataforma.
+                        <strong>Turnos solicitados</strong> dentro de la plataforma.
                     </p>
 
                     <hr style='border:none; border-top:1px solid #eee; margin:20px 0;' />

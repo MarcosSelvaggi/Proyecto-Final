@@ -10,7 +10,7 @@
             <asp:Panel runat="server" DefaultButton="BtnModificar">
                 <div class="row g-3">
                     <div class="col-md-12">
-                        <label class="form-label">Nuevo contraseña</label>
+                        <label class="form-label">Nueva contraseña</label>
                         <asp:TextBox ID="txtPassword" CssClass="form-control" runat="server" TextMode="Password"></asp:TextBox>
                     </div>
 
