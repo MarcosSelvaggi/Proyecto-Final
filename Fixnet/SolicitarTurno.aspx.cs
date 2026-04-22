@@ -24,7 +24,7 @@ namespace Fixnet
         {
             if (Session["Usuario"] == null)
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/Logearse.aspx");
                 return;
             }
 

@@ -15,6 +15,12 @@ namespace Fixnet
         protected void Page_Load(object sender, EventArgs e)
         {
 
+            if (Session["Usuario"] != null)
+            {
+                Response.Redirect("~/PerfilUsuario.aspx");
+                return;
+            }
+
         }
 
         protected void BtnEnviar_Click(object sender, EventArgs e)

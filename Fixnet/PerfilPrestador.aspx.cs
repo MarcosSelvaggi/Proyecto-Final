@@ -25,7 +25,7 @@ namespace Fixnet
 
                 if (usuario == null)
                 {
-                    Response.Redirect("/Login.aspx");
+                    Response.Redirect("/Logearse.aspx");
                     return;
                 }
 
