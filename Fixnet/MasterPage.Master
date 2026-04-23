@@ -80,22 +80,6 @@
                         <% if (Session["Usuario"] == null)
                             {
                         %>
-                        <div id="chatbot">
-                            <div id="chat-header">
-                                <span>💬 FixNet</span>
-                                <button id="btn-minimizar" onclick="toggleChat(event)">−</button>
-                            </div>
-
-                            <div id="chat-body"></div>
-
-                            <div id="chat-opciones">
-                                <button onclick="seleccionarServicio('Electricista')">Electricista</button>
-                                <button onclick="seleccionarServicio('Plomero')">Plomero</button>
-                                <button onclick="seleccionarServicio('Técnico de PC')">PC</button>
-                                <button onclick="seleccionarServicio('Técnico de aires acondicionados')">Aire</button>
-                                <button onclick="seleccionarServicio('Albañil')">Albañil</button>
-                            </div>
-                        </div>
                         <ul class="navbar-nav ms-lg-auto me-3 text-center text-lg-start">
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="/Registro.aspx">Registrarse</a>
@@ -127,7 +111,25 @@
                     <%}%>
                 </nav>
             </header>
+            <% if (Session["Usuario"] == null)
+                { %>
+            <div id="chatbot">
+                <div id="chat-header">
+                    <span>💬 FixNet</span>
+                    <button type="button" id="btn-minimizar" onclick="toggleChat(event)">−</button>
+                </div>
 
+                <div id="chat-body"></div>
+
+                <div id="chat-opciones">
+                    <button onclick="seleccionarServicio('Electricista')">Electricista</button>
+                    <button onclick="seleccionarServicio('Plomero')">Plomero</button>
+                    <button onclick="seleccionarServicio('Técnico de PC')">PC</button>
+                    <button onclick="seleccionarServicio('Técnico de aires acondicionados')">Aire</button>
+                    <button onclick="seleccionarServicio('Albañil')">Albañil</button>
+                </div>
+            </div>
+            <% } %>
         </div>
         <div id="content" style="margin-top: 100px">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">

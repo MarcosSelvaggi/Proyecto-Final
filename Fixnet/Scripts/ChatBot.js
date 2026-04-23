@@ -45,11 +45,6 @@ function buscarPrestadores() {
         localidad: estadoChat.idLocalidad
     };
 
-    console.log({
-        servicio: estadoChat.servicio,
-        idLocalidad: estadoChat.idLocalidad
-    });
-
     fetch("Default.aspx/ContarPrestadores", {
         method: "POST",
         headers: {
@@ -215,7 +210,6 @@ function seleccionarLocalidad(id, nombre) {
     estadoChat.localidad = nombre;
     estadoChat.idLocalidad = id;
 
-    console.log("ID LOCALIDAD:", id);
 
     agregarMensaje("usuario", nombre);
     agregarMensaje("bot", "Buscando prestadores... 🔍");
@@ -261,3 +255,10 @@ function reiniciarChat() {
 
     agregarMensaje("bot", "¿Qué servicio necesitás?");
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.innerWidth <= 576) {
+        chatMinimizado = true;
+        document.getElementById("chatbot").classList.add("minimizado");
+    }
+});

@@ -64,6 +64,43 @@ a {
     .registro-navbar-lg-screen {
         display: none;
     }
+
+    /* CHAT EN CELULARES */
+    #chatbot {
+        width: 95%;
+        height: 80vh;
+        right: 2.5%;
+        bottom: 10px;
+        border-radius: 12px;
+    }
+
+    #chatbot.minimizado {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #25d366;
+    }
+
+    #chatbot.minimizado #chat-header {
+        justify-content: center;
+    }
+
+    #chatbot.minimizado span {
+        display: none;
+    }
+
+    #chat-header span {
+        font-size: 14px;
+    }
+
+    #chat-opciones button {
+        flex: 1 1 100%;
+        font-size: 14px;
+        padding: 8px;
+    }
 }
 
 .hover-underline {
@@ -151,15 +188,15 @@ a {
     gap: 5px;
 }
 
-    #chat-opciones button {
-        flex: 1 1 45%;
-        border: none;
-        background: #25d366;
-        color: white;
-        padding: 6px;
-        border-radius: 8px;
-        cursor: pointer;
-    }
+#chat-opciones button {
+    flex: 1 1 45%;
+    border: none;
+    background: #25d366;
+    color: white;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+}
 
 #chat-header {
     background: #075e54;
@@ -185,7 +222,7 @@ a {
     height: 45px;
 }
 
-    #chatbot.minimizado #chat-body,
-    #chatbot.minimizado #chat-opciones {
-        display: none;
-    }
+#chatbot.minimizado #chat-body,
+#chatbot.minimizado #chat-opciones {
+    display: none;
+}
