@@ -311,6 +311,7 @@
     <Content Include="PerfilCliente.aspx" />
     <Content Include="PerfilPrestador.aspx" />
     <Content Include="Registro.aspx" />
+    <Content Include="Scripts\ChatBot.js" />
     <Content Include="SeleccionarPerfil.aspx" />
     <Content Include="styles\StyleContacto.css" />
     <Content Include="SobreFixnet.aspx" />

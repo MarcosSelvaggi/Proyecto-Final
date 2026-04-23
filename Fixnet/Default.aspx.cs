@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Dominio;
+using Negocio;
 
 namespace Fixnet
 {
@@ -11,6 +13,16 @@ namespace Fixnet
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+        }
+        [System.Web.Services.WebMethod]
+        public static int ContarPrestadores(FiltroPrestadoresChat datos)
+        {
+            UsuarioManager bd = new UsuarioManager();
+
+            int idServicio = bd.ObtenerIdServicio(datos.servicio);
+            string localidad = datos.localidad;
+
+            return bd.ContarPrestadores(idServicio, localidad);
         }
     }
 }

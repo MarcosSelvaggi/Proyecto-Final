@@ -104,7 +104,7 @@
 <section class="py-5 bg-primary text-white text-center">
     <div class="container">
         <h2 class="fw-bold mb-3">¿Listo para empezar?</h2>
-        <p class="mb-4">Registrate y comenzá a usar Fixnet hoy mismo.</p>
+        <p class="mb-4">Registrate y comenzá a usar FixNet hoy mismo.</p>
         <a href="/Registro.aspx" class="btn btn-light btn-lg fw-bold">
             Crear cuenta
         </a>

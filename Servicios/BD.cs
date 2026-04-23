@@ -17,8 +17,8 @@ namespace Servicios
     public class BD
     {
 
-        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
         {
@@ -48,6 +48,58 @@ namespace Servicios
                 catch (SqlException ex)
                 {
                     Console.WriteLine(ex.Message);
+                    return 0;
+                }
+            }
+        }
+        public int ContarPrestadores(int idServicio, string idLocalidad)
+        {
+            if (string.IsNullOrEmpty(idLocalidad))
+                return 0;
+
+            string query = @"
+                            SELECT COUNT(DISTINCT P.IdPrestador)
+                            FROM Usuario U
+                            INNER JOIN Prestador P ON U.IdUsuario = P.IdUsuario
+                            INNER JOIN ZonasPrestador ZP ON ZP.IdPrestador = P.IdPrestador
+                            INNER JOIN PrestadorServicio PS ON PS.IdPrestador = P.IdPrestador
+                            WHERE ',' + ZP.IdLocalidad + ',' LIKE '%,' + @Localidad + ',%'
+                            AND PS.IdServicio = @IdServicio";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Localidad", idLocalidad);
+                cmd.Parameters.AddWithValue("@IdServicio", idServicio);
+
+                conn.Open();
+                return (int)cmd.ExecuteScalar();
+            }
+        }
+        public int ObtenerIdServicio(string nombreServicio)
+        {
+            string query = @"
+                            SELECT TOP 1 IdServicio 
+                            FROM Servicios 
+                            WHERE LOWER(Nombre) LIKE @Nombre";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Nombre", "%" + nombreServicio.ToLower() + "%");
+
+                try
+                {
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null)
+                        return Convert.ToInt32(result);
+
+                    return 0; // no lo encontró
+                }
+                catch
+                {
                     return 0;
                 }
             }
@@ -434,7 +486,7 @@ namespace Servicios
             using (SqlCommand Command = new SqlCommand(query, sqlConnection))
             {
                 Command.Parameters.AddWithValue("@Localidad", "%" + usuario.Cliente.IdLocalidad + "%");
-                Command.Parameters.AddWithValue("@IdServicio", Servicio); // ← faltaba el @
+                Command.Parameters.AddWithValue("@IdServicio", Servicio);
 
                 try
                 {

@@ -20,7 +20,10 @@ namespace Negocio
             return Conexion.RegistrarUsuarioBD(Usuario) > 0;
         }
 
-
+        public int ObtenerIdServicio(string nombreServicio)
+        {
+            return Conexion.ObtenerIdServicio(nombreServicio);
+        }
         public Usuario LogearUsuario(string Email, string Password)
         {
             return Conexion.LogearUsuario(Email, Password);
@@ -45,6 +48,10 @@ namespace Negocio
         public List<Servicio> TraerServicios()
         {  
             return Conexion.TraerServiciosBD();
+        }
+        public int ContarPrestadores(int idServicio, string idLocalidad)
+        {
+            return Conexion.ContarPrestadores(idServicio, idLocalidad);
         }
 
         //public bool ActualizarEstadoTurno(int idTurno, string estado)

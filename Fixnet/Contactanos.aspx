@@ -78,7 +78,7 @@
 Mientras tanto, podés revisar nuestras preguntas frecuentes o seguir explorando el sitio.
 También podés ponerte en contacto con nosotros a través de nuestros canales de atención para recibir ayuda personalizada.
 Nuestro equipo está comprometido en ofrecerte la mejor experiencia posible dentro de la plataforma.
-Agradecemos tu confianza en Fixnet y estamos para acompañarte en cada paso.
+Agradecemos tu confianza en FixNet y estamos para acompañarte en cada paso.
                     </p>
 
                 </div>
