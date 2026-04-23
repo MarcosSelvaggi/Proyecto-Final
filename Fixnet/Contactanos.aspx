@@ -1,11 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="Contactanos.aspx.cs" Inherits="Fixnet.Contactanos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+   <script src="<%= ResolveUrl("~/Scripts/EnviarMailScript.js") %>"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-<!-- 🌟 HEADER -->
+<!-- HEADER -->
 <section class="bg-primary text-white text-center py-5">
     <div class="container">
         <h1 class="fw-bold">Contáctanos</h1>
@@ -13,44 +14,47 @@
     </div>
 </section>
 
-<!-- 📩 FORM + INFO -->
+<!-- FORM + INFO -->
 <section class="py-5">
     <div class="container">
         <div class="row">
 
-            <!-- 📨 FORMULARIO -->
+            <!-- FORMULARIO -->
             <div class="col-lg-7 mb-4">
                 <div class="card shadow border-0 p-4">
 
                     <h4 class="mb-3 fw-bold">Enviá un mensaje</h4>
 
-                    <form>
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" id="inputNombre" class="form-control" placeholder="Tu nombre" />
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Nombre</label>
-                            <input type="text" class="form-control" placeholder="Tu nombre">
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Asunto</label>
+                        <input type="text" id="inputAsunto" class="form-control" placeholder="¿En qué te podemos ayudar?" />
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" placeholder="tu@email.com">
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mensaje</label>
+                        <textarea id="inputMensaje" class="form-control" rows="6"
+                                  placeholder="Escribí tu mensaje..."></textarea>
+                        <small class="text-muted mt-1 d-block">
+                            * Recordá incluir tu mail u otros datos de contacto en el mensaje para que podamos responderte.
+                        </small>
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Mensaje</label>
-                            <textarea class="form-control" rows="5" placeholder="Escribí tu mensaje..."></textarea>
-                        </div>
+                    <span id="lblErrorContacto" class="text-danger mb-2 d-block"></span>
 
-                        <button type="submit" class="btn btn-primary w-100 fw-bold">
-                            Enviar mensaje
-                        </button>
-
-                    </form>
+                    <button type="button" id="btnEnviarContacto" onclick="enviarContacto()"
+                            class="btn btn-primary w-100 fw-bold">
+                        Enviar mensaje
+                    </button>
 
                 </div>
             </div>
 
-            <!-- 📞 INFO DE CONTACTO -->
+            <!-- INFO DE CONTACTO -->
             <div class="col-lg-5">
                 <div class="card shadow border-0 p-4 h-100">
 
@@ -75,10 +79,8 @@
 
                     <p class="text-muted">
                         Nos esforzamos por brindarte una solución rápida y efectiva a tu consulta.
-Mientras tanto, podés revisar nuestras preguntas frecuentes o seguir explorando el sitio.
-También podés ponerte en contacto con nosotros a través de nuestros canales de atención para recibir ayuda personalizada.
-Nuestro equipo está comprometido en ofrecerte la mejor experiencia posible dentro de la plataforma.
-Agradecemos tu confianza en FixNet y estamos para acompañarte en cada paso.
+                        Nuestro equipo está comprometido en ofrecerte la mejor experiencia posible
+                        dentro de la plataforma. Agradecemos tu confianza en FixNet.
                     </p>
 
                 </div>
@@ -88,20 +90,34 @@ Agradecemos tu confianza en FixNet y estamos para acompañarte en cada paso.
     </div>
 </section>
 
-<!-- 📍 MAPA (opcional visual) -->
+<!-- MAPA -->
 <section class="pb-5">
     <div class="container">
         <div class="ratio ratio-16x9 shadow">
-            <iframe 
-    src="https://maps.google.com/maps?q=Soldado%20de%20Malvinas%20278%20Villa%20Adelina%20Buenos%20Aires&z=16&output=embed"
-    width="100%" 
-    height="350" 
-    style="border:0;" 
-    allowfullscreen="" 
-    loading="lazy">
-</iframe>
+            <iframe
+                src="https://maps.google.com/maps?q=Soldado%20de%20Malvinas%20278%20Villa%20Adelina%20Buenos%20Aires&z=16&output=embed"
+                width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy">
+            </iframe>
         </div>
     </div>
 </section>
+
+<!-- MODAL: mensaje enviado OK -->
+<div class="modal fade" id="modalEnviado" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white border-0">
+                <h5 class="modal-title">¡Mensaje enviado!</h5>
+            </div>
+            <div class="modal-body text-center py-4">
+                <p class="fs-5">Recibimos tu consulta. Te contactamos a la brevedad.</p>
+            </div>
+            <div class="modal-footer justify-content-center border-0">
+                <a href="/Default.aspx" class="btn btn-success px-4">Volver al inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 </asp:Content>

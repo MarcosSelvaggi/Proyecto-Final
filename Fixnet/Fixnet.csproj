@@ -312,6 +312,7 @@
     <Content Include="PerfilPrestador.aspx" />
     <Content Include="Registro.aspx" />
     <Content Include="Scripts\ChatBot.js" />
+    <Content Include="Scripts\EnviarMailScript.js" />
     <Content Include="SeleccionarPerfil.aspx" />
     <Content Include="styles\StyleContacto.css" />
     <Content Include="SobreFixnet.aspx" />
@@ -324,6 +325,7 @@
     <Content Include="Web.config" />
     <Content Include="PerfilUsuario.aspx" />
     <Content Include="SolicitarTurno.aspx" />
+    <Content Include="Gestion.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuscarPrestadores.aspx.cs">
@@ -453,6 +455,13 @@
     </Compile>
     <Compile Include="TurnosSolicitados.aspx.designer.cs">
       <DependentUpon>TurnosSolicitados.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion.aspx.cs">
+      <DependentUpon>Gestion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion.aspx.designer.cs">
+      <DependentUpon>Gestion.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
