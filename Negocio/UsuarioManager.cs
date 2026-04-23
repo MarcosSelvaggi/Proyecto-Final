@@ -87,5 +87,11 @@ namespace Negocio
         {
             return Conexion.ActualiarInformacionUsuario(Usuario);
         }
+
+        public bool CargarCalificacion(string IdTurno, string Comentario, string Calificacion)
+        {
+            return false;
+            //return Conexion.CalificarTurno(IdTurno, Comentario, Calificacion); 
+        }
     }
 }

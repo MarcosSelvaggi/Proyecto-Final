@@ -8,14 +8,17 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Web.UI.WebControls;
 
 
 namespace Servicios
 {
     public class BD
     {
-        //readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+
+        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
         {
@@ -40,7 +43,7 @@ namespace Servicios
                     sqlConnection.Open();
                     command.ExecuteNonQuery();
 
-                    return (int)returnValue.Value; 
+                    return (int)returnValue.Value;
                 }
                 catch (SqlException ex)
                 {
@@ -105,7 +108,7 @@ namespace Servicios
                             usuario.EmailUsuario = reader["Email"].ToString();
 
                             usuario.Prestador.DescripcionPrestador = reader["Descripcion"].ToString();
-                            usuario.Prestador.ZonasPrestador = reader["IdLocalidad"].ToString(); 
+                            usuario.Prestador.ZonasPrestador = reader["IdLocalidad"].ToString();
                             usuario.Prestador.HorariosPrestador = reader["DisponibilidadPrestador"].ToString();
 
                             usuario.Cliente.Provincia = reader["Provincia"].ToString();
@@ -385,15 +388,15 @@ namespace Servicios
                 try
                 {
                     conn.Open();
-                    object resultado = cmd.ExecuteScalar(); 
+                    object resultado = cmd.ExecuteScalar();
 
                     if (resultado != null && int.TryParse(resultado.ToString(), out int idUsuario))
                     {
-                        return idUsuario; 
+                        return idUsuario;
                     }
                     else
                     {
-                        return 0; 
+                        return 0;
                     }
                 }
                 catch (SqlException ex)
@@ -480,7 +483,7 @@ namespace Servicios
             return PrestadoresEncontrados;
         }
 
-        public bool CambiarPassword (string EmailUsuario,  string Password)
+        public bool CambiarPassword(string EmailUsuario, string Password)
         {
             string query = "Update Usuario set PasswordHash = @Password where Email = @Email";
 
@@ -564,7 +567,7 @@ namespace Servicios
                             {
                                 EmailService EmailService = new EmailService();
                                 EmailService.EnviarMailAlPrestador(SqlDataReader["Nombre"].ToString(), SqlDataReader["Email"].ToString(), mensaje);
-                                SqlDataReader.Close(); 
+                                SqlDataReader.Close();
                             }
 
                         }
@@ -825,9 +828,70 @@ namespace Servicios
                 }
                 catch (Exception)
                 {
-                    return false; 
+                    return false;
                 }
             }
+        }
+
+        public bool CalificarTurno(string IdTurno, string Comentario, string Calificacion)
+        {
+            bool ResultadoCalificacion = false; 
+            string QueryTurno = @"SELECT IdCliente,IdPrestador  
+                                  from Turno where IdTurno = @IdTurno";
+
+            using (SqlConnection Connection = new SqlConnection(connectionString))
+            using (SqlCommand Command = new SqlCommand(QueryTurno, Connection))
+            {
+                Command.Parameters.AddWithValue("@IdTurno", IdTurno);
+                try
+                {
+                    Connection.Open();
+                    SqlDataReader Reader = Command.ExecuteReader();
+
+                    int IdCliente = 0;
+                    int IdPrestador = 0;
+
+
+                    if (Reader.Read())
+                    {
+                         IdCliente = Reader.GetInt32(0);
+                         IdPrestador = Reader.GetInt32(1);
+
+                        string QueryCalificacion = @"Insert into Calificaciones
+                                                     (IdTurno, IdCliente, IdPrestador, Calificacion, Comentario) values 
+                                                     (@IdTurno, @IdCliente, @IdPrestador, @Calificacion, @Comentario)"; 
+
+                        using (SqlConnection SqlConnection =  new SqlConnection(connectionString))
+                        using (SqlCommand SqlCommand = new SqlCommand(QueryCalificacion, SqlConnection))
+                        {
+                            SqlCommand.Parameters.AddWithValue("@IdTurno", IdTurno);
+                            SqlCommand.Parameters.AddWithValue("@IdCliente", IdCliente);
+                            SqlCommand.Parameters.AddWithValue("@IdPrestador", IdPrestador);
+                            SqlCommand.Parameters.AddWithValue("@Calificacion", Calificacion);
+                            SqlCommand.Parameters.AddWithValue("@Comentario", Comentario);
+
+                            try
+                            {
+                                SqlConnection.Open();
+                                if (SqlCommand.ExecuteNonQuery() > 0)
+                                {
+                                    ResultadoCalificacion = true; 
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                ResultadoCalificacion = false; 
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    ResultadoCalificacion = false;
+                }
+            }
+
+                return ResultadoCalificacion; 
         }
     }
 }

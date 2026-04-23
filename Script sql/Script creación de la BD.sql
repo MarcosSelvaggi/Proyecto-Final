@@ -83,5 +83,14 @@ create table ZonasPrestador(
 	IdLocalidad varchar(4086) not null
 )
 
+create table Calificaciones(
+	IdCalificacion int primary key identity (1,1) not null, 
+	IdTurno int foreign key references Turno(IdTurno) not null,
+	IdCliente int foreign key references Cliente(IdCliente) not null, 
+	IdPrestador int foreign key references Prestador(IdPrestador) not null, 
+	Calificacion float not null,
+	Comentario varchar(400) 
+)
+
 
 GO 

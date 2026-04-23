@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -35,6 +36,8 @@ namespace Fixnet
             UsuarioManager bd = new UsuarioManager();
             var tabla = bd.TraerTurnosCliente(usuario.Cliente.IdCliente);
 
+            
+
             rptTurnos.DataSource = tabla;
             rptTurnos.DataBind();
         }
@@ -48,6 +51,40 @@ namespace Fixnet
                 case "Pendiente": return "bg-warning text-dark";
                 default: return "bg-secondary";
             }
+        }
+
+        protected void CalificarPrestador(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "Calificar")
+            {
+                Session.Add("TurnoCalificado", e.CommandArgument.ToString());
+                
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "ModalCalificarPrestador",
+                "var modal = new bootstrap.Modal(document.getElementById('ModalCalificarPrestador')); modal.show();", true);
+            }
+        }
+
+        protected void BtnCalificar_Click(object sender, EventArgs e)
+        {
+            UsuarioManager UsuarioManager = new UsuarioManager();
+            if (UsuarioManager.CargarCalificacion(Session["TurnoCalificado"].ToString(), TxtComentario.InnerText, PuntuacionDelPrestador.Value))
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "ModalTurnoCalificado",
+                "var modal = new bootstrap.Modal(document.getElementById('ModalTurnoCalificado')); modal.show();", true);
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "ModalTurnoNoCalificado",
+                "var modal = new bootstrap.Modal(document.getElementById('ModalTurnoNoCalificado')); modal.show();", true);
+                return; 
+            }
+
+        }
+
+        protected void BtnVolverAlPerfil_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/PerfilUsuario.aspx", false);
+            return;
         }
     }
 }
