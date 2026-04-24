@@ -2,7 +2,6 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 
-    <!-- ESTILOS PARA QUE QUEDE MAS LINDO -->
     <style>
         .card-prestador { transition: box-shadow .15s; }
         .card-prestador:hover { box-shadow: 0 4px 12px rgba(0,0,0,.1); }
@@ -11,6 +10,10 @@
             background: #e0e7ff; color: #4338ca;
             display: flex; align-items: center; justify-content: center;
             font-weight: 500; font-size: 15px; flex-shrink: 0;
+        }
+        .avatar-foto {
+            width: 44px; height: 44px; border-radius: 50%;
+            object-fit: cover; flex-shrink: 0;
         }
     </style>
 </asp:Content>
@@ -57,9 +60,7 @@
                             <div class="card-body d-flex flex-column gap-2">
 
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="avatar-iniciales">
-                                        <%# ObtenerIniciales(Eval("NombreUsuario").ToString(), Eval("ApellidoUsuario").ToString()) %>
-                                    </div>
+                                    <%# ObtenerAvatar(Eval("FotoPerfil"), Eval("NombreUsuario").ToString(), Eval("ApellidoUsuario").ToString()) %>
                                     <div>
                                         <div class="fw-medium"><%# Eval("NombreUsuario") %> <%# Eval("ApellidoUsuario") %></div>
                                         <div class="small text-muted"><%# Eval("EmailUsuario") %></div>
@@ -95,7 +96,6 @@
 
     </div>
 
-    <!-- SLIDER PARA EL PRECIO-->
     <script>
         function filtrarPorPrecio(valor) {
             document.getElementById('sliderLabel').textContent = '$' + parseInt(valor).toLocaleString('es-AR');
@@ -120,4 +120,3 @@
     </script>
 
 </asp:Content>
-

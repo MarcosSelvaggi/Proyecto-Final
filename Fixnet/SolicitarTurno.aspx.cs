@@ -45,7 +45,7 @@ namespace Fixnet
         {
             string query = @"
                 SELECT
-                    U.Nombre, U.Apellido, U.Email, U.Telefono,
+                    U.Nombre, U.Apellido, U.Email, U.Telefono, U.FotoPerfil,
                     P.IdPrestador, P.Descripcion,
                     ZP.IdLocalidad,
                     D.DisponibilidadPrestador
@@ -71,38 +71,41 @@ namespace Fixnet
                 string nombre = reader["Nombre"].ToString();
                 string apellido = reader["Apellido"].ToString();
                 int idPrestador = Convert.ToInt32(reader["IdPrestador"]);
+                string fotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null : reader["FotoPerfil"].ToString();
 
-               
-                LblIniciales.Text = ObtenerIniciales(nombre, apellido);
+                // Avatar: foto o iniciales
+                if (!string.IsNullOrEmpty(fotoPerfil))
+                {
+                    ImgFotoPrestador.ImageUrl = fotoPerfil;
+                    ImgFotoPrestador.Visible = true;
+                    divInicialesPrestador.Visible = false;
+                }
+                else
+                {
+                    LblIniciales.Text = ObtenerIniciales(nombre, apellido);
+                    ImgFotoPrestador.Visible = false;
+                    divInicialesPrestador.Visible = true;
+                }
+
                 LblNombre.Text = nombre + " " + apellido;
                 LblEmail.Text = reader["Email"].ToString();
                 LblTelefono.Text = reader["Telefono"].ToString();
                 LblDescripcion.Text = reader["Descripcion"].ToString();
 
-                
-                //string zonaRaw = reader["IdLocalidad"].ToString();
-                //var zonas = zonaRaw.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                //RptZonas.DataSource = zonas;
-                //RptZonas.DataBind();
-
                 Session.Add("ListaLocalidades", reader["IdLocalidad"].ToString());
                 RegisterAsyncTask(new PageAsyncTask(ListarLocalidades));
 
-                // Horarios — PARSE DE LOS HORARIOS CON COMA DE MARCOS
                 string horarioRaw = reader["DisponibilidadPrestador"].ToString();
                 RptHorarios.DataSource = ParsearHorarios(horarioRaw);
                 RptHorarios.DataBind();
 
                 reader.Close();
 
-
                 ViewState["IdPrestador"] = idPrestador;
-
-
-                // S query separada con nombre del servicio
                 CargarServicios(idPrestador);
             }
         }
+
 
         protected async Task ListarLocalidades()
         {

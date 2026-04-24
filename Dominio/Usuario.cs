@@ -15,6 +15,7 @@ namespace Dominio
         public string NombreUsuario;
         public string ApellidoUsuario;
         public string TelefonoUsuario;
+        public string FotoPerfil;
         public Cliente Cliente;
         public Prestador Prestador;
 

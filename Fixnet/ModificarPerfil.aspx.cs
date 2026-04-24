@@ -12,6 +12,7 @@ namespace Fixnet
     public partial class ModificarPerfil : System.Web.UI.Page
     {
         Usuario Usuario = new Usuario();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             Usuario = (Usuario)Session["Usuario"];
@@ -25,6 +26,7 @@ namespace Fixnet
             if (!IsPostBack)
             {
                 CargarTxTs();
+                CargarFotoActual();
             }
         }
 
@@ -36,24 +38,67 @@ namespace Fixnet
             txtEmail.Text = Usuario.EmailUsuario;
         }
 
+        protected void CargarFotoActual()
+        {
+            // Muestra la foto guardada o las iniciales si no tiene
+            if (!string.IsNullOrEmpty(Usuario.FotoPerfil))
+            {
+                imgFotoActual.ImageUrl = Usuario.FotoPerfil; // ya es "data:image/...;base64,..."
+                imgFotoActual.Style["display"] = "inline-block";
+                lblIniciales.Visible = false;
+            }
+            else
+            {
+                string ini = "";
+                if (!string.IsNullOrEmpty(Usuario.NombreUsuario)) ini += Usuario.NombreUsuario[0];
+                if (!string.IsNullOrEmpty(Usuario.ApellidoUsuario)) ini += Usuario.ApellidoUsuario[0];
+                lblIniciales.Text = ini.ToUpper();
+                lblIniciales.Visible = true;
+            }
+        }
+
         protected void BtnVolver_Click(object sender, EventArgs e)
         {
             Response.Redirect("/PerfilUsuario.aspx", false);
-            return;
         }
 
         protected void BtnModificarPerfil_Click(object sender, EventArgs e)
         {
-
             if (!RevisarInformacionIngresada())
-            {
                 return;
+
+            if (fuFoto.HasFile)
+            {
+                string tipo = fuFoto.PostedFile.ContentType;
+                if (tipo != "image/jpeg" && tipo != "image/png" && tipo != "image/gif")
+                {
+                    lblErrorFoto.Text = "Solo se permiten imágenes JPG, PNG o GIF.";
+                    lblErrorFoto.Visible = true;
+                    return;
+                }
+
+                if (fuFoto.PostedFile.ContentLength > 2 * 1024 * 1024)
+                {
+                    lblErrorFoto.Text = "La imagen no puede superar los 2 MB.";
+                    lblErrorFoto.Visible = true;
+                    return;
+                }
+
+                byte[] bytes = fuFoto.FileBytes;
+                string base64 = $"data:{tipo};base64,{Convert.ToBase64String(bytes)}";
+
+                UsuarioManager mgr = new UsuarioManager();
+                if (mgr.GuardarFotoPerfil(Usuario.IdUsuario, base64))
+                {
+                    Usuario.FotoPerfil = base64;
+                }
             }
 
+            // ── Datos personales ──────────────────────────────────────────
             Usuario.NombreUsuario = txtNombre.Text;
             Usuario.ApellidoUsuario = txtApellido.Text;
             Usuario.EmailUsuario = txtEmail.Text;
-            Usuario.TelefonoUsuario = txtTeléfono.Text; 
+            Usuario.TelefonoUsuario = txtTeléfono.Text;
 
             UsuarioManager UsuarioManager = new UsuarioManager();
 
@@ -65,8 +110,9 @@ namespace Fixnet
                     "var modal = new bootstrap.Modal(document.getElementById('ModificarUsuarioModal')); modal.show();" +
                     "setTimeout(function() { window.location.href = '/PerfilUsuario.aspx'; }, 5000);", true);
             }
-
         }
+
+        // ── Validaciones (igual que antes) ────────────────────────────────
 
         protected bool RevisarInformacionIngresada()
         {
@@ -76,26 +122,15 @@ namespace Fixnet
                 lblError.Visible = true;
                 return false;
             }
-
-            if (!RealizarValidaciones())
-            {
-                return false; 
-            }
-
-            return true;
+            return RealizarValidaciones();
         }
 
         protected bool RevisarTxTs()
         {
-            if (!string.IsNullOrWhiteSpace(txtNombre.Text) &&
-                !string.IsNullOrWhiteSpace(txtApellido.Text) &&
-                !string.IsNullOrWhiteSpace(txtEmail.Text) &&
-                !string.IsNullOrWhiteSpace(txtTeléfono.Text))
-            {
-                return true;
-            }
-
-            return false;
+            return !string.IsNullOrWhiteSpace(txtNombre.Text) &&
+                   !string.IsNullOrWhiteSpace(txtApellido.Text) &&
+                   !string.IsNullOrWhiteSpace(txtEmail.Text) &&
+                   !string.IsNullOrWhiteSpace(txtTeléfono.Text);
         }
 
         protected bool RealizarValidaciones()
@@ -123,6 +158,7 @@ namespace Fixnet
                 lblError.Visible = true;
                 return false;
             }
+
             if (Usuario.EmailUsuario != txtEmail.Text)
             {
                 if (!Validaciones.ValidarEmailExiste(txtEmail.Text))
@@ -132,8 +168,8 @@ namespace Fixnet
                     return false;
                 }
             }
-            return true; 
-        }
 
+            return true;
+        }
     }
 }

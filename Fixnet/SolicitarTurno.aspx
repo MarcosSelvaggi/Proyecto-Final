@@ -3,26 +3,17 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
         .avatar-grande {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: #e0e7ff;
-            color: #4338ca;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 500;
-            flex-shrink: 0;
+            width: 64px; height: 64px; border-radius: 50%;
+            background: #e0e7ff; color: #4338ca;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: 500; flex-shrink: 0;
         }
-
-        .horario-dia {
-            min-width: 100px;
+        .avatar-foto-grande {
+            width: 64px; height: 64px; border-radius: 50%;
+            object-fit: cover; flex-shrink: 0;
         }
-
-        .badge-zona {
-            font-size: 13px;
-        }
+        .horario-dia { min-width: 100px; }
+        .badge-zona  { font-size: 13px; }
     </style>
 </asp:Content>
 
@@ -30,15 +21,19 @@
 
     <div class="container py-4" style="max-width: 750px">
 
-        <%-- Encabezado --%>
+        <%-- Encabezado prestador --%>
         <div class="d-flex align-items-center gap-3 mb-4">
-            <div class="avatar-grande">
+
+            <%-- Foto si tiene, iniciales si no --%>
+            <asp:Image ID="ImgFotoPrestador" runat="server"
+                CssClass="avatar-foto-grande" AlternateText="Foto"
+                Visible="false" />
+            <div class="avatar-grande" id="divInicialesPrestador" runat="server">
                 <asp:Label runat="server" ID="LblIniciales" />
             </div>
+
             <div>
-                <h4 class="mb-0">
-                    <asp:Label runat="server" ID="LblNombre" />
-                </h4>
+                <h4 class="mb-0"><asp:Label runat="server" ID="LblNombre" /></h4>
                 <small class="text-muted">
                     <asp:Label runat="server" ID="LblEmail" />
                     <asp:Label runat="server" ID="LblTelefono" />
@@ -49,9 +44,7 @@
         <%-- Descripción --%>
         <div class="mb-4">
             <h6 class="text-muted text-uppercase" style="font-size: 11px; letter-spacing: .08em">Sobre el prestador</h6>
-            <p class="mb-0">
-                <asp:Label runat="server" ID="LblDescripcion" />
-            </p>
+            <p class="mb-0"><asp:Label runat="server" ID="LblDescripcion" /></p>
         </div>
 
         <hr class="my-3" />
@@ -62,17 +55,12 @@
             <asp:Repeater runat="server" ID="RptServicios">
                 <ItemTemplate>
                     <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-
                         <div>
                             <asp:RadioButton ID="rbServicio" runat="server" GroupName="Servicios" />
                             <span><%# Eval("NombreServicio") %></span>
                         </div>
-
-                        <span class="badge bg-light text-dark border fw-medium">$<%# Eval("Precio", "{0:N0}") %>/h
-                        </span>
-
-                        <asp:HiddenField ID="hfIdServicio" runat="server"
-                            Value='<%# Eval("IdServicio") %>' />
+                        <span class="badge bg-light text-dark border fw-medium">$<%# Eval("Precio", "{0:N0}") %>/h</span>
+                        <asp:HiddenField ID="hfIdServicio" runat="server" Value='<%# Eval("IdServicio") %>' />
                     </div>
                 </ItemTemplate>
             </asp:Repeater>
@@ -102,9 +90,7 @@
                     <div class="d-flex align-items-center py-2 border-bottom">
                         <span class="horario-dia fw-medium"><%# Eval("Dia") %></span>
                         <asp:Panel runat="server" Visible='<%# (bool)Eval("Trabaja") %>'>
-                            <span class="text-muted small">
-                                <%# Eval("HoraInicio") %>:00 hs &nbsp;–&nbsp; <%# Eval("HoraFin") %>:00 hs
-                            </span>
+                            <span class="text-muted small"><%# Eval("HoraInicio") %>:00 hs &nbsp;–&nbsp; <%# Eval("HoraFin") %>:00 hs</span>
                         </asp:Panel>
                         <asp:Panel runat="server" Visible='<%# !(bool)Eval("Trabaja") %>'>
                             <span class="text-muted small">No disponible</span>
@@ -116,68 +102,52 @@
 
         <hr class="my-3" />
 
-        <%-- Botón turno  --%>
         <div class="text-end">
-            <asp:Button ID="BtnSolicitar" runat="server"
-                Text="Solicitar turno"
-                CssClass="btn btn-primary"
-                OnClick="BtnSolicitar_Click"
-                UseSubmitBehavior="false" />
+            <asp:Button ID="BtnSolicitar" runat="server" Text="Solicitar turno"
+                CssClass="btn btn-primary" OnClick="BtnSolicitar_Click" UseSubmitBehavior="false" />
         </div>
 
     </div>
+
+    <!-- Modal mensaje al prestador -->
     <div class="modal fade" id="modalMensaje" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <h5 class="modal-title">Mensaje al prestador</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <div class="modal-body">
-                    <asp:TextBox ID="txtMensaje" runat="server"
-                        CssClass="form-control"
-                        TextMode="MultiLine"
-                        Rows="4"
-                        placeholder="Escribí un mensaje opcional..." />
+                    <asp:TextBox ID="txtMensaje" runat="server" CssClass="form-control"
+                        TextMode="MultiLine" Rows="4" placeholder="Escribí un mensaje opcional..." />
                 </div>
-
                 <div class="modal-footer">
-                    <asp:Button ID="BtnConfirmarSolicitud" runat="server"
-                        Text="Enviar solicitud"
-                        CssClass="btn btn-success"
-                        OnClick="BtnConfirmarSolicitud_Click" />
+                    <asp:Button ID="BtnConfirmarSolicitud" runat="server" Text="Enviar solicitud"
+                        CssClass="btn btn-success" OnClick="BtnConfirmarSolicitud_Click" />
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal sistema -->
     <div class="modal fade" id="modalMensajeSistema" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-
-            <div class="modal-header text-white" id="modalHeader">
-                <h5 class="modal-title d-flex align-items-center gap-2">
-                    <span id="modalIcon"></span>
-                    <span>Aviso</span>
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header text-white" id="modalHeader">
+                    <h5 class="modal-title d-flex align-items-center gap-2">
+                        <span id="modalIcon"></span>
+                        <span>Aviso</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <asp:Label ID="LblMensajeSistema" runat="server" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
             </div>
-
-            <div class="modal-body">
-                <asp:Label ID="LblMensajeSistema" runat="server" />
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                    OK
-                </button>
-            </div>
-
         </div>
     </div>
-</div>
 
 </asp:Content>
-

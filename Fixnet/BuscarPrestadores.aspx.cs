@@ -80,6 +80,7 @@ namespace Fixnet
                     EmailUsuario = p.EmailUsuario,
                     TelefonoUsuario = p.TelefonoUsuario,
                     Prestador = p.Prestador,
+                    FotoPerfil = p.FotoPerfil,
                     PrecioServicio = precio
                 };
             });
@@ -100,8 +101,18 @@ namespace Fixnet
             if (!string.IsNullOrEmpty(apellido)) ini += apellido[0];
             return ini.ToUpper();
         }
+
+
+        protected string ObtenerAvatar(object fotoPerfil, string nombre, string apellido)
+        {
+            string foto = fotoPerfil == null ? null : fotoPerfil.ToString();
+            if (!string.IsNullOrEmpty(foto))
+                return "<img src='" + foto + "' class='avatar-foto' alt='Foto' />";
+            return "<div class='avatar-iniciales'>" + ObtenerIniciales(nombre, apellido) + "</div>";
+        }
+
     }
 
-    
-   
+
+
 }

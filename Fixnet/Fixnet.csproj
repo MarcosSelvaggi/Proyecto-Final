@@ -313,6 +313,7 @@
     <Content Include="Registro.aspx" />
     <Content Include="Scripts\ChatBot.js" />
     <Content Include="Scripts\EnviarMailScript.js" />
+    <Content Include="Scripts\FotoPerfilPreview.js" />
     <Content Include="SeleccionarPerfil.aspx" />
     <Content Include="styles\StyleContacto.css" />
     <Content Include="SobreFixnet.aspx" />

@@ -114,6 +114,7 @@ namespace Servicios
                         U.Apellido,
                         U.Telefono,
                         U.Activo,
+                        U.FotoPerfil,
                         U.PasswordHash,
                         P.Descripcion,
                         C.Direccion,
@@ -158,6 +159,7 @@ namespace Servicios
                             usuario.TelefonoUsuario = reader["Telefono"].ToString();
                             usuario.UsuarioActivo = (bool)reader["Activo"];
                             usuario.EmailUsuario = reader["Email"].ToString();
+                            usuario.FotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null: reader["FotoPerfil"].ToString();
 
                             usuario.Prestador.DescripcionPrestador = reader["Descripcion"].ToString();
                             usuario.Prestador.ZonasPrestador = reader["IdLocalidad"].ToString();
@@ -470,6 +472,7 @@ namespace Servicios
                         U.Telefono,
                         U.Activo,
                         U.Email,
+                        U.FotoPerfil,
                         P.Descripcion,
                         PS.IdServicio,
                         P.IdPrestador,
@@ -501,6 +504,7 @@ namespace Servicios
                         Usuario.NombreUsuario = Reader["Nombre"].ToString();
                         Usuario.ApellidoUsuario = Reader["Apellido"].ToString();
                         Usuario.TelefonoUsuario = Reader["Telefono"].ToString();
+                        Usuario.FotoPerfil = Reader["FotoPerfil"] == DBNull.Value ? null : Reader["FotoPerfil"].ToString();
                         Usuario.UsuarioActivo = (bool)Reader["Activo"];
                         Usuario.EmailUsuario = Reader["Email"].ToString();
                         Usuario.Prestador.IdPrestador = Convert.ToInt32(Reader["IdPrestador"]);
@@ -945,6 +949,55 @@ namespace Servicios
 
                 return ResultadoCalificacion; 
         }
+
+
+
+
+        public bool GuardarFotoPerfilBD(int idUsuario, string base64)
+        {
+            string query = "UPDATE Usuario SET FotoPerfil = @FotoPerfil WHERE IdUsuario = @IdUsuario";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@FotoPerfil", (object)base64 ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                try
+                {
+                    conn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+
+        public string ObtenerFotoPerfil(int idUsuario)
+        {
+            string query = "SELECT FotoPerfil FROM Usuario WHERE IdUsuario = @IdUsuario";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                try
+                {
+                    conn.Open();
+                    var result = cmd.ExecuteScalar();
+                    return (result == null || result == DBNull.Value) ? null : result.ToString();
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+        }
+
+
+
     }
 }
 

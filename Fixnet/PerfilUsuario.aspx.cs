@@ -40,10 +40,21 @@ namespace Fixnet
             lblEmail.Text = usuario.EmailUsuario;
             lblTelefono.Text = usuario.TelefonoUsuario;
 
-            // Iniciales
-            string inicialNombre = !string.IsNullOrEmpty(usuario.NombreUsuario) ? usuario.NombreUsuario.Substring(0, 1) : "";
-            string inicialApellido = !string.IsNullOrEmpty(usuario.ApellidoUsuario) ? usuario.ApellidoUsuario.Substring(0, 1) : "";
-            lblIniciales.Text = (inicialNombre + inicialApellido).ToUpper();
+            // Foto o iniciales
+            if (!string.IsNullOrEmpty(usuario.FotoPerfil))
+            {
+                imgFotoPerfil.ImageUrl = usuario.FotoPerfil;
+                imgFotoPerfil.Visible = true;
+                divIniciales.Visible = false;
+            }
+            else
+            {
+                string inicialNombre = !string.IsNullOrEmpty(usuario.NombreUsuario) ? usuario.NombreUsuario.Substring(0, 1) : "";
+                string inicialApellido = !string.IsNullOrEmpty(usuario.ApellidoUsuario) ? usuario.ApellidoUsuario.Substring(0, 1) : "";
+                lblIniciales.Text = (inicialNombre + inicialApellido).ToUpper();
+                imgFotoPerfil.Visible = false;
+                divIniciales.Visible = true;
+            }
 
 
             // =========================
@@ -143,7 +154,7 @@ namespace Fixnet
         // LISTAR LAS LOCALIDADES 
         protected async Task ListarLocalidades()
         {
-            string ListaLocalidades = (string)Session["ListaLocalidades"]; 
+            string ListaLocalidades = (string)Session["ListaLocalidades"];
             var url = "https://apis.datos.gob.ar/georef/api/localidades?id=" + ListaLocalidades + "&campos=basico";
 
             using (HttpClient httpClient = new HttpClient())
@@ -156,20 +167,17 @@ namespace Fixnet
                     var Localidad = JsonSerializer.Deserialize<ListaDeLocalidades>(Data,
                         new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-                    var Lista = Localidad; 
+                    var Lista = Localidad;
 
                     foreach (var item in Lista.Localidades)
                     {
-                        lblZonas.Text += item.Nombre + ", "; 
+                        lblZonas.Text += item.Nombre + ", ";
                     }
 
-                    lblZonas.Text = lblZonas.Text.Remove(lblZonas.Text.Count() - 2); 
+                    lblZonas.Text = lblZonas.Text.Remove(lblZonas.Text.Count() - 2);
                 }
             }
         }
 
     }
-
-
-
 }

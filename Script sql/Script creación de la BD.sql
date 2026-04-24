@@ -1,96 +1,96 @@
-use master 
-go 
+USE master;
+GO
+ 
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Proyecto_Final_Integrador')
+BEGIN
+    CREATE DATABASE Proyecto_Final_Integrador;
+END
+GO
+ 
+USE Proyecto_Final_Integrador;
+GO
+ 
 
-if not exists (select * from sys.databases where name = 'Proyecto_Final_Integrador')
-begin
-create database Proyecto_Final_Integrador;
-end 
-go
-
-use Proyecto_Final_Integrador 
-go
-
-create table MetodosPago(
-	IdMetodoPago int primary key identity(1,1) not null,
-	NombreMetodoPago nvarchar(100) not null
+CREATE TABLE MetodosPago (
+    IdMetodoPago     INT           PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    NombreMetodoPago NVARCHAR(100) NOT NULL
 );
-
-create table Usuario(
-	IdUsuario int primary key identity(1,1) not null, 
-	Email nvarchar(256) not null unique, 
-	PasswordHash nvarchar (256) not null, 
-	FechaRegistro datetime not null default getdate(),
-	Activo bit not null default 1, 
-	Nombre nvarchar(100) not null,
-	Apellido nvarchar (100) not null,
-	Telefono nvarchar (20) not null
+ 
+CREATE TABLE Usuario (
+    IdUsuario     INT           PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    Email         NVARCHAR(256) NOT NULL UNIQUE,
+    PasswordHash  NVARCHAR(256) NOT NULL,
+    FechaRegistro DATETIME      NOT NULL DEFAULT GETDATE(),
+    Activo        BIT           NOT NULL DEFAULT 1,
+    Nombre        NVARCHAR(100) NOT NULL,
+    Apellido      NVARCHAR(100) NOT NULL,
+    Telefono      NVARCHAR(20)  NOT NULL,
+    FotoPerfil    NVARCHAR(MAX) NULL          
 );
-
-create table Cliente(
-	IdCliente int primary key identity(1,1) not null,                        
-	IdUsuario int foreign key references Usuario(IdUsuario) not null,
-	Provincia nvarchar (100) not null,
-	Departamento nvarchar(100) not null,
-	Localidad nvarchar (100) not null,
-	LocalidadId nvarchar(100) not null,
-	Direccion nvarchar(100) not null
+ 
+CREATE TABLE Cliente (
+    IdCliente    INT           PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdUsuario    INT           NOT NULL REFERENCES Usuario(IdUsuario),
+    Provincia    NVARCHAR(100) NOT NULL,
+    Departamento NVARCHAR(100) NOT NULL,
+    Localidad    NVARCHAR(100) NOT NULL,
+    LocalidadId  NVARCHAR(100) NOT NULL,
+    Direccion    NVARCHAR(100) NOT NULL
 );
-
-create table Prestador(
-	IdPrestador int primary key identity(1,1) not null, 
-	IdUsuario int foreign key references Usuario(IdUsuario) not null,
-	Descripcion nvarchar(400) not null,
+ 
+CREATE TABLE Prestador (
+    IdPrestador INT           PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdUsuario   INT           NOT NULL REFERENCES Usuario(IdUsuario),
+    Descripcion NVARCHAR(400) NOT NULL
 );
-
-create table Servicios(
-	IdServicio int primary key identity(1,1) not null, 
-	Nombre nvarchar(100) unique not null, 
-	Descripcion nvarchar(400) not null
+ 
+CREATE TABLE Servicios (
+    IdServicio  INT           PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    Nombre      NVARCHAR(100) NOT NULL UNIQUE,
+    Descripcion NVARCHAR(400) NOT NULL
 );
-
-create table PrestadorServicio(
-	IdPrestadorServicio int primary key identity(1,1) not null,
-	IdPrestador int foreign key references Prestador(IdPrestador) not null,
-	IdServicio int foreign key references Servicios(IdServicio) not null,
-	PrecioHora money not null check (PrecioHora > 0)
-); 
-
-create table PrestadorMetodoPago(
-	IdPrestadorMetodoPago int primary key identity(1,1) not null, 
-	IdPrestador int foreign key references Prestador(IdPrestador) not null, 
-	IdMetodoPago int foreign key references MetodosPago(IdMetodoPago) not null
-); 
-
-create table Disponibilidad(
-	IdDisponibilidad int primary key identity(1,1) not null, 
-	IdPrestador int foreign key references Prestador(IdPrestador) not null,
-	DisponibilidadPrestador varchar(300) not null
+ 
+CREATE TABLE PrestadorServicio (
+    IdPrestadorServicio INT   PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdPrestador         INT   NOT NULL REFERENCES Prestador(IdPrestador),
+    IdServicio          INT   NOT NULL REFERENCES Servicios(IdServicio),
+    PrecioHora          MONEY NOT NULL CHECK (PrecioHora > 0)
 );
-
-create table Turno(
-	IdTurno int primary key identity(1,1) not null, 
-	IdCliente int foreign key references Cliente(IdCliente) not null, 
-	IdPrestador int foreign key references Prestador(IdPrestador) not null, 
-	IdServicio int foreign key references Servicios(IdServicio) not null,
-	Mensaje nvarchar(500) null,
-	FechaSolicitud datetime default getdate(),
-	Estado nvarchar(50) default 'Pendiente'
+ 
+CREATE TABLE PrestadorMetodoPago (
+    IdPrestadorMetodoPago INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdPrestador           INT NOT NULL REFERENCES Prestador(IdPrestador),
+    IdMetodoPago          INT NOT NULL REFERENCES MetodosPago(IdMetodoPago)
 );
-
-create table ZonasPrestador(
-	IdZona int primary key identity(1,1) not null, 
-	IdPrestador int foreign key references Prestador(IdPrestador) not null,
-	IdLocalidad varchar(4086) not null
-)
-
-create table Calificaciones(
-	IdCalificacion int primary key identity (1,1) not null, 
-	IdTurno int foreign key references Turno(IdTurno) not null,
-	IdCliente int foreign key references Cliente(IdCliente) not null, 
-	IdPrestador int foreign key references Prestador(IdPrestador) not null, 
-	Calificacion float not null,
-	Comentario varchar(400) 
-)
-
-
-GO 
+ 
+CREATE TABLE Disponibilidad (
+    IdDisponibilidad       INT          PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdPrestador            INT          NOT NULL REFERENCES Prestador(IdPrestador),
+    DisponibilidadPrestador VARCHAR(300) NOT NULL
+);
+ 
+CREATE TABLE Turno (
+    IdTurno       INT           PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdCliente     INT           NOT NULL REFERENCES Cliente(IdCliente),
+    IdPrestador   INT           NOT NULL REFERENCES Prestador(IdPrestador),
+    IdServicio    INT           NOT NULL REFERENCES Servicios(IdServicio),
+    Mensaje       NVARCHAR(500) NULL,
+    FechaSolicitud DATETIME     DEFAULT GETDATE(),
+    Estado        NVARCHAR(50)  DEFAULT 'Pendiente'
+);
+ 
+CREATE TABLE ZonasPrestador (
+    IdZona      INT          PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdPrestador INT          NOT NULL REFERENCES Prestador(IdPrestador),
+    IdLocalidad VARCHAR(4086) NOT NULL
+);
+ 
+CREATE TABLE Calificaciones (
+    IdCalificacion INT          PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdTurno        INT          NOT NULL REFERENCES Turno(IdTurno),
+    IdCliente      INT          NOT NULL REFERENCES Cliente(IdCliente),
+    IdPrestador    INT          NOT NULL REFERENCES Prestador(IdPrestador),
+    Calificacion   FLOAT        NOT NULL,
+    Comentario     VARCHAR(400) NULL
+);
+GO

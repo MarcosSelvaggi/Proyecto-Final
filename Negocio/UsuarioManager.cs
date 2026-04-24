@@ -100,5 +100,10 @@ namespace Negocio
             return false;
             //return Conexion.CalificarTurno(IdTurno, Comentario, Calificacion); 
         }
+
+        public bool GuardarFotoPerfil(int idUsuario, string base64)
+        {
+            return Conexion.GuardarFotoPerfilBD(idUsuario, base64);
+        }
     }
 }
