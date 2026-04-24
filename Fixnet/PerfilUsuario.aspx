@@ -30,8 +30,10 @@
                     </h2>
 
                     <div class="subinfo">
+                        <i class="fa fa-envelope"></i>
                         <asp:Label ID="lblEmail" runat="server" />
-                        <span>·</span>
+                        <span>-</span>
+                        <i class="fa fa-phone"></i>
                         <asp:Label ID="lblTelefono" runat="server" />
                     </div>
 
@@ -77,14 +79,22 @@
 
                     <asp:Panel ID="pnlClienteDatos" runat="server">
 
-                        <p><span>Provincia:</span>
-                            <asp:Label ID="lblProvincia" runat="server" /></p>
-                        <p><span>Departamento:</span>
-                            <asp:Label ID="lblDepartamento" runat="server" /></p>
-                        <p><span>Localidad:</span>
-                            <asp:Label ID="lblLocalidad" runat="server" /></p>
-                        <p><span>Dirección:</span>
-                            <asp:Label ID="lblDireccion" runat="server" /></p>
+                        <p>
+                            <span>Provincia:</span>
+                            <asp:Label ID="lblProvincia" runat="server" />
+                        </p>
+                        <p>
+                            <span>Departamento:</span>
+                            <asp:Label ID="lblDepartamento" runat="server" />
+                        </p>
+                        <p>
+                            <span>Localidad:</span>
+                            <asp:Label ID="lblLocalidad" runat="server" />
+                        </p>
+                        <p>
+                            <span>Dirección:</span>
+                            <asp:Label ID="lblDireccion" runat="server" />
+                        </p>
 
                         <asp:Button ID="btnEditarCliente" runat="server"
                             Text="Editar"
@@ -124,10 +134,14 @@
 
                     <asp:Panel ID="pnlPrestadorDatos" runat="server">
 
-                        <p><span>Descripción:</span>
-                            <asp:Label ID="lblDescripcion" runat="server" /></p>
-                        <p><span>Zonas:</span>
-                            <asp:Label ID="lblZonas" runat="server" /></p>
+                        <p>
+                            <span>Descripción:</span>
+                            <asp:Label ID="lblDescripcion" runat="server" />
+                        </p>
+                        <p>
+                            <span>Zonas:</span>
+                            <asp:Label ID="lblZonas" runat="server" />
+                        </p>
 
                         <asp:Button ID="btnEditarPrestador" runat="server"
                             Text="Editar"

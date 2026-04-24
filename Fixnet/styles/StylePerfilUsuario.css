@@ -33,11 +33,12 @@
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    animation: fadeSlideUp 0.6s ease-out both;
 }
 
 .perfil-user {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 15px;
 }
 
@@ -54,9 +55,17 @@
     color: white;
 }
 
+.perfil-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .nombre {
-    margin: 0;
+    margin: 0 0 4px 0;
     font-size: 20px;
+    text-align: left;
+    width: 100%;
 }
 
 .subinfo {
@@ -181,11 +190,6 @@
     }
 }
 
-
-.perfil-header {
-    animation: fadeSlideUp 0.7s ease-out both;
-}
-
 .perfil-card {
     animation: fadeSlideUp 0.8s ease-out both;
 }
@@ -199,10 +203,6 @@
 
 .avatar i {
     font-size: 28px;
-}
-
-.perfil-header {
-    animation: fadeSlideUp 0.6s ease-out both;
 }
 
 .perfil-card.cliente {
