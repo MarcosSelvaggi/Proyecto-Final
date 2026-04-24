@@ -11,7 +11,7 @@ namespace Fixnet
 {
 
 
-    public partial class WebForm1
+    public partial class SobreFixnet
     {
     }
 }

@@ -330,6 +330,7 @@
     <Content Include="styles\StyleRegistro.css" />
     <Content Include="styles\StyleSeleccionarPerfil.css" />
     <Content Include="styles\StylesMasterPage.css" />
+    <Content Include="styles\StyleSobreFixnet.css" />
     <Content Include="styles\StyleSolicitarTurno.css" />
     <Content Include="TurnosSolicitados.aspx" />
     <Content Include="Web.config" />
