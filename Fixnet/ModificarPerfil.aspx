@@ -1,121 +1,134 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="ModificarPerfil.aspx.cs" Inherits="Fixnet.ModificarPerfil" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link href="styles/StyleRegistro.css" rel="stylesheet" />
-     <script src="<%= ResolveUrl("~/Scripts/FotoPerfilPreview.js") %>"></script>
+    <link href="styles/StyleModificarPerfil.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <div class="container2">
-        <div style="max-width: 700px; width: 100%;">
-            <h2 class="text-center mb-4">
-                <i class="bi bi-caret-right-fill"></i>Modificar Información Personal<i class="bi bi-caret-left-fill"></i>
+    <div class="recovery-container">
+
+        <div class="recovery-card">
+
+            <h2 class="titulo">
+                <i class="bi bi-person-gear"></i>
+                Modificar Información Personal
             </h2>
 
             <asp:Panel runat="server" DefaultButton="BtnModificar">
-                <div class="row g-3">
 
-                    <!-- FOTO DE PERFIL (opcional) -->
-                    <div class="col-12 text-center mb-2">
-                        <div class="mb-2">
-                            <!-- Muestra la foto actual o las iniciales si no tiene -->
-                            <div id="divFotoActual" style="display:inline-block; position:relative;">
-                                <asp:Image ID="imgFotoActual" runat="server"
-                                    Style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid #0d6efd; display:none;"
-                                    AlternateText="Foto de perfil" />
-                                <asp:Label ID="lblIniciales" runat="server"
-                                    Style="width:100px; height:100px; border-radius:50%; background:#0d6efd; color:white;
-                                           font-size:2rem; font-weight:bold; display:inline-flex;
-                                           align-items:center; justify-content:center;" />
-                            </div>
-                        </div>
+                <!-- FOTO -->
+                <div class="field text-center">
 
-                        <label class="form-label d-block text-muted" style="font-size:0.9rem;">
-                            Foto de perfil <span class="text-secondary">(opcional)</span>
-                        </label>
+                    <label>Foto de perfil</label>
 
-                        <!-- Preview antes de guardar -->
-                        <img id="previewFoto" src="#" alt="Preview"
-                             style="display:none; width:100px; height:100px; border-radius:50%;
-                                    object-fit:cover; border:3px solid #198754; margin-bottom:8px;" />
+                    <!-- CONTENEDOR VISUAL DEL AVATAR -->
+                    <div class="avatar-wrapper">
 
-                        <asp:FileUpload ID="fuFoto" runat="server" CssClass="form-control form-control-sm"
-                            Style="max-width:300px; margin:0 auto;"
-                            onchange="previewImagen(this)" />
+                        <asp:Image ID="imgFotoActual" runat="server"
+                            CssClass="avatar-foto"
+                            AlternateText="Foto de perfil"
+                            Visible="false" />
 
-                        <small class="text-muted d-block mt-1">JPG, PNG o GIF · máx. 2 MB</small>
+                        <asp:Panel ID="divInicialesWrapper" runat="server" CssClass="avatar-foto">
+                            <asp:Label ID="lblIniciales" runat="server" />
+                        </asp:Panel>
 
-                        <asp:Label ID="lblErrorFoto" runat="server" CssClass="text-danger d-block mt-1" Visible="false" />
+                        <img id="previewFoto"
+                            class="avatar-foto"
+                            style="display: none;" />
+
                     </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Nombre</label>
-                        <asp:TextBox ID="txtNombre" CssClass="form-control" runat="server" />
-                    </div>
+                    <!-- INPUT -->
+                    <asp:FileUpload ID="fuFoto" runat="server"
+                        CssClass="input"
+                        onchange="previewImagen(this)" />
 
-                    <div class="col-md-6">
-                        <label class="form-label">Apellido</label>
-                        <asp:TextBox ID="txtApellido" CssClass="form-control" runat="server" />
-                    </div>
-
-                    <div class="col-md-12">
-                        <label class="form-label">Teléfono</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark text-white">+54</span>
-                            <asp:TextBox ID="txtTeléfono" CssClass="form-control" runat="server"
-                                onKeypress="return soloNumeros(event)" />
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <label class="form-label">Email</label>
-                        <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server" TextMode="Email" />
-                    </div>
-
-                    <div class="col-12 text-center mt-4">
-                        <div class="row">
-                            <div class="col-2"></div>
-                            <div class="col-4">
-                                <div class="btnEnviar">
-                                    <asp:Button ID="BtnModificar" runat="server" Text="Modificar"
-                                        CssClass="BtnEnviar" OnClick="BtnModificarPerfil_Click" />
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="btnEnviar">
-                                    <asp:Button ID="BtnVolver" runat="server" Text="Volver"
-                                        CssClass="btn btn-outline-dark" OnClick="BtnVolver_Click" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <asp:Label ID="lblError" runat="server" ForeColor="Red"
-                            Font-Bold="true" Visible="false" CssClass="mt-3" />
-                    </div>
+                    <asp:Label ID="lblErrorFoto" runat="server"
+                        CssClass="error"
+                        Visible="false" />
 
                 </div>
+
+                <!-- NOMBRE -->
+                <div class="field">
+                    <label>Nombre</label>
+                    <asp:TextBox ID="txtNombre" runat="server" CssClass="input" ClientIDMode="Static" />
+                    <small id="errorNombre" class="error"></small>
+                </div>
+
+                <!-- APELLIDO -->
+                <div class="field">
+                    <label>Apellido</label>
+                    <asp:TextBox ID="txtApellido" runat="server" CssClass="input" ClientIDMode="Static" />
+                    <small id="errorApellido" class="error"></small>
+                </div>
+
+                <!-- TELEFONO -->
+                <div class="field">
+                    <label>Teléfono</label>
+                    <asp:TextBox ID="txtTelefono" runat="server" CssClass="input" ClientIDMode="Static" MaxLength="10" TextMode="Phone" />
+                    <small id="errorTelefono" class="error"></small>
+                </div>
+
+                <!-- EMAIL -->
+                <div class="field">
+                    <label>Email</label>
+                    <asp:TextBox ID="txtEmail" runat="server" CssClass="input" TextMode="Email" ClientIDMode="Static" />
+                    <small id="errorEmail" class="error"></small>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="actions mt-3">
+
+                    <asp:Button ID="BtnModificar" runat="server" ClientIDMode="Static"
+                        Text="Guardar cambios"
+                        CssClass="btn-primary"
+                        OnClick="BtnModificarPerfil_Click" />
+
+                    <asp:Button ID="BtnVolver" runat="server"
+                        Text="Volver"
+                        CssClass="btn-secondary"
+                        OnClick="BtnVolver_Click" />
+
+                </div>
+
+                <asp:Label ID="lblError" runat="server"
+                    CssClass="error d-block mt-2"
+                    Visible="false" />
+
             </asp:Panel>
+
         </div>
     </div>
 
-    <!-- MODAL ÉXITO -->
-    <div class="modal fade" id="ModificarUsuarioModal" tabindex="-1" aria-hidden="true">
+    <!-- MODAL -->
+    <div class="modal fade" id="successModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h1 class="modal-title fs-5">Información actualizada correctamente</h1>
+
+            <div class="modal-content glass-modal">
+
+                <div class="modal-header modal-header-glass">
+
+                    <div class="icon-box">
+                        <i class="bi bi-check2-circle"></i>
+                    </div>
+
+                    <h5 class="modal-title modal-title-glass">Perfil actualizado</h5>
+
                 </div>
-                <div class="modal-body">
-                    <p>Se ha actualizado correctamente su información personal.</p>
-                    <p>En unos segundos serás redirigido a tu perfil.</p>
+
+                <div class="modal-body modal-body-glass">
+                    <p>Tu información fue actualizada correctamente.</p>
+                    <p class="muted">Serás redirigido al perfil...</p>
                 </div>
-                <div class="modal-footer">
-                    <a href="/PerfilUsuario.aspx" class="btn btn-dark ms-auto">Ir ahora</a>
-                </div>
+
             </div>
+
         </div>
     </div>
 
-
+    <script src="scripts/ModificarPerfil.js"></script>
 </asp:Content>

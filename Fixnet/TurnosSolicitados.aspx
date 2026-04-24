@@ -1,18 +1,19 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="TurnosSolicitados.aspx.cs" Inherits="Fixnet.TurnosSolicitados" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <link href="styles/StyleMisTurnos.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <asp:Repeater ID="rptTurnos" runat="server">
         <ItemTemplate>
-            <div class="card mb-3 shadow-sm border-start border-4 border-primary">
+            <div class="turno-card">
                 <div class="card-body">
 
                     <h5 class="card-title d-flex justify-content-between align-items-center">
 
                         <%# Eval("Servicio") %>
 
-                        <span class='badge <%# ObtenerClaseEstado(Eval("Estado").ToString()) %>'>
+                        <span class='badge-estado <%# ObtenerClaseEstado(Eval("Estado").ToString()) %>'>
                             <%# Eval("Estado") %>
                         </span>
 
@@ -56,7 +57,7 @@
                             ID="btnAceptar"
                             runat="server"
                             Text="Aceptar"
-                            CssClass="btn btn-success btn-sm"
+                            CssClass="btn-aceptar"
                             CommandArgument='<%# Eval("IdTurno") %>'
                             OnCommand="AceptarTurno" />
 
@@ -64,7 +65,7 @@
                             ID="btnRechazar"
                             runat="server"
                             Text="Rechazar"
-                            CssClass="btn btn-danger btn-sm"
+                            CssClass="btn-rechazar"
                             CommandArgument='<%# Eval("IdTurno") %>'
                             OnCommand="RechazarTurno" />
 

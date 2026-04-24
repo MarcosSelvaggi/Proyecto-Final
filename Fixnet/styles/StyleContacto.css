@@ -1,58 +1,79 @@
-﻿* {
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-    font-family: sans-serif;
+﻿.contrasena-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: #e2e8f0;
 }
-
-body {
-    background-color: #f5f5f5;
-}
-
 .container2 {
-    width: 80%;
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 520px;
+    padding: 30px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    color: #e2e8f0;
 }
 
     .container2 h1 {
         text-align: center;
         margin-bottom: 20px;
-        color: #333;
+        font-size: 22px;
+        font-weight: 600;
+        color: #38bdf8;
     }
 
-.input, .textarea {
-    display: block;
+.input {
     width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #f7f7f7;
-    color: #333;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.03);
+    color: #e2e8f0;
+    outline: none;
+    transition: 0.3s;
 }
 
-    .input:focus, .textarea:focus {
-        outline: none;
-        box-shadow: 0 0 5px #333;
+    .input:focus {
+        border-color: #0ea5e9;
+        box-shadow: 0 0 10px rgba(14,165,233,0.25);
+    }
+    .input::placeholder {
+        color: #64748b;
     }
 
 .btnEnviar {
-    display: block;
     width: 100%;
-    padding: 10px;
+    margin-top: 10px;
+    padding: 12px 14px;
+    border-radius: 10px;
     border: none;
-    border-radius: 5px;
-    background-color: #333;
-    color: #fff;
+    background: linear-gradient(135deg, #0ea5e9, #22c55e);
+    color: white;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: 0.3s;
 }
 
     .btnEnviar:hover {
-        background-color: #555;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(34,197,94,0.35);
     }
+
+.btn-outline-dark {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #e2e8f0;
+    border-radius: 10px;
+}
+
+.text-danger {
+    color: #f87171;
+    font-size: 12px;
+    display: block;
+    margin-top: 6px;
+}

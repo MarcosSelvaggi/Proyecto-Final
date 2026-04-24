@@ -1,0 +1,133 @@
+﻿.recovery-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #020617, #0f172a, #020617, #0ea5e9);
+    background-size: 300% 300%;
+    animation: gradientMove 18s ease infinite;
+}
+
+@keyframes gradientMove {
+    0%,100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.recovery-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px);
+    border-radius: 16px;
+    padding: 30px;
+    color: #e2e8f0;
+}
+
+.titulo {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #38bdf8;
+}
+.field {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+    .field label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 13px;
+        color: #94a3b8;
+    }
+
+.input {
+    width: 100%;
+    padding: 12px 40px 12px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.03);
+    color: #e2e8f0;
+}
+
+.icon {
+    position: absolute;
+    right: 10px;
+    top: 38px;
+}
+
+.input-ok {
+    border: 1px solid #22c55e;
+    box-shadow: 0 0 10px rgba(34,197,94,0.5);
+}
+
+.input-error {
+    border: 1px solid #ef4444;
+    box-shadow: 0 0 10px rgba(239,68,68,0.5);
+}
+
+.valid-icon {
+    position: absolute;
+    right: 35px;
+    top: 38px;
+    color: #22c55e;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.field.valid .valid-icon {
+    opacity: 1;
+}
+
+.error {
+    color: #f87171;
+    font-size: 13px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-primary {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    color: white;
+    border: none;
+}
+
+.btn-secondary {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #e2e8f0;
+}
+.avatar-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 15px 0;
+}
+.avatar-foto {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.15);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}

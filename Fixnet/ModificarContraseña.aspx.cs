@@ -1,12 +1,7 @@
 ﻿using Dominio;
 using Negocio;
 using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace Fixnet
 {
@@ -34,36 +29,43 @@ namespace Fixnet
 
         protected void ModificarContraseña_Click(object sender, EventArgs e)
         {
-            if (!RevisarInformacionIngresada())
+            string nuevaPass = txtPassword.Text;
+
+            if (!Validaciones.ValidarPassword(nuevaPass))
             {
-                return; 
+                lblError.Text = "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.";
+                lblError.Visible = true;
+
+                txtPassword.CssClass = "input input-error";
+                return;
             }
             else
             {
-                Usuario.PasswordUsuario = txtPassword.Text;
-                UsuarioManager UsuarioManager = new UsuarioManager();
+                txtPassword.CssClass = "input input-ok";
+            }
 
-                if (UsuarioManager.CambiarContraseña(Usuario.EmailUsuario, Usuario.PasswordUsuario))
-                {
-                    Session["Usuario"] = Usuario;
+            Usuario.PasswordUsuario = nuevaPass;
 
-                    ScriptManager.RegisterStartupScript(
+            UsuarioManager UsuarioManager = new UsuarioManager();
+
+            bool ok = UsuarioManager.CambiarContraseña(Usuario.EmailUsuario, nuevaPass);
+
+            if (ok)
+            {
+                Session["Usuario"] = Usuario;
+
+                ScriptManager.RegisterStartupScript(
                     this,
                     this.GetType(),
-                    "ModificarContraseñaModal",
-                    "var myModal = new bootstrap.Modal(document.getElementById('ModificarContraseñaModal')); myModal.show();" +
-                    "setTimeout(function() { window.location.href = '/PerfilUsuario.aspx'; }, 5000);",
+                    "successModal",
+                    "var modal = new bootstrap.Modal(document.getElementById('successModal')); modal.show();" +
+                    "setTimeout(function(){ window.location.href='/PerfilUsuario.aspx'; }, 3000);",
                     true
                 );
-                }
-                else
-                {
-                    throw new Exception("Algo salió mal"); 
-                }
             }
         }
 
-        protected bool RevisarInformacionIngresada()
+        /*protected bool RevisarInformacionIngresada()
         {
             if (!RevisarTxTs())
             {
@@ -81,8 +83,8 @@ namespace Fixnet
 
             return true;
         }
-
-        protected bool RevisarTxTs()
+        */
+        /*protected bool RevisarTxTs()
         {
             if (!string.IsNullOrWhiteSpace(txtPassword.Text))
             {
@@ -90,6 +92,6 @@ namespace Fixnet
             }
 
             return false;
-        }
+        }*/
     }
 }

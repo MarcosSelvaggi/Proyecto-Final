@@ -19,15 +19,16 @@ namespace Fixnet
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            Usuario usuario = (Usuario)Session["Usuario"];
+            if (usuario == null)
+            {
+                Response.Redirect("/Logearse.aspx");
+                return;
+            }
             if (!IsPostBack)
             {
-                Usuario usuario = (Usuario)Session["Usuario"];
+                CargarServicios();
 
-                if (usuario == null)
-                {
-                    Response.Redirect("/Logearse.aspx");
-                    return;
-                }
 
                 if (usuario.Prestador != null)
                 {
@@ -57,7 +58,6 @@ namespace Fixnet
 
                 RegisterAsyncTask(new PageAsyncTask(CargarProvincias));
 
-                CargarServicios();
             }
         }
 
@@ -309,10 +309,11 @@ namespace Fixnet
             Usuario usuario = (Usuario)Session["Usuario"];
             UsuarioManager manager = new UsuarioManager();
 
-            // Lista general de servicios
             var servicios = manager.TraerServicios();
 
-            // Lista de servicios del prestador desde BD
+            rptServicios.DataSource = servicios;
+            rptServicios.DataBind();
+
             List<ServiciosPrestador> serviciosPrestador = new List<ServiciosPrestador>();
             if (usuario.Prestador != null)
             {
@@ -322,11 +323,6 @@ namespace Fixnet
                     serviciosPrestador = usuario.Prestador.Servicios ?? new List<ServiciosPrestador>();
             }
 
-
-            rptServicios.DataSource = servicios;
-            rptServicios.DataBind();
-
-
             foreach (RepeaterItem item in rptServicios.Items)
             {
                 HiddenField hf = (HiddenField)item.FindControl("hfIdServicio");
@@ -334,8 +330,6 @@ namespace Fixnet
                 CheckBox chk = (CheckBox)item.FindControl("chkServicio");
 
                 int idServicio = int.Parse(hf.Value);
-
-                // Busco si el prestador tiene este servicio
                 var servicio = serviciosPrestador.Find(s => s.IdServicio == idServicio);
 
                 if (servicio != null)
@@ -345,7 +339,6 @@ namespace Fixnet
                 }
             }
         }
-
         protected void CbxChecked(object sender, EventArgs e)
         {
             ActivarHorarios();
@@ -592,10 +585,13 @@ namespace Fixnet
                 lblErrorPrestador.Text = "Debes aceptar los términos y condiciones.";
                 lblErrorPrestador.Visible = true;
 
-                ScriptManager.RegisterStartupScript(this, this.GetType(),
-                "abrirModal",
-                "var myModal = new bootstrap.Modal(document.getElementById('modalTerminos')); myModal.show();",
-                true);
+                ScriptManager.RegisterStartupScript(
+                    this,
+                    this.GetType(),
+                    "abrirModal",
+                    "Sys.Application.add_load(function() { var myModal = new bootstrap.Modal(document.getElementById('modalTerminos')); myModal.show(); });",
+                    true
+                );
 
 
                 return;
@@ -634,21 +630,21 @@ namespace Fixnet
             //Limpió el Zonas Prestador sino se sigue agregando lo viejo
             usuarioSession.Prestador.ZonasPrestador = "";
 
-            if (Session["Localidades_Seleccionadas_Por_Prestador"] != null)
-            {
-                var ListaLocalidadesAux = (List<Localidades>)Session["Localidades_Seleccionadas_Por_Prestador"];
-                foreach (Localidades localidad in ListaLocalidadesAux)
-                {
-                    usuarioSession.Prestador.ZonasPrestador += localidad.Id + ',';
-                }
-            }
-            else
+            var ListaLocalidadesAux = Session["Localidades_Seleccionadas_Por_Prestador"] as List<Localidades>;
+
+            if (ListaLocalidadesAux == null || ListaLocalidadesAux.Count == 0)
             {
                 LblErrorLocalidades.Visible = true;
                 LblErrorLocalidades.InnerText = "Tenés que seleccionar al menos una localidad";
                 return;
             }
-            usuarioSession.Prestador.ZonasPrestador = usuarioSession.Prestador.ZonasPrestador.Remove(usuarioSession.Prestador.ZonasPrestador.Length - 1, 1);
+
+            foreach (Localidades localidad in ListaLocalidadesAux)
+            {
+                usuarioSession.Prestador.ZonasPrestador += localidad.Id + ',';
+            }
+
+            usuarioSession.Prestador.ZonasPrestador = usuarioSession.Prestador.ZonasPrestador.TrimEnd(',');
 
             if (NingunDiaSeleccionado())
             {

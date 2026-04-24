@@ -1,0 +1,108 @@
+﻿.imgSeleccionarPerfil:hover {
+    color:white;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.perfil-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #020617, #0f172a, #020617, #0ea5e9);
+    background-size: 300% 300%;
+    animation: gradientMove 18s ease infinite;
+}
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+.perfil-card {
+    width: 100%;
+    max-width: 600px;
+    padding: 35px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    color: #e2e8f0;
+}
+    .perfil-card h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #38bdf8;
+    }
+    .perfil-card label {
+        font-size: 14px;
+        margin-bottom: 6px;
+        display: block;
+        color: #94a3b8;
+    }
+    .perfil-card .form-control,
+    .perfil-card select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.15);
+        background: rgba(255,255,255,0.03);
+        color: #e2e8f0;
+        margin-bottom: 18px;
+        transition: 0.3s;
+    }
+
+    .perfil-card select {
+        cursor: pointer;
+    }
+
+        .perfil-card input:focus,
+        .perfil-card select:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 10px rgba(56,189,248,0.4);
+            outline: none;
+        }
+
+.BtnActualizar {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #0ea5e9, #22c55e);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .BtnActualizar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(34,197,94,0.4);
+    }
+
+.text-danger {
+    color: #f87171;
+    font-size: 13px;
+}
+.perfil-ok {
+    text-align: center;
+    color: #22c55e;
+    margin-top: 20px;
+}
+
+@media (max-width: 500px) {
+    .perfil-card {
+        padding: 25px 20px;
+    }
+}

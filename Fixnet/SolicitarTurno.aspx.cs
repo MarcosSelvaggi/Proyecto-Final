@@ -252,7 +252,7 @@ namespace Fixnet
                 "modalYRedirect",
                 @"
                 var modal = document.getElementById('modalMensajeSistema');
-                document.getElementById('modalHeader').className = 'modal-header text-white bg-success';
+                document.getElementById('modalHeader').className = 'modal-header';
                 document.getElementById('modalIcon').innerText = '✔️';
                 modal.querySelector('.modal-body').innerText = 'Solicitud enviada correctamente. Serás redirigido a Mis Turnos...';
                 var m = new bootstrap.Modal(modal);
@@ -274,28 +274,23 @@ namespace Fixnet
         {
             LblMensajeSistema.Text = mensaje;
 
-            string color = "bg-primary";
             string icono = "ℹ️";
 
             switch (tipo)
             {
                 case "success":
-                    color = "bg-success";
                     icono = "✔️";
                     break;
 
                 case "error":
-                    color = "bg-danger";
                     icono = "❌";
                     break;
 
                 case "warning":
-                    color = "bg-warning text-dark";
                     icono = "⚠️";
                     break;
 
                 case "info":
-                    color = "bg-primary";
                     icono = "ℹ️";
                     break;
             }
@@ -304,7 +299,7 @@ namespace Fixnet
                 "modalSistema",
                 $@"
                 var modal = document.getElementById('modalMensajeSistema');
-                document.getElementById('modalHeader').className = 'modal-header text-white {color}';
+                document.getElementById('modalHeader').className = 'modal-header';
                 document.getElementById('modalIcon').innerText = '{icono}';
                 new bootstrap.Modal(modal).show();
                 ",

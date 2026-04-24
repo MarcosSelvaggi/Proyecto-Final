@@ -1,0 +1,230 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.perfil-container {
+    min-height: 100vh;
+    padding: 30px;
+    background: linear-gradient(...);
+    background-size: 300% 300%;
+    animation: gradientMove 18s ease infinite, fadeSlideUp 0.6s ease-out both;
+    color: #e2e8f0;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.perfil-header {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+.perfil-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e, #0ea5e9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 22px;
+    color: white;
+}
+
+.nombre {
+    margin: 0;
+    font-size: 20px;
+}
+
+.subinfo {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.perfil-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-glass {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .btn-glass:hover {
+        background: rgba(255,255,255,0.1);
+    }
+
+.perfil-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.perfil-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    transition: 0.3s;
+}
+
+    .perfil-card:hover {
+        transform: translateY(-4px);
+    }
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.card-body p {
+    margin: 6px 0;
+    color: #cbd5e1;
+}
+
+.card-body span {
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+    .badge.ok {
+        background: #22c55e;
+        color: white;
+    }
+
+    .badge.warn {
+        background: #f59e0b;
+        color: black;
+    }
+
+.btn-primary {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    color: white;
+}
+
+.btn-success {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .perfil-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .perfil-user {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.perfil-header {
+    animation: fadeSlideUp 0.7s ease-out both;
+}
+
+.perfil-card {
+    animation: fadeSlideUp 0.8s ease-out both;
+}
+    .perfil-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .perfil-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+.avatar i {
+    font-size: 28px;
+}
+
+.perfil-header {
+    animation: fadeSlideUp 0.6s ease-out both;
+}
+
+.perfil-card.cliente {
+    animation: fadeSlideUp 0.7s ease-out both;
+}
+
+.perfil-card.prestador {
+    animation: fadeSlideUp 0.9s ease-out both;
+}
+.avatar {
+    width: 70px;
+    height: 70px;
+    font-weight: bold;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.avatar-foto {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    flex-shrink: 0;
+}

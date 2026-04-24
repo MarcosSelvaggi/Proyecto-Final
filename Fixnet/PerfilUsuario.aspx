@@ -1,135 +1,154 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master"
-AutoEventWireup="true" CodeBehind="PerfilUsuario.aspx.cs"
-Inherits="Fixnet.PerfilUsuario" Async="true" %>
+    AutoEventWireup="true" CodeBehind="PerfilUsuario.aspx.cs"
+    Inherits="Fixnet.PerfilUsuario" Async="true" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <link href="styles/StylePerfilUsuario.css" rel="stylesheet" />
+</asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="perfil-container">
 
-<style>
-    .avatar {
-        width: 70px;
-        height: 70px;
-        font-weight: bold;
-        font-size: 22px;
-        flex-shrink: 0;
-    }
-    .avatar-foto {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid white;
-        flex-shrink: 0;
-    }
-</style>
+        <!-- HEADER -->
+        <div class="perfil-header">
 
-<div class="container py-4" style="max-width:900px;">
+            <div class="perfil-user">
 
-    <div class="card text-white bg-primary mb-4 shadow-sm">
-        <div class="card-body d-flex align-items-center gap-3">
+                <!-- AVATAR -->
+                <asp:Image ID="imgFotoPerfil" runat="server"
+                    CssClass="avatar-foto"
+                    Visible="false" />
 
-            <%-- Avatar: foto si tiene, iniciales si no --%>
-            <asp:Image ID="imgFotoPerfil" runat="server"
-                CssClass="avatar-foto"
-                AlternateText="Foto de perfil"
-                Visible="false" />
+                <div class="avatar" id="divIniciales" runat="server">
+                    <asp:Label ID="lblIniciales" runat="server" />
+                </div>
 
-            <div class="avatar rounded-circle bg-success d-flex align-items-center justify-content-center border border-3 border-white"
-                 id="divIniciales" runat="server">
-                <asp:Label ID="lblIniciales" runat="server" />
+                <!-- INFO -->
+                <div class="perfil-info">
+                    <h2 class="nombre">
+                        <asp:Label ID="lblNombreCompleto" runat="server" />
+                    </h2>
+
+                    <div class="subinfo">
+                        <asp:Label ID="lblEmail" runat="server" />
+                        <span>·</span>
+                        <asp:Label ID="lblTelefono" runat="server" />
+                    </div>
+
+                    <!-- ACCIONES -->
+                    <div class="perfil-actions">
+                        <asp:Button CssClass="btn-glass"
+                            Text="Editar información"
+                            ID="BtnModificarInformacionPersonal"
+                            runat="server"
+                            OnClick="ModificarInformacionPersonal_Click" />
+
+                        <asp:Button CssClass="btn-glass"
+                            Text="Cambiar contraseña"
+                            ID="BtnModificarContraseña"
+                            runat="server"
+                            OnClick="ModificarContraseña_Click" />
+                    </div>
+                </div>
+
             </div>
 
-            <div>
-                <h5 class="mb-1">
-                    <asp:Label ID="lblNombreCompleto" runat="server" />
-                </h5>
-                <small>
-                    <asp:Label ID="lblEmail" runat="server" />
-                    ·
-                    <asp:Label ID="lblTelefono" runat="server" />
-                </small>
-            </div>
         </div>
-        <div class="row px-2">
-            <div class="col-md-8 col-4 py-1">
-                <asp:Button CssClass="btn btn-dark" Text="Editar información personal"
-                    ID="BtnModificarInformacionPersonal" runat="server"
-                    OnClick="ModificarInformacionPersonal_Click" />
-            </div>
-            <div class="col-md-6 col-3 py-1">
-                <asp:Button CssClass="btn btn-dark" Text="Modificar contraseña"
-                    ID="BtnModificarContraseña" runat="server"
-                    OnClick="ModificarContraseña_Click" />
-            </div>
-        </div>
-    </div>
 
-    <div class="row g-3">
+        <!-- GRID -->
+        <div class="perfil-grid">
 
-        <!-- CLIENTE -->
-        <div class="col-md-6">
-            <div class="card border-primary shadow-sm h-100">
-                <div class="card-header bg-primary text-white d-flex justify-content-between">
-                    <span>📍 Perfil cliente</span>
+            <!-- CLIENTE -->
+            <div class="perfil-card cliente">
+
+                <div class="card-title">
+                    <span><i class="bi bi-geo-alt-fill"></i>Perfil cliente</span>
+
                     <asp:Panel ID="pnlBadgeClienteOk" runat="server">
-                        <span class="badge bg-success">Completo</span>
+                        <span class="badge ok">Completo</span>
                     </asp:Panel>
-                    <asp:Panel ID="pnlBadgeClienteVacio" runat="server">
-                        <span class="badge bg-info text-dark">Sin completar</span>
-                    </asp:Panel>
-                </div>
-                <div class="card-body">
-                    <asp:Panel ID="pnlClienteDatos" runat="server">
-                        <p><strong>Provincia:</strong> <asp:Label ID="lblProvincia" runat="server" /></p>
-                        <p><strong>Departamento:</strong> <asp:Label ID="lblDepartamento" runat="server" /></p>
-                        <p><strong>Localidad:</strong> <asp:Label ID="lblLocalidad" runat="server" /></p>
-                        <p><strong>Dirección:</strong> <asp:Label ID="lblDireccion" runat="server" /></p>
-                        <asp:Button ID="btnEditarCliente" runat="server" Text="Editar"
-                            CssClass="btn btn-primary btn-sm" OnClick="btnEditarCliente_Click" />
-                    </asp:Panel>
-                    <asp:Panel ID="pnlClienteVacio" runat="server">
-                        <p class="text-primary mb-1">Todavía no completaste tu perfil.</p>
-                        <small class="text-muted">Completalo para acceder a los servicios.</small>
-                        <div class="mt-3">
-                            <asp:Button ID="btnCrearCliente" runat="server" Text="Completar perfil"
-                                CssClass="btn btn-primary btn-sm" OnClick="btnCrearCliente_Click" />
-                        </div>
-                    </asp:Panel>
-                </div>
-            </div>
-        </div>
 
-        <!-- PRESTADOR -->
-        <div class="col-md-6">
-            <div class="card border-success shadow-sm h-100">
-                <div class="card-header bg-success text-white d-flex justify-content-between">
-                    <span>🔧 Perfil prestador</span>
-                    <asp:Panel ID="pnlBadgePrestadorOk" runat="server">
-                        <span class="badge bg-light text-success">Activo</span>
-                    </asp:Panel>
-                    <asp:Panel ID="pnlBadgePrestadorVacio" runat="server">
-                        <span class="badge bg-warning text-dark">Sin completar</span>
+                    <asp:Panel ID="pnlBadgeClienteVacio" runat="server">
+                        <span class="badge warn">Incompleto</span>
                     </asp:Panel>
                 </div>
+
                 <div class="card-body">
-                    <asp:Panel ID="pnlPrestadorDatos" runat="server">
-                        <p><strong>Descripción:</strong> <asp:Label ID="lblDescripcion" runat="server" /></p>
-                        <p><strong>Zonas:</strong> <asp:Label ID="lblZonas" runat="server" /></p>
-                        <asp:Button ID="btnEditarPrestador" runat="server" Text="Editar"
-                            CssClass="btn btn-success btn-sm" OnClick="btnEditarPrestador_Click" />
+
+                    <asp:Panel ID="pnlClienteDatos" runat="server">
+
+                        <p><span>Provincia:</span>
+                            <asp:Label ID="lblProvincia" runat="server" /></p>
+                        <p><span>Departamento:</span>
+                            <asp:Label ID="lblDepartamento" runat="server" /></p>
+                        <p><span>Localidad:</span>
+                            <asp:Label ID="lblLocalidad" runat="server" /></p>
+                        <p><span>Dirección:</span>
+                            <asp:Label ID="lblDireccion" runat="server" /></p>
+
+                        <asp:Button ID="btnEditarCliente" runat="server"
+                            Text="Editar"
+                            CssClass="btn-primary"
+                            OnClick="btnEditarCliente_Click" />
+
                     </asp:Panel>
-                    <asp:Panel ID="pnlPrestadorVacio" runat="server">
-                        <p class="text-success mb-1">Todavía no completaste tu perfil.</p>
-                        <small class="text-muted">Completalo para ofrecer servicios.</small>
-                        <div class="mt-3">
-                            <asp:Button ID="btnCrearPrestador" runat="server" Text="Completar perfil"
-                                CssClass="btn btn-success btn-sm" OnClick="btnCrearPrestador_Click" />
-                        </div>
+
+                    <asp:Panel ID="pnlClienteVacio" runat="server">
+                        <p>Completá tu perfil para acceder a servicios.</p>
+
+                        <asp:Button ID="btnCrearCliente" runat="server"
+                            Text="Completar"
+                            CssClass="btn-primary"
+                            OnClick="btnCrearCliente_Click" />
                     </asp:Panel>
+
                 </div>
             </div>
+
+            <!-- PRESTADOR -->
+            <div class="perfil-card prestador">
+
+                <div class="card-title">
+                    <span><i class="bi bi-tools"></i>Perfil prestador</span>
+
+                    <asp:Panel ID="pnlBadgePrestadorOk" runat="server">
+                        <span class="badge ok">Activo</span>
+                    </asp:Panel>
+
+                    <asp:Panel ID="pnlBadgePrestadorVacio" runat="server">
+                        <span class="badge warn">Inactivo</span>
+                    </asp:Panel>
+                </div>
+
+                <div class="card-body">
+
+                    <asp:Panel ID="pnlPrestadorDatos" runat="server">
+
+                        <p><span>Descripción:</span>
+                            <asp:Label ID="lblDescripcion" runat="server" /></p>
+                        <p><span>Zonas:</span>
+                            <asp:Label ID="lblZonas" runat="server" /></p>
+
+                        <asp:Button ID="btnEditarPrestador" runat="server"
+                            Text="Editar"
+                            CssClass="btn-success"
+                            OnClick="btnEditarPrestador_Click" />
+
+                    </asp:Panel>
+
+                    <asp:Panel ID="pnlPrestadorVacio" runat="server">
+                        <p>Completá tu perfil para ofrecer servicios.</p>
+
+                        <asp:Button ID="btnCrearPrestador" runat="server"
+                            Text="Completar"
+                            CssClass="btn-success"
+                            OnClick="btnCrearPrestador_Click" />
+                    </asp:Panel>
+
+                </div>
+            </div>
+
         </div>
 
     </div>
-</div>
-
 </asp:Content>

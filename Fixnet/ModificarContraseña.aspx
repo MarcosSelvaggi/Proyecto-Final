@@ -1,69 +1,100 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="ModificarContraseña.aspx.cs" Inherits="Fixnet.CambiarContraseña" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link href="styles/StyleRegistro.css" rel="stylesheet" />
+
+<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <link href="styles/StyleModificarContrasenia.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <div class="container2">
-        <div style="max-width: 700px; width: 100%;">
-            <h2 class="text-center mb-4"><i class="bi bi-caret-right-fill"></i>Modificar contraseña<i class="bi bi-caret-left-fill"></i></h2>
+<asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
+
+    <div class="recovery-container">
+
+        <div class="recovery-card">
+
+            <h2 class="titulo">
+                <i class="bi bi-shield-lock"></i>
+                Modificar contraseña
+            </h2>
+
             <asp:Panel runat="server" DefaultButton="BtnModificar">
-                <div class="row g-3">
-                    <div class="col-md-12">
-                        <label class="form-label">Nueva contraseña</label>
-                        <asp:TextBox ID="txtPassword" CssClass="form-control" runat="server" TextMode="Password"></asp:TextBox>
-                    </div>
 
-                    <div class="col-12 text-center mt-4">
-                        <div class="row">
-                            <div class="col-2"></div>
-                            <div class="col-4">
-                                <div class="btnEnviar">
-                                    <asp:Button ID="BtnModificar" runat="server" Text="Modificar" CssClass="BtnEnviar" OnClick="ModificarContraseña_Click" />
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="btnEnviar">
-                                    <asp:Button ID="BtnVolver" runat="server" Text="Volver" CssClass="btn btn-outline-dark" OnClick="BtnVolver_Click" />
-                                </div>
-                            </div>
-                        </div>
+                <!-- INPUT PASSWORD -->
+                <div class="field">
 
-                        <!-- MENSAJE DE ERROR -->
-                        <asp:Label
-                            ID="lblError"
+                    <label>Nueva contraseña</label>
+
+                    <div class="input-wrapper">
+                        <asp:TextBox ID="txtPassword"
                             runat="server"
-                            ForeColor="Red"
-                            Font-Bold="true"
-                            Visible="false"
-                            CssClass="mt-3">
-                        </asp:Label>
+                            TextMode="Password"
+                            ClientIDMode="Static"
+                            CssClass="input" />
+
+                        <div class="icons">
+                            <i class="bi bi-key icon"></i>
+                            <i class="bi bi-check2-circle valid-icon" id="checkPassword"></i>
+                        </div>
                     </div>
+
+                    <small id="errorPassword" class="error"></small>
+
                 </div>
+
+                <!-- ERROR BACK -->
+                <asp:Label ID="lblError"
+                    runat="server"
+                    CssClass="error"
+                    Visible="false" />
+
+                <!-- BOTONES -->
+                <div class="actions">
+
+                    <asp:Button ID="BtnModificar"
+                        runat="server"
+                        Text="Modificar"
+                        CssClass="btn-primary"
+                        OnClick="ModificarContraseña_Click" />
+
+                    <asp:Button ID="BtnVolver"
+                        runat="server"
+                        Text="Volver"
+                        CssClass="btn-secondary"
+                        OnClick="BtnVolver_Click" />
+
+                </div>
+
             </asp:Panel>
+
         </div>
+
     </div>
 
-    <!-- MODALES -->
-
-    <div class="modal fade" id="ModificarContraseñaModal" tabindex="-1" aria-labelledby="ModificarContraseña" aria-hidden="true">
+    <div class="modal fade" id="successModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-dialog" style="min-width: 400px; width: 90%">
-                <div class="modal-content">
-                    <div class="modal-header bg-success text-white">
-                        <h1 class="modal-title fs-5" runat="server">Contraseña actualizada correctamente</h1>
+
+            <div class="modal-content glass-modal">
+
+                <!-- HEADER -->
+                <div class="modal-header modal-header-glass">
+
+                    <div class="icon-box">
+                        <i class="bi bi-check2-circle"></i>
                     </div>
-                    <div class="modal-body">
-                        <p>Se ha actualizado correctamente tu contraseña.</p>
-                        <p>En unos segundos serás redirigido a tu perfil.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="/PerfilUsuario.aspx" class="btn btn-dark ms-auto">Ir ahora</a>
-                        <div class="col-4"></div>
-                    </div>
+
+                    <h5 class="modal-title modal-title-glass">Contraseña actualizada
+                    </h5>
+
                 </div>
+
+                <!-- BODY -->
+                <div class="modal-body modal-body-glass">
+                    <p>Tu contraseña fue cambiada correctamente.</p>
+                    <p class="muted">Ya podés iniciar sesión con la nueva contraseña.</p>
+                </div>
+
             </div>
+
         </div>
     </div>
-
+    <script src="scripts/RecuperarContrasenia.js"></script>
 </asp:Content>

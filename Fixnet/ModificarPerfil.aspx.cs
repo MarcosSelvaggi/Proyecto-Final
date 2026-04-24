@@ -34,26 +34,27 @@ namespace Fixnet
         {
             txtNombre.Text = Usuario.NombreUsuario;
             txtApellido.Text = Usuario.ApellidoUsuario;
-            txtTeléfono.Text = Usuario.TelefonoUsuario;
+            txtTelefono.Text = Usuario.TelefonoUsuario;
             txtEmail.Text = Usuario.EmailUsuario;
         }
-
         protected void CargarFotoActual()
         {
-            // Muestra la foto guardada o las iniciales si no tiene
-            if (!string.IsNullOrEmpty(Usuario.FotoPerfil))
+            bool tieneFoto = !string.IsNullOrEmpty(Usuario.FotoPerfil);
+
+            imgFotoActual.Visible = tieneFoto;
+            divInicialesWrapper.Visible = !tieneFoto;
+
+            if (tieneFoto)
             {
-                imgFotoActual.ImageUrl = Usuario.FotoPerfil; // ya es "data:image/...;base64,..."
-                imgFotoActual.Style["display"] = "inline-block";
-                lblIniciales.Visible = false;
+                imgFotoActual.ImageUrl = Usuario.FotoPerfil;
             }
             else
             {
-                string ini = "";
-                if (!string.IsNullOrEmpty(Usuario.NombreUsuario)) ini += Usuario.NombreUsuario[0];
-                if (!string.IsNullOrEmpty(Usuario.ApellidoUsuario)) ini += Usuario.ApellidoUsuario[0];
+                string ini =
+                    (Usuario.NombreUsuario?.FirstOrDefault().ToString() ?? "") +
+                    (Usuario.ApellidoUsuario?.FirstOrDefault().ToString() ?? "");
+
                 lblIniciales.Text = ini.ToUpper();
-                lblIniciales.Visible = true;
             }
         }
 
@@ -98,7 +99,7 @@ namespace Fixnet
             Usuario.NombreUsuario = txtNombre.Text;
             Usuario.ApellidoUsuario = txtApellido.Text;
             Usuario.EmailUsuario = txtEmail.Text;
-            Usuario.TelefonoUsuario = txtTeléfono.Text;
+            Usuario.TelefonoUsuario = txtTelefono.Text; 
 
             UsuarioManager UsuarioManager = new UsuarioManager();
 
@@ -106,9 +107,9 @@ namespace Fixnet
             {
                 Session["Usuario"] = Usuario;
 
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "ModificarUsuarioModal",
-                    "var modal = new bootstrap.Modal(document.getElementById('ModificarUsuarioModal')); modal.show();" +
-                    "setTimeout(function() { window.location.href = '/PerfilUsuario.aspx'; }, 5000);", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "successModal",
+                "var modal = new bootstrap.Modal(document.getElementById('successModal')); modal.show();" +
+                "setTimeout(function() { window.location.href = '/PerfilUsuario.aspx'; }, 3000);", true);
             }
         }
 
@@ -127,24 +128,25 @@ namespace Fixnet
 
         protected bool RevisarTxTs()
         {
+
             return !string.IsNullOrWhiteSpace(txtNombre.Text) &&
                    !string.IsNullOrWhiteSpace(txtApellido.Text) &&
                    !string.IsNullOrWhiteSpace(txtEmail.Text) &&
-                   !string.IsNullOrWhiteSpace(txtTeléfono.Text);
+                   !string.IsNullOrWhiteSpace(txtTelefono.Text);
         }
 
         protected bool RealizarValidaciones()
         {
-            if (!Validaciones.ValidarTelefono(txtTeléfono.Text))
+            if (!Validaciones.ValidarTelefono(txtTelefono.Text))
             {
                 lblError.Text = "El teléfono debe tener exactamente 10 números juntos.";
                 lblError.Visible = true;
                 return false;
             }
 
-            if (Usuario.TelefonoUsuario != txtTeléfono.Text)
+            if (Usuario.TelefonoUsuario != txtTelefono.Text)
             {
-                if (!Validaciones.ValidarTelefonoExiste(txtTeléfono.Text))
+                if (!Validaciones.ValidarTelefonoExiste(txtTelefono.Text))
                 {
                     lblError.Text = "El teléfono ya está registrado.";
                     lblError.Visible = true;
@@ -171,5 +173,6 @@ namespace Fixnet
 
             return true;
         }
+
     }
 }

@@ -14,6 +14,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles/StylesMasterPage.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.lineicons.com/5.1/line/lineicons.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,7 +23,7 @@
     <form id="form1" runat="server">
         <div>
             <header>
-                <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+                <nav class="navbar fixed-top navbar-expand-lg navbar-dark navbar-glass">
 
                     <a class="navbar-brand mb-0" href="/Default.aspx">
                         <img src="assets/logo.png" alt="Logo" id="brand-logo">
@@ -41,7 +42,8 @@
                         <!-- Menú central -->
                         <ul class="navbar-nav mx-auto text-center text-lg-start">
 
-                            <% if (Session["Usuario"] == null) { %>
+                            <% if (Session["Usuario"] == null)
+                                { %>
 
                             <!-- NO logueado -->
                             <li class="nav-item">
@@ -57,48 +59,55 @@
                                 <a class="nav-link active hover-underline" href="/Contactanos.aspx">Contáctanos</a>
                             </li>
 
-                            <% } else {
-                                Dominio.Usuario UsuarioNav = (Dominio.Usuario)Session["Usuario"];
-                                
-                                bool navEsCliente = UsuarioNav.Cliente != null 
-                                && EsPerfilValido(UsuarioNav.Cliente.DireccionCliente);
+                            <% }
+                                else
+                                {
+                                    Dominio.Usuario UsuarioNav = (Dominio.Usuario)Session["Usuario"];
 
-                                 bool navEsPrestador = UsuarioNav.Prestador != null 
-                                 && EsPerfilValido(UsuarioNav.Prestador.DescripcionPrestador);
+                                    bool navEsCliente = UsuarioNav.Cliente != null
+                                    && EsPerfilValido(UsuarioNav.Cliente.DireccionCliente);
+
+                                    bool navEsPrestador = UsuarioNav.Prestador != null
+                                    && EsPerfilValido(UsuarioNav.Prestador.DescripcionPrestador);
                             %>
 
                             <!-- LOGUEADO —  según perfil -->
 
                             <%-- Buscar Prestadores: visible si es Cliente (o tiene ambos perfiles) --%>
-                            <% if (navEsCliente) { %>
+                            <% if (navEsCliente)
+                                { %>
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="/BuscarPrestadores.aspx">Buscar profesionales</a>
                             </li>
                             <% } %>
 
                             <%-- Mis Turnos: visible para Cliente (o ambos) --%>
-                            <% if (navEsCliente) { %>
+                            <% if (navEsCliente)
+                                { %>
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="/MisTurnos.aspx">Mis turnos</a>
                             </li>
                             <% } %>
 
                             <%-- Turnos Solicitados: visible para Prestador (o ambos) --%>
-                            <% if (navEsPrestador) { %>
+                            <% if (navEsPrestador)
+                                { %>
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="/TurnosSolicitados.aspx">Turnos solicitados</a>
                             </li>
                             <% } %>
 
                             <%-- Gestión: visible solo para Prestador --%>
-                            <% if (navEsPrestador) { %>
+                            <% if (navEsPrestador)
+                                { %>
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="/Gestion.aspx">Gestión</a>
                             </li>
                             <% } %>
 
                             <%--  usuario logueado pero sin ningún perfil completo todavía --%>
-                            <% if (!navEsCliente && !navEsPrestador) { %>
+                            <% if (!navEsCliente && !navEsPrestador)
+                                { %>
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="/SeleccionarPerfil.aspx">Completá tu perfil</a>
                             </li>
@@ -108,7 +117,8 @@
                         </ul>
 
                         <!-- Menú derecho -->
-                        <% if (Session["Usuario"] == null) { %>
+                        <% if (Session["Usuario"] == null)
+                            { %>
                         <ul class="navbar-nav ms-lg-auto me-3 text-center text-lg-start">
                             <li class="nav-item">
                                 <a class="nav-link active hover-underline" href="/Registro.aspx">Registrarse</a>
@@ -117,8 +127,10 @@
                                 <a class="nav-link active hover-underline" href="/Logearse.aspx">Iniciar sesión</a>
                             </li>
                         </ul>
-                        <% } else {
-                               Dominio.Usuario UsuarioRight = (Dominio.Usuario)Session["Usuario"];
+                        <% }
+                            else
+                            {
+                                Dominio.Usuario UsuarioRight = (Dominio.Usuario)Session["Usuario"];
                         %>
                         <ul class="navbar-nav ms-lg-auto me-3 text-center text-lg-start">
                             <li class="nav-item">
@@ -128,7 +140,7 @@
                             </li>
                             <li>
                                 <h3>
-                                    <asp:Button runat="server" Text="Cerrar sesión" CssClass="btn btn-primary"
+                                    <asp:Button runat="server" Text="Cerrar sesión" CssClass="btn-glass"
                                         ID="btn_CerrarSesion" OnClick="btn_CerrarSesion_Click" />
                                 </h3>
                             </li>
@@ -138,7 +150,8 @@
                 </nav>
             </header>
 
-            <% if (Session["Usuario"] == null) { %>
+            <% if (Session["Usuario"] == null)
+                { %>
             <div id="chatbot">
                 <div id="chat-header">
                     <span>💬 FixNet</span>
@@ -158,7 +171,7 @@
             <% } %>
         </div>
 
-        <div id="content" style="margin-top: 100px">
+        <div id="content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
         </div>

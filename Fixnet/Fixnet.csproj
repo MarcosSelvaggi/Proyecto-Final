@@ -313,15 +313,24 @@
     <Content Include="Registro.aspx" />
     <Content Include="Scripts\ChatBot.js" />
     <Content Include="Scripts\EnviarMailScript.js" />
-    <Content Include="Scripts\FotoPerfilPreview.js" />
+    <Content Include="Scripts\ModificarPerfil.js" />
+    <Content Include="Scripts\RecuperarContrasenia.js" />
+    <Content Include="Scripts\Registro.js" />
     <Content Include="SeleccionarPerfil.aspx" />
+    <Content Include="styles\StyleBuscarPrestadores.css" />
     <Content Include="styles\StyleContacto.css" />
     <Content Include="SobreFixnet.aspx" />
     <Content Include="styles\StyleDefault.css" />
     <Content Include="styles\StyleMisTurnos.css" />
-    <Content Include="styles\StylePerfiles.css" />
+    <Content Include="styles\StyleModificarPerfil.css" />
+    <Content Include="styles\StylePerfilCliente.css" />
+    <Content Include="styles\StylePerfilPrestador.css" />
+    <Content Include="styles\StylePerfilUsuario.css" />
+    <Content Include="styles\StyleModificarContrasenia.css" />
     <Content Include="styles\StyleRegistro.css" />
+    <Content Include="styles\StyleSeleccionarPerfil.css" />
     <Content Include="styles\StylesMasterPage.css" />
+    <Content Include="styles\StyleSolicitarTurno.css" />
     <Content Include="TurnosSolicitados.aspx" />
     <Content Include="Web.config" />
     <Content Include="PerfilUsuario.aspx" />
@@ -339,9 +348,6 @@
     <Compile Include="ModificarContraseña.aspx.cs">
       <DependentUpon>ModificarContraseña.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ModificarContraseña.aspx.designer.cs">
-      <DependentUpon>ModificarContraseña.aspx</DependentUpon>
     </Compile>
     <Compile Include="ContraseñaOlvidada.aspx.cs">
       <DependentUpon>ContraseñaOlvidada.aspx</DependentUpon>
@@ -387,6 +393,9 @@
     </Compile>
     <Compile Include="MisTurnos.aspx.designer.cs">
       <DependentUpon>MisTurnos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ModificarContraseña.aspx.designer.cs">
+      <DependentUpon>ModificarContraseña.aspx</DependentUpon>
     </Compile>
     <Compile Include="ModificarPerfil.aspx.cs">
       <DependentUpon>ModificarPerfil.aspx</DependentUpon>

@@ -22,14 +22,14 @@ namespace Fixnet
                 return;
             }
 
-            if (!Validaciones.ValidarTelefono(txtTeléfono.Text))
+            if (!Validaciones.ValidarTelefono(txtTelefono.Text))
             {
                 lblError.Text = "El teléfono debe tener exactamente 10 números juntos.";
                 lblError.Visible = true;
                 return;
             }
 
-            if (!Validaciones.ValidarTelefonoExiste(txtTeléfono.Text))
+            if (!Validaciones.ValidarTelefonoExiste(txtTelefono.Text))
             {
                 lblError.Text = "El teléfono ya está registrado.";
                 lblError.Visible = true;
@@ -65,7 +65,7 @@ namespace Fixnet
 
             Usuario.NombreUsuario = txtNombre.Text;
             Usuario.ApellidoUsuario = txtApellido.Text;
-            Usuario.TelefonoUsuario = txtTeléfono.Text;
+            Usuario.TelefonoUsuario = txtTelefono.Text;
             Usuario.EmailUsuario = txtEmail.Text;
             Usuario.PasswordUsuario = txtPassword.Text;
 

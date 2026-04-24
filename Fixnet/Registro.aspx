@@ -6,60 +6,71 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <div class="container2">
-        <div style="max-width: 700px; width: 100%;">
-            <h2 class="text-center mb-4"><i class="bi bi-caret-right-fill"></i>Registro <i class="bi bi-caret-left-fill"></i></h2>
+    <div class="registro-container">
+        <div class="registro-card">
 
-            <div class="row g-3">
-                <asp:Panel runat="server" DefaultButton="BtnRegistro">
-                <div class="col-md-6">
-                    <label class="form-label">Nombre</label>
-                    <asp:TextBox ID="txtNombre" CssClass="form-control" runat="server"></asp:TextBox>
+            <h2 class="titulo">Crear cuenta</h2>
+
+            <asp:Panel runat="server" DefaultButton="BtnRegistro">
+
+                <!-- NOMBRE -->
+                <div class="form-group floating">
+                    <asp:TextBox ID="txtNombre" ClientIDMode="Static" runat="server" CssClass="form-control"></asp:TextBox>
+                    <label>Nombre</label>
+                    <span class="valid-icon">✔</span>
+                    <span class="icon">👤</span>
+                    <small class="error" id="errorNombre"></small>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label">Apellido</label>
-                    <asp:TextBox ID="txtApellido" CssClass="form-control" runat="server"></asp:TextBox>
+                <!-- APELLIDO -->
+                <div class="form-group floating">
+                    <asp:TextBox ID="txtApellido" ClientIDMode="Static" runat="server" CssClass="form-control"></asp:TextBox>
+                    <label>Apellido</label>
+                    <span class="valid-icon">✔</span>
+                    <span class="icon">👤</span>
+                    <small class="error" id="errorApellido"></small>
                 </div>
 
-                <div class="col-md-12">
-                    <label class="form-label">Teléfono</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark text-white">+54</span>
-                        <asp:TextBox ID="txtTeléfono" CssClass="form-control" runat="server" onKeypress="return soloNumeros(event)"></asp:TextBox>
-                    </div>
+                <!-- TEL -->
+                <div class="form-group floating">
+                    <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" MaxLength="10" ClientIDMode="Static"></asp:TextBox>
+                    <label>Teléfono (+54)</label>
+                    <span class="valid-icon">✔</span>
+                    <span class="icon">📱</span>
+                    <small class="error" id="errorTelefono"></small>
                 </div>
 
-                <div class="col-md-12">
-                    <label class="form-label">Email</label>
-                    <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server" TextMode="Email"></asp:TextBox>
+                <!-- EMAIL -->
+                <div class="form-group floating">
+                    <asp:TextBox ID="txtEmail" ClientIDMode="Static" runat="server" CssClass="form-control"></asp:TextBox>
+                    <label>Email</label>
+                    <span class="valid-icon">✔</span>
+                    <span class="icon">📧</span>
+                    <small class="error" id="errorEmail"></small>
                 </div>
 
-                <div class="col-md-12">
-                    <label class="form-label">Contraseña</label>
-                    <asp:TextBox ID="txtPassword" CssClass="form-control" runat="server" TextMode="Password"></asp:TextBox>
+                <!-- PASSWORD -->
+                <div class="form-group floating">
+                    <asp:TextBox ID="txtPassword" ClientIDMode="Static" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
+                    <label>Contraseña</label>
+                    <span class="valid-icon">✔</span>
+                    <span class="icon-password" onclick="togglePass('txtPassword')">👁</span>
+                    <span class="icon">🔒</span>
+                    <small class="error" id="errorPassword"></small>
                 </div>
 
-                <div class="col-12 text-center mt-4">
+                <asp:Label ID="lblError" runat="server" CssClass="error-general" Visible="false"></asp:Label>
 
-                    <div class="btnEnviar">
-                        <asp:Button ID="BtnRegistro" runat="server" Text="Registrarse" CssClass="BtnEnviar" OnClick="BtnRegistro_Click"/>
-                    </div>
+                <asp:Button ID="BtnRegistro" runat="server"
+                    Text="Registrarse"
+                    CssClass="btn-registro"
+                    OnClick="BtnRegistro_Click" />
 
-                    <!-- MENSAJE DE ERROR -->
-                    <asp:Label 
-                        ID="lblError" 
-                        runat="server" 
-                        ForeColor="Red"
-                        Font-Bold="true"
-                        Visible="false"
-                        CssClass="mt-3">
-                    </asp:Label>
 
-                </div>
-                </asp:Panel>
-            </div>
+            </asp:Panel>
         </div>
     </div>
+
+    <script src="scripts/Registro.js"></script>
 
 </asp:Content>

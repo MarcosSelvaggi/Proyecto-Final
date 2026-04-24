@@ -64,10 +64,10 @@ namespace Fixnet
         {
             switch (estado)
             {
-                case "Aceptado": return "bg-success";
-                case "Rechazado": return "bg-danger";
-                case "Pendiente": return "bg-warning text-dark";
-                default: return "bg-secondary";
+                case "Aceptado": return "estado-aceptado";
+                case "Rechazado": return "estado-rechazado";
+                case "Pendiente": return "estado-pendiente";
+                default: return "estado-pendiente";
             }
         }
     }
