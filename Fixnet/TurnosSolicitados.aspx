@@ -2,77 +2,87 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="styles/StyleMisTurnos.css" rel="stylesheet" />
+  <link href="styles/TurnosSolicitados.css" rel="stylesheet" />
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:Repeater ID="rptTurnos" runat="server">
-        <ItemTemplate>
-            <div class="turno-card">
-                <div class="card-body">
 
-                    <h5 class="card-title d-flex justify-content-between align-items-center">
+    <div class="container py-4 container-turnos" style="max-width: 780px;">
 
-                        <%# Eval("Servicio") %>
+        <div class="page-header">
+            <span style="font-size:2rem;">📋</span>
+            <div>
+                <h4>Turnos solicitados</h4>
+                <p>Gestioná las solicitudes que recibiste de tus clientes.</p>
+            </div>
+        </div>
 
+        <asp:Repeater ID="rptTurnos" runat="server">
+            <ItemTemplate>
+                <div class='turno-card <%# Eval("Estado").ToString() == "Aceptado" ? "turno-aceptado" : Eval("Estado").ToString() == "Rechazado" ? "turno-rechazado" : "" %>'>
+
+                    <!-- Header -->
+                    <div class="turno-card-header">
+                        <span class="turno-servicio"><%# Eval("Servicio") %></span>
                         <span class='badge-estado <%# ObtenerClaseEstado(Eval("Estado").ToString()) %>'>
                             <%# Eval("Estado") %>
                         </span>
+                    </div>
 
-                    </h5>
+                    <!-- Body -->
+                    <div class="turno-card-body">
+                        <div class="turno-info-grid">
+                            <div class="turno-info-item">
+                                <strong>Cliente</strong>
+                                <%# Eval("Nombre") %> <%# Eval("Apellido") %>
+                            </div>
+                            <div class="turno-info-item">
+                                <strong>Teléfono</strong>
+                                <%# Eval("Telefono") %>
+                            </div>
+                            <div class="turno-info-item">
+                                <strong>Email</strong>
+                                <%# Eval("Email") %>
+                            </div>
+                            <div class="turno-info-item">
+                                <strong>Dirección</strong>
+                                <%# Eval("Direccion") %> — <%# Eval("Localidad") %>
+                            </div>
+                        </div>
 
-                    <p class="mb-1">
-                        <strong>Cliente:</strong>
-                        <%# Eval("Nombre") %> <%# Eval("Apellido") %>
-                    </p>
+                        <%# string.IsNullOrWhiteSpace(Eval("Mensaje").ToString())
+                            ? ""
+                            : "<div class='turno-mensaje'>💬 " + Eval("Mensaje") + "</div>" %>
 
-                    <p class="mb-1">
-                        <strong>Teléfono:</strong>
-                        <%# Eval("Telefono") %>
-                    </p>
+                        <div class="turno-fecha">
+                            🕐 Solicitud recibida el <%# Eval("FechaSolicitud", "{0:dd/MM/yyyy HH:mm}") %>
+                        </div>
+                    </div>
 
-                    <p class="mb-1">
-                        <strong>Email:</strong>
-                        <%# Eval("Email") %>
-                    </p>
-
-                    <p class="mb-1">
-                        <strong>Dirección:</strong>
-                        <%# Eval("Direccion") %> - <%# Eval("Localidad") %>
-                    </p>
-
-                    <p class="mb-1">
-                        <strong>Mensaje:</strong>
-                        <%# Eval("Mensaje") %>
-                    </p>
-
-                    <p class="text-muted mt-2">
-                        Solicitud:
-                    <%# Eval("FechaSolicitud", "{0:dd/MM/yyyy HH:mm}") %>
-                    </p>
-
-                    <div class="mt-3 d-flex gap-2"
+                    <!-- Acciones solo si está Pendiente -->
+                    <div class="turno-acciones"
                         runat="server"
                         visible='<%# Eval("Estado").ToString() == "Pendiente" %>'>
-
                         <asp:Button
                             ID="btnAceptar"
                             runat="server"
-                            Text="Aceptar"
+                            Text="✔ Aceptar"
                             CssClass="btn-aceptar"
                             CommandArgument='<%# Eval("IdTurno") %>'
                             OnCommand="AceptarTurno" />
-
                         <asp:Button
                             ID="btnRechazar"
                             runat="server"
-                            Text="Rechazar"
+                            Text="✖ Rechazar"
                             CssClass="btn-rechazar"
                             CommandArgument='<%# Eval("IdTurno") %>'
                             OnCommand="RechazarTurno" />
-
                     </div>
 
                 </div>
-            </div>
-        </ItemTemplate>
-    </asp:Repeater>
+            </ItemTemplate>
+        </asp:Repeater>
+
+    </div>
+
 </asp:Content>

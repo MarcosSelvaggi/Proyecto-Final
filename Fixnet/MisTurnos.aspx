@@ -3,74 +3,85 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="styles/StyleMisTurnos.css" rel="stylesheet" />
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:Repeater ID="rptTurnos" runat="server">
-        <ItemTemplate>
-            <div class="turno-card">
-                <div class="card-body">
 
-                    <h5 class="card-title d-flex justify-content-between align-items-center">
+    <div class="container py-4 container-turnos" style="max-width: 780px;">
 
-                        <%# Eval("Servicio") %>
+        <div class="page-header">
+            <span style="font-size:2rem;">📅</span>
+            <div>
+                <h4>Mis turnos</h4>
+                <p>Seguí el estado de tus solicitudes a prestadores.</p>
+            </div>
+        </div>
 
+        <asp:Repeater ID="rptTurnos" runat="server">
+            <ItemTemplate>
+                <div class='turno-card <%# Eval("Estado").ToString() == "Aceptado" ? "turno-aceptado" : Eval("Estado").ToString() == "Rechazado" ? "turno-rechazado" : "turno-pendiente" %>'>
+
+                    <!-- Header -->
+                    <div class="turno-card-header">
+                        <span class="turno-servicio"><%# Eval("Servicio") %></span>
                         <span class='badge-estado <%# ObtenerClaseEstado(Eval("Estado").ToString()) %>'>
                             <%# Eval("Estado") %>
                         </span>
+                    </div>
 
-                    </h5>
+                    <!-- Body -->
+                    <div class="turno-card-body">
+                        <div class="turno-info-grid">
+                            <div class="turno-info-item">
+                                <strong>Prestador</strong>
+                                <%# Eval("Nombre") %> <%# Eval("Apellido") %>
+                            </div>
+                            <div class="turno-info-item">
+                                <strong>Teléfono</strong>
+                                <%# Eval("Telefono") %>
+                            </div>
+                            <div class="turno-info-item">
+                                <strong>Email</strong>
+                                <%# Eval("Email") %>
+                            </div>
+                            <div class="turno-info-item">
+                                <strong>Descripción</strong>
+                                <%# Eval("Descripcion") %>
+                            </div>
+                        </div>
 
-                    <p class="mb-1">
-                        <strong>Prestador:</strong>
-                        <%# Eval("Nombre") %> <%# Eval("Apellido") %>
-                    </p>
+                        <%# string.IsNullOrWhiteSpace(Eval("Mensaje").ToString())
+                            ? ""
+                            : "<div class='turno-mensaje'>💬 " + Eval("Mensaje") + "</div>" %>
 
-                    <p class="mb-1">
-                        <strong>Teléfono:</strong>
-                        <%# Eval("Telefono") %>
-                    </p>
+                        <div class="turno-fecha">
+                            🕐 Solicitud enviada el <%# Eval("FechaSolicitud", "{0:dd/MM/yyyy HH:mm}") %>
+                        </div>
+                    </div>
 
-                    <p class="mb-1">
-                        <strong>Email:</strong>
-                        <%# Eval("Email") %>
-                    </p>
-
-                    <p class="mb-1">
-                        <strong>Descripción:</strong>
-                        <%# Eval("Descripcion") %>
-                    </p>
-
-                    <p class="mb-1">
-                        <strong>Mensaje:</strong>
-                        <%# Eval("Mensaje") %>
-                    </p>
-
-                    <p class="text-muted mt-2">
-                        Solicitud enviada el:
-                    <%# Eval("FechaSolicitud", "{0:dd/MM/yyyy HH:mm}") %>
-                    </p>
-                    <asp:Button Text="Calificar"
-                        CssClass="btn btn-outline-primary"
-                        ID="Button"
-                        runat="server"
-                        OnCommand="CalificarPrestador"
-                        CommandName="Calificar"
-                        CommandArgument='<%# Eval("IdTurno") %>' />
+                    <!-- Acción calificar -->
+                    <div class="turno-acciones">
+                        <asp:Button Text="⭐ Calificar"
+                            CssClass="btn-calificar"
+                            ID="Button"
+                            runat="server"
+                            OnCommand="CalificarPrestador"
+                            CommandName="Calificar"
+                            CommandArgument='<%# Eval("IdTurno") %>' />
+                    </div>
 
                 </div>
-            </div>
-        </ItemTemplate>
-    </asp:Repeater>
+            </ItemTemplate>
+        </asp:Repeater>
 
-    <!-- MODALES -->
-    <!-- MODAL PARA CALIFICAR EL TURNO -->
-    <div class="modal fade" id="ModalCalificarPrestador" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="Calificar Prestador" aria-hidden="true">
+    </div>
+
+    <!-- MODAL CALIFICAR -->
+    <div class="modal fade" id="ModalCalificarPrestador" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content glass-modal">
                 <div class="modal-header modal-header-glass">
-                    <h5 class="modal-title modal-title-glass">Califica el servicio de
-                        <label id="LblNombrePrestador"></label>
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title modal-title-glass">Calificá el servicio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body modal-body-glass">
                     <p>¿Cómo estuvo el servicio?</p>
@@ -81,60 +92,56 @@
                         <input type="radio" id="Estrella2" name="Puntuacion" value="2" onclick="CambiarPuntuacion(2)" /><label for="Estrella2">★</label>
                         <input type="radio" id="Estrella1" name="Puntuacion" value="1" onclick="CambiarPuntuacion(1)" /><label for="Estrella1">★</label>
                     </div>
-
                     <asp:HiddenField runat="server" Value="4" ID="PuntuacionDelPrestador" />
-
-                    <p>Deja algún comentario (opcional)</p>
-                    <textarea rows="5" style="resize: none; min-width: 100%" id="TxtComentario" runat="server"></textarea>
+                    <p class="mt-2">Dejá un comentario (opcional)</p>
+                    <textarea rows="4" style="resize:none; width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:10px; color:#e2e8f0; padding:10px;"
+                        id="TxtComentario" runat="server"></textarea>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.08);">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Volver</button>
-                    <asp:Button Text="Calificar" CssClass="btn btn-outline-success" runat="server" ID="BtnCalificar" OnClick="BtnCalificar_Click" />
+                    <asp:Button Text="Calificar" CssClass="btn-calificar" runat="server" ID="BtnCalificar" OnClick="BtnCalificar_Click" />
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE TURNO CALIFICADO -->
-    <div class="modal fade" id="ModalTurnoCalificado" tabindex="-1" aria-labelledby="Modal Turno Calificado" aria-hidden="true">
+    <!-- MODAL TURNO CALIFICADO -->
+    <div class="modal fade" id="ModalTurnoCalificado" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content glass-modal">
                 <div class="modal-header modal-header-glass">
-                    <h5 class="modal-title modal-title-glass" id="TituloTurnoCalificado">Turno calificado</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title modal-title-glass">Turno calificado ✅</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body modal-body-glass">
-                    <p>El turno se ha calificado correctamente.</p>
+                    <p>El turno se calificó correctamente.</p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.08);">
                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Confirmar</button>
-                    <asp:Button Text="Volver al perfil" CssClass="btn btn-outline-success" runat="server" ID="BtnVolverAlPerfil" OnClick="BtnVolverAlPerfil_Click" />
+                    <asp:Button Text="Volver al perfil" CssClass="btn-calificar" runat="server" ID="BtnVolverAlPerfil" OnClick="BtnVolverAlPerfil_Click" />
                 </div>
             </div>
         </div>
     </div>
 
-
-    <!-- MODAL NO SE PUDO CALIFICAR EL TURNO -->
-    <div class="modal fade" id="ModalTurnoNoCalificado" tabindex="-1" aria-labelledby="Modal Turno No Calificado" aria-hidden="true">
+    <!-- MODAL ERROR CALIFICACIÓN -->
+    <div class="modal fade" id="ModalTurnoNoCalificado" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content glass-modal">
                 <div class="modal-header modal-header-glass">
-                    <h5 class="modal-title modal-title-glass" id="TituloTurnoNoCalificado">Ocurrió un error</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title modal-title-glass">Ocurrió un error ❌</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body modal-body-glass">
-                    <p>Hubo un error al calificar el turno, inténtalo de nuevo más tarde.</p>
+                    <p>Hubo un error al calificar el turno. Intentalo de nuevo más tarde.</p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.08);">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <asp:Button Text="Volver al perfil" CssClass="btn btn-outline-success" runat="server" ID="BtnVolverAlPerfilNoCalificado" OnClick="BtnVolverAlPerfil_Click" />
+                    <asp:Button Text="Volver al perfil" CssClass="btn-calificar" runat="server" ID="BtnVolverAlPerfilNoCalificado" OnClick="BtnVolverAlPerfil_Click" />
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- SCRIPTS -->
 
     <script>
         function CambiarPuntuacion(Valor) {

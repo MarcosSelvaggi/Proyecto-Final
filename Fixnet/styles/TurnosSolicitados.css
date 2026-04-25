@@ -43,6 +43,7 @@
         box-shadow: 0 15px 35px rgba(0,0,0,0.5);
     }
 
+/* Tono verde/rojo según estado */
 .turno-aceptado {
     border-color: rgba(34,197,94,0.4) !important;
     background: rgba(34,197,94,0.06) !important;
@@ -51,11 +52,6 @@
 .turno-rechazado {
     border-color: rgba(239,68,68,0.4) !important;
     background: rgba(239,68,68,0.06) !important;
-}
-
-.turno-pendiente {
-    border-color: rgba(234,179,8,0.4) !important;
-    background: rgba(234,179,8,0.04) !important;
 }
 
 .turno-card-header {
@@ -127,23 +123,40 @@
     padding: 12px 20px;
     border-top: 1px solid rgba(255,255,255,0.06);
     background: rgba(255,255,255,0.02);
-    align-items: center;
 }
 
-.btn-calificar {
-    background: linear-gradient(135deg, #0ea5e9, #22c55e);
-    border: none;
+.btn-aceptar {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
     color: white;
+    border: none;
     border-radius: 10px;
-    padding: 7px 18px;
+    padding: 8px 20px;
     font-weight: 500;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.15s;
 }
 
-    .btn-calificar:hover {
+    .btn-aceptar:hover {
         opacity: 0.85;
+        transform: scale(1.03);
+    }
+
+.btn-rechazar {
+    background: transparent;
+    color: #ef4444;
+    border: 1.5px solid #ef4444;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.15s, transform 0.15s;
+}
+
+    .btn-rechazar:hover {
+        background: #ef4444;
+        color: white;
         transform: scale(1.03);
     }
 
@@ -175,59 +188,6 @@
     background: rgba(148,163,184,0.1);
     color: #94a3b8;
 }
-
-/* Modales dark */
-.glass-modal {
-    background: rgba(15, 23, 42, 0.92);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px;
-    color: #e2e8f0;
-}
-
-.modal-header-glass {
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.03);
-}
-
-.modal-title-glass {
-    color: #fff;
-    font-weight: 600;
-}
-
-.modal-body-glass {
-    color: #cbd5e1;
-}
-
-.glass-modal .btn-close {
-    filter: invert(1);
-}
-
-/* Estrellas */
-.star-rating {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    gap: 4px;
-    margin: 12px 0;
-}
-
-    .star-rating input {
-        display: none;
-    }
-
-    .star-rating label {
-        font-size: 2rem;
-        color: #334155;
-        cursor: pointer;
-        transition: color 0.15s;
-    }
-
-        .star-rating input:checked ~ label,
-        .star-rating label:hover,
-        .star-rating label:hover ~ label {
-            color: #facc15;
-        }
 
 @media (max-width: 576px) {
     .turno-info-grid {
