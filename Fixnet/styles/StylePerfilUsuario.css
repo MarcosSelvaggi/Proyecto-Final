@@ -174,7 +174,16 @@
 
     .perfil-user {
         flex-direction: column;
-        text-align: center;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .nombre {
+        text-align: left;
+    }
+
+    .subinfo {
+        text-align: left;
     }
 }
 

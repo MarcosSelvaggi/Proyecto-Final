@@ -11,7 +11,7 @@
             <div class="container">
                 <asp:Panel runat="server" DefaultButton="btnGuardarPrestador">
                     <div class="form">
-                        <div class="col-8 py-2 justify_content_center">
+                        <div class="col-12 py-2">
                             <h2>Configuración de tu perfil de prestador</h2>
 
                             <!-- Descripción que quiera utilizar el Prestador -->
