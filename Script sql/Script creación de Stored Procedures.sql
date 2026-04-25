@@ -54,3 +54,35 @@ BEGIN
     END CATCH
 END;
 GO
+
+
+CREATE OR ALTER PROCEDURE CalificarTurnos
+    @IdTurno int,
+    @Comentario VARCHAR(200),
+    @Calificacion int
+AS 
+BEGIN 
+    BEGIN TRY
+        Begin Transaction 
+            Declare @IdPrestador int;
+            Select @IdPrestador = IdPrestador from Turno where IdTurno = @IdTurno; 
+
+            Declare @IdCliente int;
+            Select @IdCliente = IdCliente from Turno where @IdTurno = @IdTurno; 
+
+            Insert into Calificaciones (IdTurno, IdCliente, IdPrestador, Calificacion, Comentario) 
+            values (@IdTurno, @IdCliente, @IdPrestador, @Calificacion, @Comentario); 
+
+            -- Para que no chille el SQL, el promedio lo dejo en una variable y después le paso la variable
+            Declare @PromedioCalificaciones float;
+            Select @PromedioCalificaciones = ROUND(CAST(AVG(Cast(Calificaciones.Calificacion as FLOAT)) AS FLOAT), 2,1)
+            from Calificaciones where Calificaciones.IdPrestador = @IdPrestador
+
+            Update Prestador set Calificacion = @PromedioCalificaciones
+
+        Commit Transaction 
+    END TRY 
+    BEGIN CATCH 
+        Rollback Transaction 
+    END CATCH
+END

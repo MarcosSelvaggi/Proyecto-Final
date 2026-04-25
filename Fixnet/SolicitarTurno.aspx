@@ -46,29 +46,21 @@
 
         <!-- SERVICIOS -->
         <div class="seccion-box mb-4">
-
             <h6 class="seccion-title">Servicios y precios</h6>
-
             <asp:Repeater runat="server" ID="RptServicios">
                 <ItemTemplate>
-
                     <div class="servicio-item">
-
                         <div class="d-flex align-items-center gap-2">
                             <asp:RadioButton ID="rbServicio" runat="server" GroupName="Servicios" />
                             <span class="servicio-nombre"><%# Eval("NombreServicio") %></span>
                         </div>
-
                         <span class="precio-servicio">$<%# Eval("Precio", "{0:N0}") %>/h
                         </span>
-
                         <asp:HiddenField ID="hfIdServicio" runat="server"
                             Value='<%# Eval("IdServicio") %>' />
                     </div>
-
                 </ItemTemplate>
             </asp:Repeater>
-
         </div>
 
         <!-- ZONAS -->

@@ -18,6 +18,7 @@ namespace Servicios
     {
         public bool EnviarMail(string MailParaRecuperar, int ClaveParaRecuperar)
         {
+            return true; 
             var Message = new MimeMessage();
 
             var FromEmail = new MailboxAddress("Fixnet", ConfigurationManager.AppSettings["Email"]);
@@ -81,6 +82,7 @@ namespace Servicios
 
         public bool EnviarMailAlPrestador(string NombrePrestador, string MailPrestador, string Mensaje)
         {
+            return true; 
             bool BoolMensaje = false; 
 
             var Message = new MimeMessage();
@@ -150,6 +152,7 @@ namespace Servicios
         }
         public bool EnviarRechazoMailAlCliente(string NombreCliente, string NombrePrestador, string MailCliente)
         {
+            return true; 
             bool BoolMensaje = false;
 
             var Message = new MimeMessage();
@@ -218,6 +221,7 @@ namespace Servicios
 
         public bool EnviarMailAlCliente(string NombreCliente, string NombrePrestador, string MailCliente)
         {
+            return true; 
             bool BoolMensaje = false; 
 
             var Message = new MimeMessage();

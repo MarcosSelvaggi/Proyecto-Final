@@ -17,8 +17,8 @@ namespace Servicios
     public class BD
     {
 
-        //readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
         {
@@ -117,6 +117,7 @@ namespace Servicios
                         U.FotoPerfil,
                         U.PasswordHash,
                         P.Descripcion,
+                        P.Calificacion,
                         C.Direccion,
                         C.Localidad,
                         C.LocalidadId,
@@ -188,21 +189,6 @@ namespace Servicios
                             {
                                 usuario.Prestador.Servicios = new List<ServiciosPrestador>();
                             }
-
-                            //El stored procedure ya carga el valor 'No ingresado' a los clientes y prestadores
-                            /*
-                            if (reader["Descripcion"] != DBNull.Value)
-                                usuario.Prestador.DescripcionPrestador = reader["Descripcion"].ToString();
-
-                            if (reader["Direccion"] != DBNull.Value)
-                                usuario.Cliente.DireccionCliente = reader["Direccion"].ToString();
-
-                            if (reader["Localidad"] != DBNull.Value)
-                                usuario.Cliente.Localidad = reader["Localidad"].ToString();
-
-                            if (reader["Provincia"] != DBNull.Value)
-                                usuario.Cliente.Provincia = reader["Provincia"].ToString();
-                            */
                             return usuario;
                         }
                     }
@@ -477,6 +463,7 @@ namespace Servicios
                         PS.IdServicio,
                         P.IdPrestador,
                         P.Descripcion,
+                        P.Calificacion,
                         PS.PrecioHora
                     FROM Usuario U
                     INNER JOIN Prestador P ON U.IdUsuario = P.IdUsuario
@@ -563,24 +550,7 @@ namespace Servicios
 
             }
         }
-        //public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
-        //{
-        //    string query = @"INSERT INTO Turno 
-        //            (IdCliente, IdPrestador, IdServicio, Mensaje)
-        //            VALUES (@IdCliente, @IdPrestador, @IdServicio, @Mensaje)";
-        //
-        //    using (SqlConnection conn = new SqlConnection(connectionString))
-        //    using (SqlCommand cmd = new SqlCommand(query, conn))
-        //    {
-        //        cmd.Parameters.AddWithValue("@IdCliente", idCliente);
-        //        cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
-        //        cmd.Parameters.AddWithValue("@IdServicio", idServicio);
-        //        cmd.Parameters.AddWithValue("@Mensaje", (object)mensaje ?? DBNull.Value);
-        //
-        //        conn.Open();
-        //        return cmd.ExecuteNonQuery() > 0;
-        //    }
-        //}
+
         public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
         {
             bool Turno = false;
@@ -714,93 +684,6 @@ namespace Servicios
             }
         }
 
-        //public bool ActualizarEstadoTurno(int idTurno, string estado)
-        //{
-        //    string query = @" UPDATE Turno 
-        //                      SET Estado = @Estado
-        //                      WHERE IdTurno = @IdTurno
-        //                      AND Estado = 'Pendiente'";
-
-        //    using (SqlConnection conn = new SqlConnection(connectionString))
-        //    using (SqlCommand cmd = new SqlCommand(query, conn))
-        //    {
-        //        cmd.Parameters.AddWithValue("@Estado", estado);
-        //        cmd.Parameters.AddWithValue("@IdTurno", idTurno);
-
-        //        try
-        //        {
-        //            conn.Open();
-        //            return cmd.ExecuteNonQuery() > 0;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw ex;
-        //        }
-        //    }
-        //}
-
-        /*public bool ActualizarEstadoTurno(int idTurno, string estado, string NombrePrestador)
-        {
-            bool Turno = false; 
-            string query = @" UPDATE Turno 
-                              SET Estado = @Estado
-                              WHERE IdTurno = @IdTurno
-                              AND Estado = 'Pendiente'";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@Estado", estado);
-                cmd.Parameters.AddWithValue("@IdTurno", idTurno);
-
-                try
-                {
-                    conn.Open();
-                    if (cmd.ExecuteNonQuery() > 0)
-                    {
-                        string QueryDatosCliente = @"Select U.Nombre, U.Email
-                                                   From Usuario U 
-                                                   Inner join Cliente C on C.IdUsuario = U.IdUsuario
-                                                   Inner Join Turno T on T.IdCliente = C.IdCliente
-                                                   Where IdTurno = @IdTurno";
-                        using (SqlConnection Connection = new SqlConnection(connectionString))
-                        using (SqlCommand Command = new SqlCommand(QueryDatosCliente, Connection))
-                        {
-                            Command.Parameters.AddWithValue("@IdTurno", idTurno);
-                            Connection.Open();
-
-                            try
-                            {
-                                SqlDataReader SqlDataReader = Command.ExecuteReader();
-
-                                while (SqlDataReader.Read())
-                                {
-                                    EmailService EmailService = new EmailService();
-                                    if (estado == "Aceptado")
-                                    {
-                                        if (EmailService.EnviarMailAlCliente(SqlDataReader["Nombre"].ToString(), NombrePrestador, SqlDataReader["Email"].ToString()))
-                                        {
-                                            Turno = true;
-                                        }
-                                    }
-                                }
-                                     
-                            }
-                            catch (Exception)
-                            {
-                                Turno = false; 
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Turno = false; 
-                }
-            }
-            return Turno; 
-        }
-        */
 
         public bool ActualizarEstadoTurno(int idTurno, string estado, string NombrePrestador)
         {
@@ -891,67 +774,30 @@ namespace Servicios
 
         public bool CalificarTurno(string IdTurno, string Comentario, string Calificacion)
         {
-            bool ResultadoCalificacion = false; 
-            string QueryTurno = @"SELECT IdCliente,IdPrestador  
-                                  from Turno where IdTurno = @IdTurno";
+            bool ResultadoCalificacion = false;
 
-            using (SqlConnection Connection = new SqlConnection(connectionString))
-            using (SqlCommand Command = new SqlCommand(QueryTurno, Connection))
+            using (SqlConnection SqlConnection = new SqlConnection(connectionString))
+            using (SqlCommand SqlCommand = new SqlCommand("CalificarTurnos", SqlConnection))
             {
-                Command.Parameters.AddWithValue("@IdTurno", IdTurno);
+                SqlCommand.CommandType = CommandType.StoredProcedure;
+
+                SqlCommand.Parameters.AddWithValue("@IdTurno", IdTurno);
+                SqlCommand.Parameters.AddWithValue("@Comentario", Comentario);
+                SqlCommand.Parameters.AddWithValue("@Calificacion", Calificacion);
+
                 try
                 {
-                    Connection.Open();
-                    SqlDataReader Reader = Command.ExecuteReader();
+                    SqlConnection.Open();
+                    ResultadoCalificacion = SqlCommand.ExecuteNonQuery() > 0;
 
-                    int IdCliente = 0;
-                    int IdPrestador = 0;
-
-
-                    if (Reader.Read())
-                    {
-                         IdCliente = Reader.GetInt32(0);
-                         IdPrestador = Reader.GetInt32(1);
-
-                        string QueryCalificacion = @"Insert into Calificaciones
-                                                     (IdTurno, IdCliente, IdPrestador, Calificacion, Comentario) values 
-                                                     (@IdTurno, @IdCliente, @IdPrestador, @Calificacion, @Comentario)"; 
-
-                        using (SqlConnection SqlConnection =  new SqlConnection(connectionString))
-                        using (SqlCommand SqlCommand = new SqlCommand(QueryCalificacion, SqlConnection))
-                        {
-                            SqlCommand.Parameters.AddWithValue("@IdTurno", IdTurno);
-                            SqlCommand.Parameters.AddWithValue("@IdCliente", IdCliente);
-                            SqlCommand.Parameters.AddWithValue("@IdPrestador", IdPrestador);
-                            SqlCommand.Parameters.AddWithValue("@Calificacion", Calificacion);
-                            SqlCommand.Parameters.AddWithValue("@Comentario", Comentario);
-
-                            try
-                            {
-                                SqlConnection.Open();
-                                if (SqlCommand.ExecuteNonQuery() > 0)
-                                {
-                                    ResultadoCalificacion = true; 
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                ResultadoCalificacion = false; 
-                            }
-                        }
-                    }
                 }
                 catch (Exception)
                 {
-                    ResultadoCalificacion = false;
+                    throw;
                 }
             }
-
-                return ResultadoCalificacion; 
+            return ResultadoCalificacion; 
         }
-
-
-
 
         public bool GuardarFotoPerfilBD(int idUsuario, string base64)
         {
@@ -1024,3 +870,173 @@ namespace Servicios
 //    command.Parameters.AddWithValue("@TelefonoNet", NuevoUsuario.TelefonoUsuario);
 
 //Esto ejecuta el StoredProcedure de manera correcta, el anterior deja los valores como ApellidoNet, NombreNet, PasswordNet, etc.
+
+
+
+//public bool ActualizarEstadoTurno(int idTurno, string estado)
+//{
+//    string query = @" UPDATE Turno 
+//                      SET Estado = @Estado
+//                      WHERE IdTurno = @IdTurno
+//                      AND Estado = 'Pendiente'";
+
+//    using (SqlConnection conn = new SqlConnection(connectionString))
+//    using (SqlCommand cmd = new SqlCommand(query, conn))
+//    {
+//        cmd.Parameters.AddWithValue("@Estado", estado);
+//        cmd.Parameters.AddWithValue("@IdTurno", idTurno);
+
+//        try
+//        {
+//            conn.Open();
+//            return cmd.ExecuteNonQuery() > 0;
+//        }
+//        catch (Exception ex)
+//        {
+//            throw ex;
+//        }
+//    }
+//}
+
+/*public bool ActualizarEstadoTurno(int idTurno, string estado, string NombrePrestador)
+{
+    bool Turno = false; 
+    string query = @" UPDATE Turno 
+                      SET Estado = @Estado
+                      WHERE IdTurno = @IdTurno
+                      AND Estado = 'Pendiente'";
+
+    using (SqlConnection conn = new SqlConnection(connectionString))
+    using (SqlCommand cmd = new SqlCommand(query, conn))
+    {
+        cmd.Parameters.AddWithValue("@Estado", estado);
+        cmd.Parameters.AddWithValue("@IdTurno", idTurno);
+
+        try
+        {
+            conn.Open();
+            if (cmd.ExecuteNonQuery() > 0)
+            {
+                string QueryDatosCliente = @"Select U.Nombre, U.Email
+                                           From Usuario U 
+                                           Inner join Cliente C on C.IdUsuario = U.IdUsuario
+                                           Inner Join Turno T on T.IdCliente = C.IdCliente
+                                           Where IdTurno = @IdTurno";
+                using (SqlConnection Connection = new SqlConnection(connectionString))
+                using (SqlCommand Command = new SqlCommand(QueryDatosCliente, Connection))
+                {
+                    Command.Parameters.AddWithValue("@IdTurno", idTurno);
+                    Connection.Open();
+
+                    try
+                    {
+                        SqlDataReader SqlDataReader = Command.ExecuteReader();
+
+                        while (SqlDataReader.Read())
+                        {
+                            EmailService EmailService = new EmailService();
+                            if (estado == "Aceptado")
+                            {
+                                if (EmailService.EnviarMailAlCliente(SqlDataReader["Nombre"].ToString(), NombrePrestador, SqlDataReader["Email"].ToString()))
+                                {
+                                    Turno = true;
+                                }
+                            }
+                        }
+
+                    }
+                    catch (Exception)
+                    {
+                        Turno = false; 
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Turno = false; 
+        }
+    }
+    return Turno; 
+}
+*/
+
+//public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
+//{
+//    string query = @"INSERT INTO Turno 
+//            (IdCliente, IdPrestador, IdServicio, Mensaje)
+//            VALUES (@IdCliente, @IdPrestador, @IdServicio, @Mensaje)";
+//
+//    using (SqlConnection conn = new SqlConnection(connectionString))
+//    using (SqlCommand cmd = new SqlCommand(query, conn))
+//    {
+//        cmd.Parameters.AddWithValue("@IdCliente", idCliente);
+//        cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
+//        cmd.Parameters.AddWithValue("@IdServicio", idServicio);
+//        cmd.Parameters.AddWithValue("@Mensaje", (object)mensaje ?? DBNull.Value);
+//
+//        conn.Open();
+//        return cmd.ExecuteNonQuery() > 0;
+//    }
+//}
+
+//public bool CalificarTurno2(string IdTurno, string Comentario, string Calificacion)
+//{
+//    bool ResultadoCalificacion = false; 
+//    string QueryTurno = @"SELECT IdCliente,IdPrestador  
+//                          from Turno where IdTurno = @IdTurno";
+//
+//    using (SqlConnection Connection = new SqlConnection(connectionString))
+//    using (SqlCommand Command = new SqlCommand(QueryTurno, Connection))
+//    {
+//        Command.Parameters.AddWithValue("@IdTurno", IdTurno);
+//        try
+//        {
+//            Connection.Open();
+//            SqlDataReader Reader = Command.ExecuteReader();
+//
+//            int IdCliente = 0;
+//            int IdPrestador = 0;
+//
+//
+//            if (Reader.Read())
+//            {
+//                 IdCliente = Reader.GetInt32(0);
+//                 IdPrestador = Reader.GetInt32(1);
+//
+//                string QueryCalificacion = @"Insert into Calificaciones
+//                                             (IdTurno, IdCliente, IdPrestador, Calificacion, Comentario) values 
+//                                             (@IdTurno, @IdCliente, @IdPrestador, @Calificacion, @Comentario)"; 
+//
+//                using (SqlConnection SqlConnection =  new SqlConnection(connectionString))
+//                using (SqlCommand SqlCommand = new SqlCommand(QueryCalificacion, SqlConnection))
+//                {
+//                    SqlCommand.Parameters.AddWithValue("@IdTurno", IdTurno);
+//                    SqlCommand.Parameters.AddWithValue("@IdCliente", IdCliente);
+//                    SqlCommand.Parameters.AddWithValue("@IdPrestador", IdPrestador);
+//                    SqlCommand.Parameters.AddWithValue("@Calificacion", Calificacion);
+//                    SqlCommand.Parameters.AddWithValue("@Comentario", Comentario);
+//
+//                    try
+//                    {
+//                        SqlConnection.Open();
+//                        if (SqlCommand.ExecuteNonQuery() > 0)
+//                        {
+//                            ResultadoCalificacion = true; 
+//                        }
+//                    }
+//                    catch (Exception)
+//                    {
+//                        ResultadoCalificacion = false; 
+//                    }
+//                }
+//            }
+//        }
+//        catch (Exception)
+//        {
+//            ResultadoCalificacion = false;
+//        }
+//    }
+//
+//        return ResultadoCalificacion; 
+//}

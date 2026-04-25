@@ -41,7 +41,8 @@ CREATE TABLE Cliente (
 CREATE TABLE Prestador (
     IdPrestador INT           PRIMARY KEY IDENTITY(1,1) NOT NULL,
     IdUsuario   INT           NOT NULL REFERENCES Usuario(IdUsuario),
-    Descripcion NVARCHAR(400) NOT NULL
+    Descripcion NVARCHAR(400) NOT NULL, 
+    Calificacion float default 0 not null
 );
  
 CREATE TABLE Servicios (

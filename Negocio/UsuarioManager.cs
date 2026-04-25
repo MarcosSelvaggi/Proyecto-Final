@@ -97,8 +97,7 @@ namespace Negocio
 
         public bool CargarCalificacion(string IdTurno, string Comentario, string Calificacion)
         {
-            return false;
-            //return Conexion.CalificarTurno(IdTurno, Comentario, Calificacion); 
+            return Conexion.CalificarTurno(IdTurno, Comentario, Calificacion); 
         }
 
         public bool GuardarFotoPerfil(int idUsuario, string base64)
