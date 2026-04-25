@@ -24,9 +24,10 @@
         .perfil-card .form-control::placeholder {
             color: #64748b;
         }
-
+    .perfil-card input[type="checkbox"] + span,
+    .perfil-card .form-check-label,
     .perfil-card label {
-        color: #94a3b8;
+        font-size: 16px;
     }
 
 .servicio-item {
@@ -42,7 +43,11 @@
     }
 .nombre-servicio {
     color: #e2e8f0;
-    font-size: 14px;
+    font-size: 16px;
+}
+.servicio-item span {
+    font-size: 16px;
+    color: #e2e8f0;
 }
 .precio-box {
     display: flex;
@@ -147,5 +152,12 @@ body.modal-open {
 
     100% {
         background-position: 0% 50%;
+    }
+}
+@media (max-width: 768px) {
+    .perfil-card .form-control,
+    .perfil-card select {
+        width: 100% !important;
+        min-width: 0;
     }
 }
