@@ -14,6 +14,7 @@
     align-items: center;
     gap: 14px;
     color: #e2e8f0;
+    text-align: left;
 }
 
     .page-header h4 {
@@ -54,8 +55,8 @@
 }
 
 .turno-pendiente {
-    border-color: rgba(234,179,8,0.4) !important;
-    background: rgba(234,179,8,0.04) !important;
+    border-color: rgba(234,179,8,0.6) !important;
+    background: rgba(234,179,8,0.08) !important;
 }
 
 .turno-card-header {
@@ -234,3 +235,26 @@
         grid-template-columns: 1fr;
     }
 }
+
+.btn-mensajes {
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.35);
+    color: #38bdf8;
+    border-radius: 10px;
+    padding: 7px 18px;
+    font-weight: 500;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .btn-mensajes:hover {
+        background: rgba(14, 165, 233, 0.28);
+        transform: scale(1.03);
+        color: #7dd3fc;
+        text-decoration: none;
+    }

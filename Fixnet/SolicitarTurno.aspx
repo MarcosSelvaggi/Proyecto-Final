@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="flex-grow-1">
-                    <h4 class="nombre-prestador mb-1">
+                    <h4 style="text-align: left !important;" class="nombre-prestador mb-1">
                         <asp:Label runat="server" ID="LblNombre" />
                     </h4>
 

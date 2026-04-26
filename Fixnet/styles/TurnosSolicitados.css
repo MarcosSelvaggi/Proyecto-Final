@@ -33,7 +33,7 @@
     backdrop-filter: blur(18px);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 16px;
-    margin-bottom: 1.2rem;
+    margin-bottom: 3rem;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
@@ -119,10 +119,16 @@
 
 .turno-acciones {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
     padding: 12px 20px;
     border-top: 1px solid rgba(255,255,255,0.06);
     background: rgba(255,255,255,0.02);
+}
+
+.acciones-izq {
+    display: flex;
+    gap: 10px;
 }
 
 .btn-aceptar {

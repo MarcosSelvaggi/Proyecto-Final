@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="styles/StyleMisTurnos.css" rel="stylesheet" />
-  <link href="styles/TurnosSolicitados.css" rel="stylesheet" />
+    <link href="styles/TurnosSolicitados.css" rel="stylesheet" />
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -10,16 +10,16 @@
     <div class="container py-4 container-turnos" style="max-width: 780px;">
 
         <div class="page-header">
-            <span style="font-size:2rem;">📋</span>
+            <span style="font-size: 2rem;">📋</span>
             <div>
-                <h4>Turnos solicitados</h4>
+                <h4 style="text-align: left !important;">Turnos solicitados</h4>
                 <p>Gestioná las solicitudes que recibiste de tus clientes.</p>
             </div>
         </div>
 
         <asp:Repeater ID="rptTurnos" runat="server">
-            <ItemTemplate>
-                <div class='turno-card <%# Eval("Estado").ToString() == "Aceptado" ? "turno-aceptado" : Eval("Estado").ToString() == "Rechazado" ? "turno-rechazado" : "" %>'>
+            <itemtemplate>
+                <div class='turno-card <%# Eval("Estado").ToString() == "Aceptado" ? "turno-aceptado" : Eval("Estado").ToString() == "Rechazado" ? "turno-rechazado" : "turno-pendiente" %>'>
 
                     <!-- Header -->
                     <div class="turno-card-header">
@@ -60,27 +60,35 @@
                     </div>
 
                     <!-- Acciones solo si está Pendiente -->
-                    <div class="turno-acciones"
-                        runat="server"
-                        visible='<%# Eval("Estado").ToString() == "Pendiente" %>'>
-                        <asp:Button
-                            ID="btnAceptar"
-                            runat="server"
-                            Text="✔ Aceptar"
-                            CssClass="btn-aceptar"
-                            CommandArgument='<%# Eval("IdTurno") %>'
-                            OnCommand="AceptarTurno" />
-                        <asp:Button
-                            ID="btnRechazar"
-                            runat="server"
-                            Text="✖ Rechazar"
-                            CssClass="btn-rechazar"
-                            CommandArgument='<%# Eval("IdTurno") %>'
-                            OnCommand="RechazarTurno" />
-                    </div>
+                    <div class="turno-acciones">
 
-                </div>
-            </ItemTemplate>
+                        <div class="acciones-izq"
+                            runat="server"
+                            visible='<%# Eval("Estado").ToString() == "Pendiente" %>'>
+                            <asp:Button
+                                ID="btnAceptar"
+                                runat="server"
+                                Text="✔ Aceptar"
+                                CssClass="btn-aceptar"
+                                CommandArgument='<%# Eval("IdTurno") %>'
+                                OnCommand="AceptarTurno" />
+                            <asp:Button
+                                ID="btnRechazar"
+                                runat="server"
+                                Text="✖ Rechazar"
+                                CssClass="btn-rechazar"
+                                CommandArgument='<%# Eval("IdTurno") %>'
+                                OnCommand="RechazarTurno" />
+                        </div>
+                        <a href='<%# "Mensajes.aspx?conv=" + ObtenerOCrearConv(
+                                Convert.ToInt32(Eval("IdTurno")),
+                                Convert.ToInt32(Eval("IdCliente")),
+                                Convert.ToInt32(Eval("IdPrestador"))) %>'
+                            class="btn-mensajes">💬 Mensajes
+                        </a>
+
+                    </div>
+            </itemtemplate>
         </asp:Repeater>
 
     </div>

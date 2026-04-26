@@ -16,13 +16,62 @@ namespace Negocio
         BD Conexion = new BD();
         public bool RegistrarUsuario(Usuario Usuario)
         {
-            Usuario.PasswordUsuario = BCrypt.Net.BCrypt.EnhancedHashPassword(Usuario.PasswordUsuario, 13);  
+            Usuario.PasswordUsuario = BCrypt.Net.BCrypt.EnhancedHashPassword(Usuario.PasswordUsuario, 13);
             return Conexion.RegistrarUsuarioBD(Usuario) > 0;
         }
 
         public int ObtenerIdServicio(string nombreServicio)
         {
             return Conexion.ObtenerIdServicio(nombreServicio);
+        }
+        // ── Mensajes
+        public bool EliminarConversacion(int idConversacion, int idUsuario)
+        {
+            return Conexion.EliminarConversacion(idConversacion, idUsuario);
+        }
+        public int ObtenerOCrearConversacion(int idTurno, int idCliente, int idPrestador)
+        {
+            return Conexion.ObtenerOCrearConversacion(idTurno, idCliente, idPrestador);
+        }
+
+        public bool EnviarMensaje(int idConversacion, int idEmisor, string texto)
+        {
+            return Conexion.EnviarMensaje(idConversacion, idEmisor, texto);
+        }
+        public string ObtenerFotoPerfil(int idUsuario)
+        {
+            return Conexion.ObtenerFotoPerfil(idUsuario);
+        }
+        public DataTable TraerMensajesConversacion(int idConversacion)
+        {
+            return Conexion.TraerMensajesConversacion(idConversacion);
+        }
+
+        public DataTable TraerConversacionesUsuario(int idUsuario)
+        {
+            return Conexion.TraerConversacionesUsuario(idUsuario);
+        }
+
+        public bool MarcarMensajesLeidos(int idConversacion, int idUsuarioLector)
+        {
+            return Conexion.MarcarMensajesLeidos(idConversacion, idUsuarioLector);
+        }
+
+        public int ContarMensajesNoLeidos(int idUsuario)
+        {
+            return Conexion.ContarMensajesNoLeidos(idUsuario);
+        }
+        public DataRow TraerPerfilPrestador(int idUsuario)
+        {
+            return Conexion.TraerPerfilPrestador(idUsuario);
+        }
+        public int ObtenerOtroUsuarioDeConversacion(int idConversacion, int idEmisor)
+        {
+            return Conexion.ObtenerOtroUsuarioDeConversacion(idConversacion, idEmisor);
+        }
+        public DataTable TraerServiciosDePrestador(int idPrestador)
+        {
+            return Conexion.TraerServiciosDePrestador(idPrestador);
         }
         public Usuario LogearUsuario(string Email, string Password)
         {
@@ -46,7 +95,7 @@ namespace Negocio
             return Conexion.ActualizarPrestadorBD(usuario);
         }
         public List<Servicio> TraerServicios()
-        {  
+        {
             return Conexion.TraerServiciosBD();
         }
         public int ContarPrestadores(int idServicio, string idLocalidad)
@@ -62,7 +111,7 @@ namespace Negocio
         {
             return Conexion.ActualizarEstadoTurno(idTurno, estado, NombrePrestador);
         }
-        public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
+        public int CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
         {
             return Conexion.CrearSolicitudTurno(idCliente, idPrestador, idServicio, mensaje);
         }
@@ -79,7 +128,7 @@ namespace Negocio
         {
             return Conexion.DevolverPrestadores(Usuario, Servicio);
         }
-    
+
         public int TraerIdUsuario(string Email)
         {
             return Conexion.ObtenerIdUsuarioPorEmail(Email);
@@ -87,7 +136,7 @@ namespace Negocio
 
         public bool CambiarContraseña(string EmailUsuario, string PasswordNueva)
         {
-            return Conexion.CambiarPassword(EmailUsuario, BCrypt.Net.BCrypt.EnhancedHashPassword(PasswordNueva, 13)); 
+            return Conexion.CambiarPassword(EmailUsuario, BCrypt.Net.BCrypt.EnhancedHashPassword(PasswordNueva, 13));
         }
 
         public bool ModificarUsuario(Usuario Usuario)
@@ -97,7 +146,7 @@ namespace Negocio
 
         public bool CargarCalificacion(string IdTurno, string Comentario, string Calificacion)
         {
-            return Conexion.CalificarTurno(IdTurno, Comentario, Calificacion); 
+            return Conexion.CalificarTurno(IdTurno, Comentario, Calificacion);
         }
 
         public bool GuardarFotoPerfil(int idUsuario, string base64)

@@ -94,4 +94,23 @@ CREATE TABLE Calificaciones (
     Calificacion   FLOAT        NOT NULL,
     Comentario     VARCHAR(400) NULL
 );
+
+CREATE TABLE Conversacion (
+    IdConversacion  INT      PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdTurno         INT      NOT NULL REFERENCES Turno(IdTurno),
+    IdCliente       INT      NOT NULL REFERENCES Cliente(IdCliente),
+    IdPrestador     INT      NOT NULL REFERENCES Prestador(IdPrestador),
+    EliminadoPorCliente BIT NOT NULL DEFAULT 0,
+    EliminadoPorPrestador BIT NOT NULL DEFAULT 0,
+    FechaCreacion   DATETIME NOT NULL DEFAULT GETDATE()
+);
+
+CREATE TABLE MensajeInbox (
+    IdMensaje       INT            PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    IdConversacion  INT            NOT NULL REFERENCES Conversacion(IdConversacion),
+    IdEmisor        INT            NOT NULL REFERENCES Usuario(IdUsuario),
+    Texto           NVARCHAR(1000) NOT NULL,
+    FechaEnvio      DATETIME       NOT NULL DEFAULT GETDATE(),
+    Leido           BIT            NOT NULL DEFAULT 0
+);
 GO

@@ -17,14 +17,12 @@ namespace Fixnet
 {
     public partial class SolicitarTurno : Page
     {
-        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["Usuario"] == null)
             {
-                Response.Redirect("~/Logearse.aspx");
+                Response.Redirect("~/Logearse.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
@@ -33,7 +31,8 @@ namespace Fixnet
                 int idUsuario;
                 if (!int.TryParse(Request.QueryString["id"], out idUsuario))
                 {
-                    Response.Redirect("~/BuscarPrestadores.aspx");
+                    Response.Redirect("~/BuscarPrestadores.aspx", false);
+                    Context.ApplicationInstance.CompleteRequest();
                     return;
                 }
 
@@ -43,67 +42,54 @@ namespace Fixnet
 
         private void CargarPerfil(int idUsuario)
         {
-            string query = @"
-                SELECT
-                    U.Nombre, U.Apellido, U.Email, U.Telefono, U.FotoPerfil,
-                    P.IdPrestador, P.Descripcion,
-                    ZP.IdLocalidad,
-                    D.DisponibilidadPrestador
-                FROM Usuario U
-                INNER JOIN Prestador P ON U.IdUsuario = P.IdUsuario
-                LEFT JOIN ZonasPrestador ZP ON ZP.IdPrestador = P.IdPrestador
-                LEFT JOIN Disponibilidad D ON D.IdPrestador = P.IdPrestador
-                WHERE U.IdUsuario = @IdUsuario";
+            UsuarioManager bd = new UsuarioManager();
+            DataRow row = bd.TraerPerfilPrestador(idUsuario);
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            if (row == null)
             {
-                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                if (!reader.Read())
-                {
-                    Response.Redirect("~/BuscarPrestadores.aspx");
-                    return;
-                }
-
-                string nombre = reader["Nombre"].ToString();
-                string apellido = reader["Apellido"].ToString();
-                int idPrestador = Convert.ToInt32(reader["IdPrestador"]);
-                string fotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null : reader["FotoPerfil"].ToString();
-
-                // Avatar: foto o iniciales
-                if (!string.IsNullOrEmpty(fotoPerfil))
-                {
-                    ImgFotoPrestador.ImageUrl = fotoPerfil;
-                    ImgFotoPrestador.Visible = true;
-                    divInicialesPrestador.Visible = false;
-                }
-                else
-                {
-                    LblIniciales.Text = ObtenerIniciales(nombre, apellido);
-                    ImgFotoPrestador.Visible = false;
-                    divInicialesPrestador.Visible = true;
-                }
-
-                LblNombre.Text = nombre + " " + apellido;
-                LblEmail.Text = reader["Email"].ToString();
-                LblTelefono.Text = reader["Telefono"].ToString();
-                LblDescripcion.Text = reader["Descripcion"].ToString();
-
-                Session.Add("ListaLocalidades", reader["IdLocalidad"].ToString());
-                RegisterAsyncTask(new PageAsyncTask(ListarLocalidades));
-
-                string horarioRaw = reader["DisponibilidadPrestador"].ToString();
-                RptHorarios.DataSource = ParsearHorarios(horarioRaw);
-                RptHorarios.DataBind();
-
-                reader.Close();
-
-                ViewState["IdPrestador"] = idPrestador;
-                CargarServicios(idPrestador);
+                Response.Redirect("~/BuscarPrestadores.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
             }
+
+            string nombre = row["Nombre"].ToString();
+            string apellido = row["Apellido"].ToString();
+            int idPrestador = Convert.ToInt32(row["IdPrestador"]);
+            string fotoPerfil = row["FotoPerfil"] == DBNull.Value ? null : row["FotoPerfil"].ToString();
+
+            if (!string.IsNullOrEmpty(fotoPerfil))
+            {
+                ImgFotoPrestador.ImageUrl = fotoPerfil;
+                ImgFotoPrestador.Visible = true;
+                divInicialesPrestador.Visible = false;
+            }
+            else
+            {
+                LblIniciales.Text = ObtenerIniciales(nombre, apellido);
+                ImgFotoPrestador.Visible = false;
+                divInicialesPrestador.Visible = true;
+            }
+
+            LblNombre.Text = nombre + " " + apellido;
+            LblEmail.Text = row["Email"].ToString();
+            LblTelefono.Text = row["Telefono"].ToString();
+            LblDescripcion.Text = row["Descripcion"].ToString();
+
+            Session.Add("ListaLocalidades", row["IdLocalidad"].ToString());
+            RegisterAsyncTask(new PageAsyncTask(ListarLocalidades));
+
+            RptHorarios.DataSource = ParsearHorarios(row["DisponibilidadPrestador"].ToString());
+            RptHorarios.DataBind();
+
+            ViewState["IdPrestador"] = idPrestador;
+            CargarServicios(idPrestador);
+        }
+
+        private void CargarServicios(int idPrestador)
+        {
+            UsuarioManager bd = new UsuarioManager();
+            RptServicios.DataSource = bd.TraerServiciosDePrestador(idPrestador);
+            RptServicios.DataBind();
         }
 
 
@@ -138,28 +124,8 @@ namespace Fixnet
             }
         }
 
-        private void CargarServicios(int idPrestador)
-        {
-            string query = @"
-                SELECT S.IdServicio, S.Nombre AS NombreServicio, PS.PrecioHora AS Precio
-                FROM PrestadorServicio PS
-                INNER JOIN Servicios S ON S.IdServicio = PS.IdServicio
-                WHERE PS.IdPrestador = @IdPrestador";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
-                conn.Open();
 
-                var tabla = new DataTable();
-                tabla.Load(cmd.ExecuteReader());
-                RptServicios.DataSource = tabla;
-                RptServicios.DataBind();
-            }
-        }
-
-        
         private List<HorarioVista> ParsearHorarios(string raw)
         {
             var result = new List<HorarioVista>();
@@ -226,7 +192,8 @@ namespace Fixnet
 
             if (usuario == null || usuario.Cliente == null || usuario.Cliente.IdCliente <= 0)
             {
-                Response.Redirect("~/Logearse.aspx");
+                Response.Redirect("~/Logearse.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
@@ -239,15 +206,28 @@ namespace Fixnet
             int idCliente = usuario.Cliente.IdCliente;
             int idPrestador = (int)ViewState["IdPrestador"];
             int idServicio = (int)ViewState["IdServicio"];
-
-            string mensaje = txtMensaje.Text;
+            string mensaje = txtMensaje.Text.Trim();
 
             UsuarioManager bd = new UsuarioManager();
-            bool ok = bd.CrearSolicitudTurno(idCliente, idPrestador, idServicio, mensaje);
+            int idTurno = bd.CrearSolicitudTurno(idCliente, idPrestador, idServicio, mensaje);
 
-            if (ok)
+            if (idTurno > 0)
             {
-                //MostrarModal("Solicitud enviada correctamente", "success");
+                // Crea la conversación y manda el mensaje inicial si escribió algo en el modal
+                if (!string.IsNullOrWhiteSpace(mensaje))
+                {
+                    int idConv = bd.ObtenerOCrearConversacion(idTurno, idCliente, idPrestador);
+                    bd.EnviarMensaje(idConv, usuario.IdUsuario, mensaje);
+                    MensajesHub.NotificarMensajeExterno(
+                        idConv,
+                        usuario.IdUsuario,
+                        mensaje,
+                        usuario.NombreUsuario,
+                        usuario.ApellidoUsuario,
+                        bd
+                    );
+                }
+
                 ScriptManager.RegisterStartupScript(this, this.GetType(),
                 "modalYRedirect",
                 @"
@@ -257,10 +237,7 @@ namespace Fixnet
                 modal.querySelector('.modal-body').innerText = 'Solicitud enviada correctamente. Serás redirigido a Mis Turnos...';
                 var m = new bootstrap.Modal(modal);
                 m.show();
-
-                setTimeout(function() {
-                    window.location.href = 'MisTurnos.aspx';
-                }, 3000);
+                setTimeout(function() { window.location.href = 'MisTurnos.aspx'; }, 3000);
                 ",
                 true);
             }
@@ -308,5 +285,5 @@ namespace Fixnet
 
     }
 
-    
+
 }

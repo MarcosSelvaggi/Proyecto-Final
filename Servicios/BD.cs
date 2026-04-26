@@ -17,8 +17,9 @@ namespace Servicios
     public class BD
     {
 
-        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
         {
@@ -160,7 +161,7 @@ namespace Servicios
                             usuario.TelefonoUsuario = reader["Telefono"].ToString();
                             usuario.UsuarioActivo = (bool)reader["Activo"];
                             usuario.EmailUsuario = reader["Email"].ToString();
-                            usuario.FotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null: reader["FotoPerfil"].ToString();
+                            usuario.FotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null : reader["FotoPerfil"].ToString();
 
                             usuario.Prestador.DescripcionPrestador = reader["Descripcion"].ToString();
                             usuario.Prestador.ZonasPrestador = reader["IdLocalidad"].ToString();
@@ -551,10 +552,8 @@ namespace Servicios
             }
         }
 
-        public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
+        public int CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
         {
-            bool Turno = false;
-
             using (SqlConnection Connection = new SqlConnection(connectionString))
             {
                 Connection.Open();
@@ -562,57 +561,51 @@ namespace Servicios
                 try
                 {
                     string Query = @"INSERT INTO Turno 
-                    (IdCliente, IdPrestador, IdServicio, Mensaje)
-                    VALUES (@IdCliente, @IdPrestador, @IdServicio, @Mensaje)";
+                                    (IdCliente, IdPrestador, IdServicio, Mensaje)
+                                    VALUES (@IdCliente, @IdPrestador, @IdServicio, @Mensaje);
+                                    SELECT SCOPE_IDENTITY();";
 
                     SqlCommand Command = new SqlCommand(Query, Connection, SqlTransaction);
-
                     Command.Parameters.AddWithValue("@IdCliente", idCliente);
                     Command.Parameters.AddWithValue("@IdPrestador", idPrestador);
                     Command.Parameters.AddWithValue("@IdServicio", idServicio);
                     Command.Parameters.AddWithValue("@Mensaje", (object)mensaje ?? DBNull.Value);
 
+                    int idTurno = Convert.ToInt32(Command.ExecuteScalar());
 
-                    if (Command.ExecuteNonQuery() > 0)
+                    if (idTurno > 0)
                     {
-
-                        string QueryDatosPrestador = @"Select 
-                                                       U.Nombre, U.Email
-                                                       from usuario U 
-                                                       Inner join Prestador P On P.IdUsuario = U.IdUsuario
-                                                       where U.IdUsuario = @IdUsuario";
+                        string QueryDatosPrestador = @"
+                                SELECT U.Nombre, U.Email
+                                FROM Usuario U 
+                                INNER JOIN Prestador P ON P.IdUsuario = U.IdUsuario
+                                WHERE P.IdPrestador = @IdPrestador";
 
                         SqlCommand CommandDatosPrestador = new SqlCommand(QueryDatosPrestador, Connection, SqlTransaction);
-                        CommandDatosPrestador.Parameters.AddWithValue("@IdUsuario", idPrestador);
+                        CommandDatosPrestador.Parameters.AddWithValue("@IdPrestador", idPrestador);
 
                         try
                         {
-                            SqlDataReader SqlDataReader = CommandDatosPrestador.ExecuteReader();
-
-                            if (SqlDataReader.Read())
+                            SqlDataReader reader = CommandDatosPrestador.ExecuteReader();
+                            if (reader.Read())
                             {
                                 EmailService EmailService = new EmailService();
-                                EmailService.EnviarMailAlPrestador(SqlDataReader["Nombre"].ToString(), SqlDataReader["Email"].ToString(), mensaje);
-                                SqlDataReader.Close();
+                                EmailService.EnviarMailAlPrestador(reader["Nombre"].ToString(), reader["Email"].ToString(), mensaje);
+                                reader.Close();
                             }
-
                         }
-                        catch (Exception)
-                        {
-                            Turno = false;
-                        }
+                        catch { }
                     }
+
                     SqlTransaction.Commit();
-                    Turno = true;
+                    return idTurno;
                 }
-                catch (Exception)
+                catch
                 {
                     SqlTransaction.Rollback();
-                    Turno = false;
+                    return 0;
                 }
             }
-
-            return Turno;
         }
 
         public DataTable TraerTurnosCliente(int idCliente)
@@ -620,6 +613,8 @@ namespace Servicios
             string query = @"SELECT 
                         T.IdTurno,
                         T.Estado,
+                        T.IdCliente,
+                        T.IdPrestador,
                         T.FechaSolicitud,
                         T.Mensaje,
                         S.Nombre AS Servicio,
@@ -655,6 +650,8 @@ namespace Servicios
                         T.FechaSolicitud,
                         T.Estado,
                         T.Mensaje,
+                        T.IdCliente,
+                        T.IdPrestador,
                         S.Nombre AS Servicio,
                         U.Nombre,
                         U.Apellido,
@@ -796,7 +793,7 @@ namespace Servicios
                     throw;
                 }
             }
-            return ResultadoCalificacion; 
+            return ResultadoCalificacion;
         }
 
         public bool GuardarFotoPerfilBD(int idUsuario, string base64)
@@ -843,200 +840,272 @@ namespace Servicios
         }
 
 
-
-    }
-}
-
-
-
-// BORRADORES
-
-
-//Cambiado por lo que está abajo, lo dejo para ver la diferencia.
-
-/*string queryString = "Insert into Usuario (Email, PasswordHash, FechaRegistro, Activo, Nombre, Apellido, Telefono)" +
-                    " values (@Email, @Password, getdate(), 1, @Nombre, @Apellido, @Telefono); Select SCOPE_IDENTITY()";*/
-
-//string queryString = "EXEC RegistrarUsuariosNuevos @Email = @EmailNet, @Password = @PasswordNet, " +
-//    "@Nombre = @NombreNet, @Apellido = ApellidoNet, @Telefono = TelefonoNet; Select SCOPE_IDENTITY()";
-
-//using (SqlConnection sqlConnection = new SqlConnection(connectionString))
-//using (SqlCommand command = new SqlCommand(queryString, sqlConnection))
-//{
-//    command.Parameters.AddWithValue("@EmailNet", NuevoUsuario.EmailUsuario);
-//    command.Parameters.AddWithValue("@PasswordNet", NuevoUsuario.PasswordUsuario);
-//    command.Parameters.AddWithValue("@NombreNet", NuevoUsuario.NombreUsuario);
-//    command.Parameters.AddWithValue("@ApellidoNet", NuevoUsuario.ApellidoUsuario);
-//    command.Parameters.AddWithValue("@TelefonoNet", NuevoUsuario.TelefonoUsuario);
-
-//Esto ejecuta el StoredProcedure de manera correcta, el anterior deja los valores como ApellidoNet, NombreNet, PasswordNet, etc.
-
-
-
-//public bool ActualizarEstadoTurno(int idTurno, string estado)
-//{
-//    string query = @" UPDATE Turno 
-//                      SET Estado = @Estado
-//                      WHERE IdTurno = @IdTurno
-//                      AND Estado = 'Pendiente'";
-
-//    using (SqlConnection conn = new SqlConnection(connectionString))
-//    using (SqlCommand cmd = new SqlCommand(query, conn))
-//    {
-//        cmd.Parameters.AddWithValue("@Estado", estado);
-//        cmd.Parameters.AddWithValue("@IdTurno", idTurno);
-
-//        try
-//        {
-//            conn.Open();
-//            return cmd.ExecuteNonQuery() > 0;
-//        }
-//        catch (Exception ex)
-//        {
-//            throw ex;
-//        }
-//    }
-//}
-
-/*public bool ActualizarEstadoTurno(int idTurno, string estado, string NombrePrestador)
-{
-    bool Turno = false; 
-    string query = @" UPDATE Turno 
-                      SET Estado = @Estado
-                      WHERE IdTurno = @IdTurno
-                      AND Estado = 'Pendiente'";
-
-    using (SqlConnection conn = new SqlConnection(connectionString))
-    using (SqlCommand cmd = new SqlCommand(query, conn))
-    {
-        cmd.Parameters.AddWithValue("@Estado", estado);
-        cmd.Parameters.AddWithValue("@IdTurno", idTurno);
-
-        try
+        //MENSAJERIA
+        public int ObtenerOCrearConversacion(int idTurno, int idCliente, int idPrestador)
         {
-            conn.Open();
-            if (cmd.ExecuteNonQuery() > 0)
+            string queryBuscar = @"
+                                SELECT IdConversacion 
+                                FROM Conversacion 
+                                WHERE IdTurno = @IdTurno";
+
+            string queryCrear = @"
+                                INSERT INTO Conversacion (IdTurno, IdCliente, IdPrestador)
+                                VALUES (@IdTurno, @IdCliente, @IdPrestador);
+                                SELECT SCOPE_IDENTITY();";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string QueryDatosCliente = @"Select U.Nombre, U.Email
-                                           From Usuario U 
-                                           Inner join Cliente C on C.IdUsuario = U.IdUsuario
-                                           Inner Join Turno T on T.IdCliente = C.IdCliente
-                                           Where IdTurno = @IdTurno";
-                using (SqlConnection Connection = new SqlConnection(connectionString))
-                using (SqlCommand Command = new SqlCommand(QueryDatosCliente, Connection))
-                {
-                    Command.Parameters.AddWithValue("@IdTurno", idTurno);
-                    Connection.Open();
+                conn.Open();
 
-                    try
-                    {
-                        SqlDataReader SqlDataReader = Command.ExecuteReader();
+                SqlCommand cmdBuscar = new SqlCommand(queryBuscar, conn);
+                cmdBuscar.Parameters.AddWithValue("@IdTurno", idTurno);
+                object resultado = cmdBuscar.ExecuteScalar();
 
-                        while (SqlDataReader.Read())
-                        {
-                            EmailService EmailService = new EmailService();
-                            if (estado == "Aceptado")
-                            {
-                                if (EmailService.EnviarMailAlCliente(SqlDataReader["Nombre"].ToString(), NombrePrestador, SqlDataReader["Email"].ToString()))
-                                {
-                                    Turno = true;
-                                }
-                            }
-                        }
+                if (resultado != null)
+                    return Convert.ToInt32(resultado);
 
-                    }
-                    catch (Exception)
-                    {
-                        Turno = false; 
-                    }
-                }
+                SqlCommand cmdCrear = new SqlCommand(queryCrear, conn);
+                cmdCrear.Parameters.AddWithValue("@IdTurno", idTurno);
+                cmdCrear.Parameters.AddWithValue("@IdCliente", idCliente);
+                cmdCrear.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                return Convert.ToInt32(cmdCrear.ExecuteScalar());
             }
         }
-        catch (Exception ex)
+
+        public bool EnviarMensaje(int idConversacion, int idEmisor, string texto)
         {
-            Turno = false; 
+            string query = @"
+                            INSERT INTO MensajeInbox (IdConversacion, IdEmisor, Texto)
+                            VALUES (@IdConversacion, @IdEmisor, @Texto)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdConversacion", idConversacion);
+                cmd.Parameters.AddWithValue("@IdEmisor", idEmisor);
+                cmd.Parameters.AddWithValue("@Texto", texto.Trim());
+                try
+                {
+                    conn.Open();
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+                catch { return false; }
+            }
         }
+
+        public DataTable TraerMensajesConversacion(int idConversacion)
+        {
+            string query = @"
+                            SELECT TOP 200
+                                M.IdMensaje,
+                                M.IdEmisor,
+                                M.Texto,
+                                M.FechaEnvio,
+                                M.Leido,
+                                U.Nombre,
+                                U.Apellido,
+                                U.FotoPerfil
+                            FROM MensajeInbox M
+                            INNER JOIN Usuario U ON U.IdUsuario = M.IdEmisor
+                            WHERE M.IdConversacion = @IdConversacion
+                            ORDER BY M.FechaEnvio ASC";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdConversacion", idConversacion);
+                conn.Open();
+                DataTable dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
+        }
+
+        public DataTable TraerConversacionesUsuario(int idUsuario)
+        {
+            // Trae todas las conversaciones donde el usuario es cliente O prestador
+            string query = @"
+                            SELECT
+                                C.IdConversacion,
+                                C.IdTurno,
+                                T.Estado        AS EstadoTurno,
+                                S.Nombre        AS Servicio,
+                                CASE WHEN CL.IdUsuario = @IdUsuario 
+                                     THEN UP.Nombre   ELSE UC.Nombre   END AS OtroNombre,
+                                CASE WHEN CL.IdUsuario = @IdUsuario 
+                                     THEN UP.Apellido ELSE UC.Apellido END AS OtroApellido,
+                                CASE WHEN CL.IdUsuario = @IdUsuario 
+                                     THEN UP.FotoPerfil ELSE UC.FotoPerfil END AS OtroFoto,
+                                (SELECT TOP 1 Texto 
+                                 FROM MensajeInbox 
+                                 WHERE IdConversacion = C.IdConversacion 
+                                 ORDER BY FechaEnvio DESC)              AS UltimoMensaje,
+                                (SELECT TOP 1 FechaEnvio 
+                                 FROM MensajeInbox 
+                                 WHERE IdConversacion = C.IdConversacion 
+                                 ORDER BY FechaEnvio DESC)              AS FechaUltimo,
+                                (SELECT COUNT(*) 
+                                 FROM MensajeInbox 
+                                 WHERE IdConversacion = C.IdConversacion 
+                                   AND Leido = 0 
+                                   AND IdEmisor <> @IdUsuario)          AS NoLeidos
+                            FROM Conversacion C
+                            INNER JOIN Turno    T  ON T.IdTurno    = C.IdTurno
+                            INNER JOIN Servicios S  ON S.IdServicio = T.IdServicio
+                            INNER JOIN Cliente   CL ON CL.IdCliente = C.IdCliente
+                            INNER JOIN Prestador PR ON PR.IdPrestador = C.IdPrestador
+                            INNER JOIN Usuario   UC ON UC.IdUsuario = CL.IdUsuario
+                            INNER JOIN Usuario   UP ON UP.IdUsuario = PR.IdUsuario
+                            WHERE (
+                                (CL.IdUsuario = @IdUsuario AND ISNULL(C.EliminadoPorCliente, 0) = 0)
+                                OR
+                                (PR.IdUsuario = @IdUsuario AND ISNULL(C.EliminadoPorPrestador, 0) = 0)
+                            )
+                            ORDER BY FechaUltimo DESC";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                conn.Open();
+                DataTable dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
+        }
+
+        public bool MarcarMensajesLeidos(int idConversacion, int idUsuarioLector)
+        {
+            string query = @"
+                            UPDATE MensajeInbox 
+                            SET Leido = 1
+                            WHERE IdConversacion = @IdConversacion 
+                              AND IdEmisor <> @IdUsuario 
+                              AND Leido = 0";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdConversacion", idConversacion);
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuarioLector);
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+                catch { return false; }
+            }
+        }
+
+        public int ContarMensajesNoLeidos(int idUsuario)
+        {
+            string query = @"
+                            SELECT COUNT(*) 
+                            FROM MensajeInbox M
+                            INNER JOIN Conversacion C ON C.IdConversacion = M.IdConversacion
+                            INNER JOIN Cliente   CL ON CL.IdCliente   = C.IdCliente
+                            INNER JOIN Prestador PR ON PR.IdPrestador = C.IdPrestador
+                            WHERE (
+                                (CL.IdUsuario = @IdUsuario AND ISNULL(C.EliminadoPorCliente, 0) = 0)
+                                OR
+                                (PR.IdUsuario = @IdUsuario AND ISNULL(C.EliminadoPorPrestador, 0) = 0)
+                            )
+                              AND M.IdEmisor <> @IdUsuario
+                              AND M.Leido = 0";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                conn.Open();
+                return (int)cmd.ExecuteScalar();
+            }
+        }
+        public bool EliminarConversacion(int idConversacion, int idUsuario)
+        {
+            string query = @"
+                            UPDATE Conversacion SET
+                                EliminadoPorCliente   = CASE WHEN CL.IdUsuario = @IdUsuario THEN 1 ELSE EliminadoPorCliente END,
+                                EliminadoPorPrestador = CASE WHEN PR.IdUsuario = @IdUsuario THEN 1 ELSE EliminadoPorPrestador END
+                            FROM Conversacion C
+                            INNER JOIN Cliente   CL ON CL.IdCliente   = C.IdCliente
+                            INNER JOIN Prestador PR ON PR.IdPrestador = C.IdPrestador
+                            WHERE C.IdConversacion = @IdConversacion
+                                AND (CL.IdUsuario = @IdUsuario OR PR.IdUsuario = @IdUsuario)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdConversacion", idConversacion);
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                try { conn.Open(); return cmd.ExecuteNonQuery() > 0; }
+                catch { return false; }
+            }
+        }
+        public int ObtenerOtroUsuarioDeConversacion(int idConversacion, int idEmisor)
+        {
+            string query = @"
+                            SELECT 
+                                CASE WHEN CL.IdUsuario = @IdEmisor THEN PR.IdUsuario ELSE CL.IdUsuario END
+                            FROM Conversacion C
+                            INNER JOIN Cliente   CL ON CL.IdCliente   = C.IdCliente
+                            INNER JOIN Prestador PR ON PR.IdPrestador = C.IdPrestador
+                            WHERE C.IdConversacion = @IdConversacion";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdConversacion", idConversacion);
+                cmd.Parameters.AddWithValue("@IdEmisor", idEmisor);
+                conn.Open();
+                var result = cmd.ExecuteScalar();
+                return result != null ? Convert.ToInt32(result) : 0;
+            }
+        }
+        public DataRow TraerPerfilPrestador(int idUsuario)
+        {
+            string query = @"
+                            SELECT
+                                U.Nombre, U.Apellido, U.Email, U.Telefono, U.FotoPerfil,
+                                P.IdPrestador, P.Descripcion,
+                                ZP.IdLocalidad,
+                                D.DisponibilidadPrestador
+                            FROM Usuario U
+                            INNER JOIN Prestador P ON U.IdUsuario = P.IdUsuario
+                            LEFT JOIN ZonasPrestador ZP ON ZP.IdPrestador = P.IdPrestador
+                            LEFT JOIN Disponibilidad D ON D.IdPrestador = P.IdPrestador
+                            WHERE U.IdUsuario = @IdUsuario";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                conn.Open();
+                DataTable dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                return dt.Rows.Count > 0 ? dt.Rows[0] : null;
+            }
+        }
+
+        public DataTable TraerServiciosDePrestador(int idPrestador)
+        {
+            string query = @"
+                            SELECT S.IdServicio, S.Nombre AS NombreServicio, PS.PrecioHora AS Precio
+                            FROM PrestadorServicio PS
+                            INNER JOIN Servicios S ON S.IdServicio = PS.IdServicio
+                            WHERE PS.IdPrestador = @IdPrestador";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                conn.Open();
+                DataTable dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
+        }
+
     }
-    return Turno; 
 }
-*/
-
-//public bool CrearSolicitudTurno(int idCliente, int idPrestador, int idServicio, string mensaje)
-//{
-//    string query = @"INSERT INTO Turno 
-//            (IdCliente, IdPrestador, IdServicio, Mensaje)
-//            VALUES (@IdCliente, @IdPrestador, @IdServicio, @Mensaje)";
-//
-//    using (SqlConnection conn = new SqlConnection(connectionString))
-//    using (SqlCommand cmd = new SqlCommand(query, conn))
-//    {
-//        cmd.Parameters.AddWithValue("@IdCliente", idCliente);
-//        cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
-//        cmd.Parameters.AddWithValue("@IdServicio", idServicio);
-//        cmd.Parameters.AddWithValue("@Mensaje", (object)mensaje ?? DBNull.Value);
-//
-//        conn.Open();
-//        return cmd.ExecuteNonQuery() > 0;
-//    }
-//}
-
-//public bool CalificarTurno2(string IdTurno, string Comentario, string Calificacion)
-//{
-//    bool ResultadoCalificacion = false; 
-//    string QueryTurno = @"SELECT IdCliente,IdPrestador  
-//                          from Turno where IdTurno = @IdTurno";
-//
-//    using (SqlConnection Connection = new SqlConnection(connectionString))
-//    using (SqlCommand Command = new SqlCommand(QueryTurno, Connection))
-//    {
-//        Command.Parameters.AddWithValue("@IdTurno", IdTurno);
-//        try
-//        {
-//            Connection.Open();
-//            SqlDataReader Reader = Command.ExecuteReader();
-//
-//            int IdCliente = 0;
-//            int IdPrestador = 0;
-//
-//
-//            if (Reader.Read())
-//            {
-//                 IdCliente = Reader.GetInt32(0);
-//                 IdPrestador = Reader.GetInt32(1);
-//
-//                string QueryCalificacion = @"Insert into Calificaciones
-//                                             (IdTurno, IdCliente, IdPrestador, Calificacion, Comentario) values 
-//                                             (@IdTurno, @IdCliente, @IdPrestador, @Calificacion, @Comentario)"; 
-//
-//                using (SqlConnection SqlConnection =  new SqlConnection(connectionString))
-//                using (SqlCommand SqlCommand = new SqlCommand(QueryCalificacion, SqlConnection))
-//                {
-//                    SqlCommand.Parameters.AddWithValue("@IdTurno", IdTurno);
-//                    SqlCommand.Parameters.AddWithValue("@IdCliente", IdCliente);
-//                    SqlCommand.Parameters.AddWithValue("@IdPrestador", IdPrestador);
-//                    SqlCommand.Parameters.AddWithValue("@Calificacion", Calificacion);
-//                    SqlCommand.Parameters.AddWithValue("@Comentario", Comentario);
-//
-//                    try
-//                    {
-//                        SqlConnection.Open();
-//                        if (SqlCommand.ExecuteNonQuery() > 0)
-//                        {
-//                            ResultadoCalificacion = true; 
-//                        }
-//                    }
-//                    catch (Exception)
-//                    {
-//                        ResultadoCalificacion = false; 
-//                    }
-//                }
-//            }
-//        }
-//        catch (Exception)
-//        {
-//            ResultadoCalificacion = false;
-//        }
-//    }
-//
-//        return ResultadoCalificacion; 
-//}

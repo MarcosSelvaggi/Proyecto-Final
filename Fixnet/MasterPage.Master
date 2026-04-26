@@ -13,6 +13,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signalr.js/2.4.3/jquery.signalR.min.js"></script>
+    <script src="/signalr/hubs"></script>
     <link rel="stylesheet" href="styles/StylesMasterPage.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -104,6 +107,17 @@
                                 <a class="nav-link active hover-underline" href="/Gestion.aspx">Gestión</a>
                             </li>
                             <% } %>
+                            <%-- Mensajes: visible para cualquier usuario logueado --%>
+                            <li class="nav-item">
+                                <a class="nav-link active hover-underline" href="/Mensajes.aspx" style="display: inline-flex; align-items: center; gap: 6px;">Mensajes
+                                    <% int noLeidos = ObtenerNoLeidos();
+                                        if (noLeidos > 0)
+                                        { %>
+                                    <span class="badge-noLeidos"><%= noLeidos %></span>
+                                    <% } %>
+                                </a>
+                            </li>
+
 
                             <%--  usuario logueado pero sin ningún perfil completo todavía --%>
                             <% if (!navEsCliente && !navEsPrestador)
@@ -182,6 +196,97 @@
             </div>
         </footer>
     </form>
+    <% if (Session["Usuario"] != null)
+        { %>
+    <script>
+        var idUsuarioActual = <%= ((Dominio.Usuario)Session["Usuario"]).IdUsuario %>;
+        var onNuevoMensaje = null;
+        var onMensajesLeidos = null;
+    </script>
+    <script src="scripts/NotificacionesHub.js"></script>
+    <script>
+        if (typeof $.connection !== 'undefined' && $.connection.mensajesHub) {
+            var hubGlobal = $.connection.mensajesHub;
+
+            hubGlobal.client.nuevoMensaje = function (m) {
+                if (typeof onNuevoMensaje === 'function') {
+                    // Estamos en Mensajes.aspx, delegar a la función
+                    onNuevoMensaje(m);
+                } else {
+                    // Estamos en otra página, mostrar toast
+                    mostrarToast(m.nombre, m.apellido, m.texto, m.foto);
+                    fetch('/MensajesHandler.ashx?accion=noLeidos')
+                        .then(function (r) { return r.text(); })
+                        .then(function (n) { actualizarBadgeNoLeidos(parseInt(n)); })
+                        .catch(function () { });
+                }
+            };
+
+            hubGlobal.client.mensajesLeidos = function () {
+                if (typeof onMensajesLeidos === 'function') {
+                    onMensajesLeidos();
+                }
+            };
+
+            hubGlobal.client.actualizarBadge = function (num) {
+                actualizarBadgeNoLeidos(num);
+
+                // Si hay mensajes nuevos y no estamos en Mensajes.aspx, pedir el último mensaje para el toast
+                var enMensajes = window.location.pathname.toLowerCase().indexOf('mensajes') > -1;
+                if (num > 0 && !enMensajes) {
+                    fetch('/MensajesHandler.ashx?accion=conversaciones')
+                        .then(function (r) { return r.json(); })
+                        .then(function (convs) {
+                            // Buscar la conv con mensajes no leídos más reciente
+                            var conNoLeidos = convs.filter(function (c) { return c.noLeidos > 0; });
+                            if (conNoLeidos.length > 0) {
+                                var c = conNoLeidos[0];
+                                mostrarToast(c.otroNombre, c.otroApellido, c.ultimoMensaje, c.otroFoto, c.idConversacion);
+                            }
+                        })
+                        .catch(function () { });
+                }
+            };
+        }
+
+        $(document).ready(function () {
+            setInterval(function () {
+                fetch('/MensajesHandler.ashx?accion=noLeidos')
+                    .then(function (r) { return r.text(); })
+                    .then(function (n) { actualizarBadgeNoLeidos(parseInt(n)); })
+                    .catch(function () { });
+            }, 30000);
+
+            var _conn = typeof $.connection !== 'undefined' ? $.connection : null;
+            if (!_conn || !_conn.mensajesHub) return;
+
+            $.connection.hub.qs = { userId: idUsuarioActual };
+
+            $.connection.hub.disconnected(function () {
+                console.log('Hub desconectado, reconectando en 5s...');
+                setTimeout(function () {
+                    // Solo reconectar si realmente está desconectado
+                    if ($.connection.hub.state === $.signalR.connectionState.disconnected) {
+                        $.connection.hub.start().done(function () {
+                            console.log('Hub reconectado');
+                            $(document).trigger('hubConectado');
+                        });
+                    }
+                }, 5000);
+            });
+
+            $.connection.hub.start({ transport: ['longPolling'] }).done(function () {
+                console.log('Hub conectado en MasterPage');
+                $(document).trigger('hubConectado');
+            }).fail(function () {
+                console.log('SignalR no disponible');
+            });
+        });
+    </script>
+    <% }
+        else
+        { %>
     <script src="scripts/ChatBot.js"></script>
+    <% } %>
 </body>
 </html>

@@ -5,6 +5,7 @@
     --variable-collection-color: rgba(255, 255, 255, 1);
     --variable-collection-whatsapp: rgba(37, 211, 102, 1);
 }
+
 body {
     margin: 0;
     min-height: 100vh;
@@ -54,17 +55,20 @@ h4 {
 #registro-navbar-small-screen {
     display: none;
 }
+
 .navbar {
     transition: 0.3s;
 }
-.navbar a {
-    color: #cbd5e1 !important;
-    transition: 0.3s;
-}
 
-    .navbar a:hover {
-        color: #38bdf8 !important;
+    .navbar a {
+        color: #cbd5e1 !important;
+        transition: 0.3s;
     }
+
+        .navbar a:hover {
+            color: #38bdf8 !important;
+        }
+
 .navbar-glass {
     background: rgba(2, 6, 23, 0.75);
     backdrop-filter: blur(18px);
@@ -72,6 +76,7 @@ h4 {
     box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     padding: 10px 20px;
 }
+
 .btn-glass {
     font-size: 14px;
     padding: 8px 14px;
@@ -96,6 +101,7 @@ h4 {
     .registro-navbar-lg-screen {
         display: none;
     }
+
     #chatbot {
         background: rgba(255,255,255,0.06);
         backdrop-filter: blur(18px);
@@ -103,23 +109,23 @@ h4 {
         color: #e2e8f0;
     }
 
-    #chatbot.minimizado {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #25d366;
-    }
+        #chatbot.minimizado {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #25d366;
+        }
 
-    #chatbot.minimizado #chat-header {
-        justify-content: center;
-    }
+            #chatbot.minimizado #chat-header {
+                justify-content: center;
+            }
 
-    #chatbot.minimizado span {
-        display: none;
-    }
+            #chatbot.minimizado span {
+                display: none;
+            }
 
     #chat-header span {
         font-size: 14px;
@@ -252,10 +258,11 @@ h4 {
     height: 45px;
 }
 
-#chatbot.minimizado #chat-body,
-#chatbot.minimizado #chat-opciones {
-    display: none;
-}
+    #chatbot.minimizado #chat-body,
+    #chatbot.minimizado #chat-opciones {
+        display: none;
+    }
+
 #footer-copyright {
     background: rgba(2, 6, 23, 0.6);
     backdrop-filter: blur(10px);
@@ -265,6 +272,7 @@ h4 {
     padding: 15px 0;
     margin-top: 40px;
 }
+
 #content {
     margin-top: 90px;
     padding: 20px;
@@ -310,6 +318,7 @@ h4 {
     justify-content: center;
     color: white;
 }
+
 .icon-box {
     width: 42px;
     height: 42px;
@@ -344,4 +353,82 @@ h4 {
 .modal-muted {
     font-size: 13px;
     color: #94a3b8;
+}
+
+.badge-noLeidos {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    padding: 0 4px;
+    margin-left: 4px;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+.toast-mensaje {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #e2e8f0;
+    font-size: 0.9rem;
+    z-index: 9999;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    animation: slideIn 0.3s ease;
+    max-width: 320px;
+    cursor: pointer;
+}
+
+    .toast-mensaje:hover {
+        border-color: rgba(14,165,233,0.4);
+    }
+
+.toast-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0ea5e9, #22c55e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.toast-info strong {
+    display: block;
+    color: #fff;
+    font-size: 0.88rem;
+}
+
+.toast-info span {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }

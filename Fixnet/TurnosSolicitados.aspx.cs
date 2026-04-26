@@ -15,7 +15,8 @@ namespace Fixnet
         {
             if (Session["Usuario"] == null)
             {
-                Response.Redirect("~/Logearse.aspx");
+                Response.Redirect("~/Logearse.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
@@ -24,7 +25,11 @@ namespace Fixnet
                 CargarTurnos();
             }
         }
-
+        protected int ObtenerOCrearConv(int idTurno, int idCliente, int idPrestador)
+        {
+            UsuarioManager bd = new UsuarioManager();
+            return bd.ObtenerOCrearConversacion(idTurno, idCliente, idPrestador);
+        }
         private void CargarTurnos()
         {
             Usuario usuario = (Usuario)Session["Usuario"];
@@ -71,6 +76,6 @@ namespace Fixnet
             }
         }
 
-       
+
     }
 }

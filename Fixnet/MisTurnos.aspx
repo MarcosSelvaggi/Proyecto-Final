@@ -9,9 +9,9 @@
     <div class="container py-4 container-turnos" style="max-width: 780px;">
 
         <div class="page-header">
-            <span style="font-size:2rem;">📅</span>
+            <span style="font-size: 2rem;">📅</span>
             <div>
-                <h4>Mis turnos</h4>
+                <h4 style="text-align: left !important;">Mis turnos</h4>
                 <p>Seguí el estado de tus solicitudes a prestadores.</p>
             </div>
         </div>
@@ -67,6 +67,13 @@
                             OnCommand="CalificarPrestador"
                             CommandName="Calificar"
                             CommandArgument='<%# Eval("IdTurno") %>' />
+                        <!-- MENSAJE -->
+                        <a href='<%# "Mensajes.aspx?conv=" + ObtenerOCrearConv(
+                            Convert.ToInt32(Eval("IdTurno")),
+                            Convert.ToInt32(Eval("IdCliente")),
+                            Convert.ToInt32(Eval("IdPrestador"))) %>'
+                            class="btn-mensajes">💬 Mensajes
+                       </a>
                     </div>
 
                 </div>
@@ -94,10 +101,10 @@
                     </div>
                     <asp:HiddenField runat="server" Value="4" ID="PuntuacionDelPrestador" />
                     <p class="mt-2">Dejá un comentario (opcional)</p>
-                    <textarea rows="4" style="resize:none; width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:10px; color:#e2e8f0; padding:10px;"
+                    <textarea rows="4" style="resize: none; width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #e2e8f0; padding: 10px;"
                         id="TxtComentario" runat="server"></textarea>
                 </div>
-                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.08);">
+                <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.08);">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Volver</button>
                     <asp:Button Text="Calificar" CssClass="btn-calificar" runat="server" ID="BtnCalificar" OnClick="BtnCalificar_Click" />
                 </div>
@@ -116,7 +123,7 @@
                 <div class="modal-body modal-body-glass">
                     <p>El turno se calificó correctamente.</p>
                 </div>
-                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.08);">
+                <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.08);">
                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Confirmar</button>
                     <asp:Button Text="Volver al perfil" CssClass="btn-calificar" runat="server" ID="BtnVolverAlPerfil" OnClick="BtnVolverAlPerfil_Click" />
                 </div>
@@ -135,14 +142,13 @@
                 <div class="modal-body modal-body-glass">
                     <p>Hubo un error al calificar el turno. Intentalo de nuevo más tarde.</p>
                 </div>
-                <div class="modal-footer" style="border-top:1px solid rgba(255,255,255,0.08);">
+                <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.08);">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <asp:Button Text="Volver al perfil" CssClass="btn-calificar" runat="server" ID="BtnVolverAlPerfilNoCalificado" OnClick="BtnVolverAlPerfil_Click" />
                 </div>
             </div>
         </div>
     </div>
-
     <script>
         function CambiarPuntuacion(Valor) {
             document.getElementById('<%= PuntuacionDelPrestador.ClientID %>').value = Valor;

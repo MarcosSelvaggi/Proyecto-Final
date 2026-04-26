@@ -16,7 +16,8 @@ namespace Fixnet
         {
             if (Session["Usuario"] == null)
             {
-                Response.Redirect("~/Logearse.aspx");
+                Response.Redirect("~/Logearse.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
@@ -25,7 +26,11 @@ namespace Fixnet
                 CargarTurnos();
             }
         }
-
+        protected int ObtenerOCrearConv(int idTurno, int idCliente, int idPrestador)
+        {
+            UsuarioManager bd = new UsuarioManager();
+            return bd.ObtenerOCrearConversacion(idTurno, idCliente, idPrestador);
+        }
         private void CargarTurnos()
         {
             Usuario usuario = (Usuario)Session["Usuario"];
@@ -36,7 +41,7 @@ namespace Fixnet
             UsuarioManager bd = new UsuarioManager();
             var tabla = bd.TraerTurnosCliente(usuario.Cliente.IdCliente);
 
-            
+
 
             rptTurnos.DataSource = tabla;
             rptTurnos.DataBind();
@@ -58,7 +63,7 @@ namespace Fixnet
             if (e.CommandName == "Calificar")
             {
                 Session.Add("TurnoCalificado", e.CommandArgument.ToString());
-                
+
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "ModalCalificarPrestador",
                 "var modal = new bootstrap.Modal(document.getElementById('ModalCalificarPrestador')); modal.show();", true);
             }
@@ -76,7 +81,7 @@ namespace Fixnet
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "ModalTurnoNoCalificado",
                 "var modal = new bootstrap.Modal(document.getElementById('ModalTurnoNoCalificado')); modal.show();", true);
-                return; 
+                return;
             }
 
         }
@@ -84,6 +89,7 @@ namespace Fixnet
         protected void BtnVolverAlPerfil_Click(object sender, EventArgs e)
         {
             Response.Redirect("/PerfilUsuario.aspx", false);
+            Context.ApplicationInstance.CompleteRequest();
             return;
         }
     }
