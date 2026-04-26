@@ -51,7 +51,6 @@
     <Compile Include="Provincias.cs" />
     <Compile Include="Servicio.cs" />
     <Compile Include="ServiciosPrestador.cs" />
-    <Compile Include="Turno.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

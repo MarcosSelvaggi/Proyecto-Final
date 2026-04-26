@@ -18,6 +18,8 @@ namespace Fixnet
         {
             if (!IsPostBack)
             {
+                //Desactiva este warning
+                #pragma warning disable 
                 CargarUsuario();
             }
         }
