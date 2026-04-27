@@ -77,6 +77,7 @@ CREATE TABLE Turno (
     IdServicio    INT           NOT NULL REFERENCES Servicios(IdServicio),
     Mensaje       NVARCHAR(500) NULL,
     FechaSolicitud DATETIME     DEFAULT GETDATE(),
+    FechaProgramada DATE NULL,
     Estado        NVARCHAR(50)  DEFAULT 'Pendiente'
 );
  

@@ -86,6 +86,8 @@ h4 {
     color: white;
     cursor: pointer;
     transition: 0.3s;
+    z-index: 1100 !important;
+    position: relative;
 }
 
     .btn-glass:hover {

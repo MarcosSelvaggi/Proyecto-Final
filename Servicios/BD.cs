@@ -1107,5 +1107,81 @@ namespace Servicios
             }
         }
 
+
+
+
+        public bool AceptarTurnoConFecha(int idTurno, int idPrestador, DateTime fecha)
+        {
+            string query = @"UPDATE Turno 
+                             SET Estado = 'Aceptado', 
+                                 FechaProgramada = @Fecha 
+                             WHERE IdTurno = @IdTurno AND IdPrestador = @IdPrestador";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@Fecha", SqlDbType.Date).Value = fecha;
+                cmd.Parameters.Add("@IdTurno", SqlDbType.Int).Value = idTurno;
+                cmd.Parameters.Add("@IdPrestador", SqlDbType.Int).Value = idPrestador;
+
+                conn.Open();
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+
+
+        /// Trae todos los turnos aceptados de un prestador en un mes/año dado.
+        /// Devuelve IdTurno, FechaProgramada, HoraProgramada, NombreCliente, ApellidoCliente, Servicio.
+
+        public DataTable TraerTurnosPrestadorPorMes(int idPrestador, int anio, int mes)
+        {
+            string query = @"
+        SELECT 
+            T.IdTurno, 
+            T.FechaProgramada, 
+            U.Nombre AS NombreCliente, 
+            U.Apellido AS ApellidoCliente, 
+            S.Nombre AS Servicio 
+        FROM Turno T 
+        INNER JOIN Cliente C  ON T.IdCliente   = C.IdCliente 
+        INNER JOIN Usuario U  ON C.IdUsuario   = U.IdUsuario 
+        INNER JOIN Servicios S ON T.IdServicio = S.IdServicio 
+        WHERE T.IdPrestador     = @IdPrestador 
+          AND T.Estado          = 'Aceptado' 
+          AND T.FechaProgramada IS NOT NULL 
+          AND YEAR(T.FechaProgramada)  = @Anio 
+          AND MONTH(T.FechaProgramada) = @Mes";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@IdPrestador", SqlDbType.Int).Value = idPrestador;
+                cmd.Parameters.Add("@Anio", SqlDbType.Int).Value = anio;
+                cmd.Parameters.Add("@Mes", SqlDbType.Int).Value = mes;
+
+                DataTable dt = new DataTable();
+                conn.Open();
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
+        }
+
+
+        /// Trae la disponibilidad del prestador (string con días laborales).
+
+        public string TraerDisponibilidadPrestador(int idPrestador)
+        {
+            string query = "SELECT DisponibilidadPrestador FROM Disponibilidad WHERE IdPrestador = @IdPrestador";
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdPrestador", idPrestador);
+                conn.Open();
+                var result = cmd.ExecuteScalar();
+                return result == null ? "" : result.ToString();
+            }
+        }
+
+
     }
 }
