@@ -658,6 +658,14 @@ namespace Fixnet
                 LblErrorHorariosPrestador.InnerText = "Error al cargar los horarios";
                 return;
             }
+
+            if (string.IsNullOrWhiteSpace(txtDescripcion.Text))
+            {
+                lblErrorPrestador.Text = "No puedes dejar en blanco la descripcion.";
+                lblErrorPrestador.Visible = true;
+                return;
+            }
+
             else
             {
                 usuarioSession.Prestador.HorariosPrestador = EscribirHorarios();
@@ -668,6 +676,8 @@ namespace Fixnet
 
             UsuarioManager manager = new UsuarioManager();
             int idPrestador = manager.ActualizarDatosPrestador(usuarioSession);
+
+            
 
             if (idPrestador > 0)
             {
