@@ -1,6 +1,6 @@
 USE master;
 GO
- 
+
 IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Proyecto_Final_Integrador')
 BEGIN
     CREATE DATABASE Proyecto_Final_Integrador;
@@ -9,12 +9,7 @@ GO
  
 USE Proyecto_Final_Integrador;
 GO
- 
 
-CREATE TABLE MetodosPago (
-    IdMetodoPago     INT           PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    NombreMetodoPago NVARCHAR(100) NOT NULL
-);
  
 CREATE TABLE Usuario (
     IdUsuario     INT           PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -56,12 +51,6 @@ CREATE TABLE PrestadorServicio (
     IdPrestador         INT   NOT NULL REFERENCES Prestador(IdPrestador),
     IdServicio          INT   NOT NULL REFERENCES Servicios(IdServicio),
     PrecioHora          MONEY NOT NULL CHECK (PrecioHora > 0)
-);
- 
-CREATE TABLE PrestadorMetodoPago (
-    IdPrestadorMetodoPago INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    IdPrestador           INT NOT NULL REFERENCES Prestador(IdPrestador),
-    IdMetodoPago          INT NOT NULL REFERENCES MetodosPago(IdMetodoPago)
 );
  
 CREATE TABLE Disponibilidad (
