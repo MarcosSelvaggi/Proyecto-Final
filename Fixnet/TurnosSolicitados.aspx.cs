@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Dominio;
@@ -15,21 +12,17 @@ namespace Fixnet
         {
             if (Session["Usuario"] == null)
             {
-                Response.Redirect("~/Logearse.aspx", false);
-                Context.ApplicationInstance.CompleteRequest();
+                Response.Redirect("~/Logearse.aspx");
                 return;
             }
 
             if (!IsPostBack)
             {
                 CargarTurnos();
+                CargarDisponibilidad();
             }
         }
-        protected int ObtenerOCrearConv(int idTurno, int idCliente, int idPrestador)
-        {
-            UsuarioManager bd = new UsuarioManager();
-            return bd.ObtenerOCrearConversacion(idTurno, idCliente, idPrestador);
-        }
+
         private void CargarTurnos()
         {
             Usuario usuario = (Usuario)Session["Usuario"];
@@ -44,10 +37,19 @@ namespace Fixnet
             rptTurnos.DataBind();
         }
 
-        protected void AceptarTurno(object sender, CommandEventArgs e)
+        private void CargarDisponibilidad()
         {
-            int idTurno = Convert.ToInt32(e.CommandArgument);
-            CambiarEstadoTurno(idTurno, "Aceptado");
+            Usuario usuario = (Usuario)Session["Usuario"];
+
+            if (usuario.Prestador == null || usuario.Prestador.IdPrestador <= 0)
+                return;
+
+            UsuarioManager bd = new UsuarioManager();
+            string disp = bd.TraerDisponibilidadPrestador(usuario.Prestador.IdPrestador);
+
+            // Lo guardamos en el hidden field para que el JS lo lea
+            hfDisponibilidad.Value = disp;
+            hfIdPrestador.Value = usuario.Prestador.IdPrestador.ToString();
         }
 
         protected void RechazarTurno(object sender, CommandEventArgs e)
@@ -58,24 +60,54 @@ namespace Fixnet
 
         private void CambiarEstadoTurno(int idTurno, string estado)
         {
-            Usuario Usuario = (Usuario)Session["Usuario"];
-
+            Usuario usuario = (Usuario)Session["Usuario"];
             UsuarioManager bd = new UsuarioManager();
-            bd.ActualizarEstadoTurno(idTurno, estado, Usuario.NombreUsuario);
+            bd.ActualizarEstadoTurno(idTurno, estado, usuario.NombreUsuario);
             CargarTurnos();
+        }
+
+        protected void btnConfirmarAceptar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idTurno = int.Parse(hfIdTurnoAceptar.Value);
+                int idPrestador = int.Parse(hfIdPrestador.Value);
+                DateTime fecha = DateTime.Parse(Request.Form["inputFecha"]);
+
+                // Instancia de tu clase de negocio (asegurate que el nombre sea el correcto)
+                UsuarioManager bd = new UsuarioManager();
+
+                bool ok = bd.AceptarTurnoConFecha(idTurno, idPrestador, fecha);
+
+                if (ok)
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "modalOk",
+                        "var m = bootstrap.Modal.getInstance(document.getElementById('modalFecha')); if(m) m.hide();", true);
+                    CargarTurnos();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de error básico
+                Response.Write("<script>alert('Error al procesar: " + ex.Message + "');</script>");
+            }
+        }
+
+        private void MostrarError(string msg)
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "err",
+                $"alert('{msg}');", true);
         }
 
         protected string ObtenerClaseEstado(string estado)
         {
             switch (estado)
             {
-                case "Aceptado": return "estado-aceptado";
-                case "Rechazado": return "estado-rechazado";
-                case "Pendiente": return "estado-pendiente";
-                default: return "estado-pendiente";
+                case "Aceptado": return "bg-success";
+                case "Rechazado": return "bg-danger";
+                case "Pendiente": return "bg-warning text-dark";
+                default: return "bg-secondary";
             }
         }
-
-
     }
 }

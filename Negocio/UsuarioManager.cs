@@ -153,5 +153,22 @@ namespace Negocio
         {
             return Conexion.GuardarFotoPerfilBD(idUsuario, base64);
         }
+
+        public bool AceptarTurnoConFecha(int idTurno, int idPrestador, DateTime fechaProgramada)
+        {
+            return Conexion.AceptarTurnoConFecha(idTurno, idPrestador, fechaProgramada);
+        }
+
+        public DataTable TraerTurnosPrestadorPorMes(int idPrestador, int anio, int mes)
+        {
+            return Conexion.TraerTurnosPrestadorPorMes(idPrestador, anio, mes);
+        }
+
+        public string TraerDisponibilidadPrestador(int idPrestador)
+        {
+            return Conexion.TraerDisponibilidadPrestador(idPrestador);
+        }
+
+
     }
 }

@@ -171,6 +171,8 @@
     <Content Include="Scripts\ChatBot.js" />
     <Content Include="Scripts\EnviarMailScript.js" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Scripts\GestionCalendar.js" />
+    <Content Include="Scripts\TurnosSolicitados.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery.signalR-2.4.3.js" />
@@ -194,6 +196,7 @@
     <Content Include="styles\StyleModificarContrasenia.css" />
     <Content Include="styles\StyleRegistro.css" />
     <Content Include="styles\StyleSeleccionarPerfil.css" />
+    <Content Include="styles\Gestion.css" />
     <Content Include="styles\StylesMasterPage.css" />
     <Content Include="styles\StyleSobreFixnet.css" />
     <Content Include="styles\StyleSolicitarTurno.css" />
