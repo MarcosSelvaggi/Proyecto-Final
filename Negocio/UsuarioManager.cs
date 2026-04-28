@@ -80,7 +80,7 @@ namespace Negocio
 
         public bool ActualizarDireccionCliente(Usuario usuario)
         {
-            return Conexion.actualizarDireccionCliente(usuario);
+            return Conexion.ActualizarDireccionCliente(usuario);
         }
         public DataTable TraerTurnosCliente(int idCliente)
         {

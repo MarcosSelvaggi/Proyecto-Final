@@ -434,3 +434,9 @@ h4 {
         opacity: 1;
     }
 }
+
+/* Estrellas */
+.star-rating {
+    font-size: 1.25rem;
+    color: #facc15;
+}

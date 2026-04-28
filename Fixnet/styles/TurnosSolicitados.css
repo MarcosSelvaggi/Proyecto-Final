@@ -52,6 +52,11 @@
     background: rgba(239,68,68,0.06) !important;
 }
 
+.turno-calificado {
+    border-color: rgba(11,83, 148, 0.4) !important;
+    background: rgba(11,83, 148, 0.4) !important;
+}
+
 .turno-card-header {
     display: flex;
     align-items: center;

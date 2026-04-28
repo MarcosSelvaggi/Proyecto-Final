@@ -106,7 +106,20 @@ namespace Fixnet
                 case "Aceptado": return "bg-success";
                 case "Rechazado": return "bg-danger";
                 case "Pendiente": return "bg-warning text-dark";
+                case "Calificado": return "bg-primary";
                 default: return "bg-secondary";
+            }
+        }
+
+        protected string ObtenerEstadoDelTurno(string Estado)
+        {
+            switch (Estado)
+            {
+                case "Aceptado": return "turno-card turno-aceptado";
+                case "Rechazado": return "turno-card turno-rechazado";
+                case "Pendiente": return "turno-card turno-pendiente";
+                case "Calificado": return "turno-card turno-calificado"; 
+                default: return "turno-card turno-aceptado";
             }
         }
     }

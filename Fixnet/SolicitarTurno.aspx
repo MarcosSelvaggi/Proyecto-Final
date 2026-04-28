@@ -37,8 +37,13 @@
 
         <!-- DESCRIPCION -->
         <div class="seccion-box mb-4">
-            <h6 class="seccion-title">Sobre el prestador</h6>
+            <h6 class="seccion-title" runat="server" id="TituloPuntuacionPrestador" Visible="false">Puntuación del prestador</h6>
+            <p class="descripcion-texto">
+                <asp:Label runat="server" Visible="false" ID="LblPuntuacionPrestador"/> 
+                <asp:Label Text=" ★" runat="server" Visible="false" ID="LblEstrellaPuntuacion" CssClass="star-rating"/>
+            </p>
 
+            <h6 class="seccion-title">Sobre el prestador</h6>
             <p class="descripcion-texto">
                 <asp:Label runat="server" ID="LblDescripcion" />
             </p>

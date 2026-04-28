@@ -7,7 +7,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="container py-4 container-turnos" style="max-width: 780px;">
-
+        <asp:ScriptManager runat="server" />
         <div class="page-header">
             <span style="font-size: 2rem;">📅</span>
             <div>
@@ -15,7 +15,10 @@
                 <p>Seguí el estado de tus solicitudes a prestadores.</p>
             </div>
         </div>
+        <asp:UpdatePanel runat="server">
+            <ContentTemplate>
 
+           
         <asp:Repeater ID="rptTurnos" runat="server">
             <ItemTemplate>
                 <div class='turno-card <%# Eval("Estado").ToString() == "Aceptado" ? "turno-aceptado" : Eval("Estado").ToString() == "Rechazado" ? "turno-rechazado" : "turno-pendiente" %>'>
@@ -66,7 +69,7 @@
                             runat="server"
                             OnCommand="CalificarPrestador"
                             CommandName="Calificar"
-                            CommandArgument='<%# Eval("IdTurno") %>' />
+                            CommandArgument='<%# Eval("IdTurno") %>' Visible='<%#HabilitarBotonCalificar(Eval("Estado").ToString())%>' />
                         <!-- MENSAJE -->
                         <a href='<%# "Mensajes.aspx?conv=" + ObtenerOCrearConv(
                             Convert.ToInt32(Eval("IdTurno")),
@@ -75,11 +78,11 @@
                             class="btn-mensajes">💬 Mensajes
                        </a>
                     </div>
-
                 </div>
             </ItemTemplate>
         </asp:Repeater>
-
+    </ContentTemplate>
+</asp:UpdatePanel>
     </div>
 
     <!-- MODAL CALIFICAR -->
@@ -106,7 +109,7 @@
                 </div>
                 <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.08);">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Volver</button>
-                    <asp:Button Text="Calificar" CssClass="btn-calificar" runat="server" ID="BtnCalificar" OnClick="BtnCalificar_Click" />
+                    <asp:Button Text="Calificar" CssClass="btn-calificar" runat="server" ID="BtnCalificar" OnClick="BtnCalificar_Click"/>
                 </div>
             </div>
         </div>
@@ -124,7 +127,7 @@
                     <p>El turno se calificó correctamente.</p>
                 </div>
                 <div class="modal-footer" style="border-top: 1px solid rgba(255,255,255,0.08);">
-                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Confirmar</button>
+                    <asp:Button Text="Confirmar" class="btn btn-outline-primary" data-bs-dismiss="modal" runat="server" ID="BtnConfirmarCalificacion" OnClick="BtnConfirmarCalificacion_Click"/>
                     <asp:Button Text="Volver al perfil" CssClass="btn-calificar" runat="server" ID="BtnVolverAlPerfil" OnClick="BtnVolverAlPerfil_Click" />
                 </div>
             </div>

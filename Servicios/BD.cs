@@ -17,8 +17,8 @@ namespace Servicios
     public class BD
     {
 
-        //readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
-        readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        readonly string connectionString = "data source=localhost\\SQLSERVER;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
+        //readonly string connectionString = "data source=localhost\\SQLEXPRESS;initial catalog=Proyecto_Final_Integrador;trusted_connection=true";
 
 
         public int RegistrarUsuarioBD(Usuario NuevoUsuario)
@@ -247,7 +247,7 @@ namespace Servicios
             }
         }
 
-        public bool actualizarDireccionCliente(Usuario UsuarioActualizado)
+        public bool ActualizarDireccionCliente(Usuario UsuarioActualizado)
         {
             string query = @"UPDATE Cliente 
                      SET Provincia = @Provincia, 
@@ -497,6 +497,7 @@ namespace Servicios
                         Usuario.EmailUsuario = Reader["Email"].ToString();
                         Usuario.Prestador.IdPrestador = Convert.ToInt32(Reader["IdPrestador"]);
                         Usuario.Prestador.DescripcionPrestador = Reader["Descripcion"].ToString();
+                        Usuario.Prestador.CalificacionPrestador = (float)Convert.ToDouble(Reader["Calificacion"]);
                         Dominio.ServiciosPrestador servicio = new Dominio.ServiciosPrestador()
                         {
                             IdServicio = Int32.Parse(Reader["IdServicio"].ToString()),
@@ -1068,7 +1069,7 @@ namespace Servicios
             string query = @"
                             SELECT
                                 U.Nombre, U.Apellido, U.Email, U.Telefono, U.FotoPerfil,
-                                P.IdPrestador, P.Descripcion,
+                                P.IdPrestador, P.Descripcion, P.Calificacion,
                                 ZP.IdLocalidad,
                                 D.DisponibilidadPrestador
                             FROM Usuario U

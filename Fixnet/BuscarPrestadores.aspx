@@ -77,6 +77,9 @@
 
                                 <!-- DESCRIPCIÓN -->
                                 <p class="descripcion-prestador">
+                                    <asp:Label Text='<%# Eval("CalificacionPrestador") %>' runat="server" Visible='<%# MostrarCalificaciones(float.Parse(Eval("CalificacionPrestador").ToString())) %>' />
+                                    <asp:Label Text=" ★" runat="server" Visible='<%# MostrarCalificaciones(float.Parse(Eval("CalificacionPrestador").ToString())) %>' CssClass="star-rating" />
+                                    <br />
                                     <%# Eval("Prestador.DescripcionPrestador") %>
                                 </p>
 
@@ -90,26 +93,19 @@
 
                                     <span class="precio-badge">$<%# Eval("PrecioServicio", "{0:N0}") %>/h
                                     </span>
-
                                 </div>
-
                                 <a href='SolicitarTurno.aspx?id=<%# Eval("IdUsuario") %>'
                                     class="btn btn-accion mt-3">Solicitar Turno
                                 </a>
-
                             </div>
                         </div>
-
                     </div>
                 </ItemTemplate>
             </asp:Repeater>
         </div>
-
         <div id="mensajeVacio" class="mensaje-vacio">
             No hay prestadores disponibles para los filtros seleccionados.
-   
         </div>
-
     </div>
 
     <script>

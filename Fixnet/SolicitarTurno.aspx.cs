@@ -74,6 +74,13 @@ namespace Fixnet
             LblEmail.Text = row["Email"].ToString();
             LblTelefono.Text = row["Telefono"].ToString();
             LblDescripcion.Text = row["Descripcion"].ToString();
+            if (row["Calificacion"].ToString() != "0")
+            {
+                LblPuntuacionPrestador.Text = row["Calificacion"].ToString();
+                LblPuntuacionPrestador.Visible = true;
+                LblEstrellaPuntuacion.Visible = true;
+                TituloPuntuacionPrestador.Visible = true;
+            }
 
             Session.Add("ListaLocalidades", row["IdLocalidad"].ToString());
             RegisterAsyncTask(new PageAsyncTask(ListarLocalidades));
@@ -281,6 +288,11 @@ namespace Fixnet
                 new bootstrap.Modal(modal).show();
                 ",
                 true);
+        }
+
+        protected bool MostrarCalificaciones(float Calificacion)
+        {
+            return Calificacion != 0;
         }
 
     }

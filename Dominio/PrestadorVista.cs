@@ -17,5 +17,6 @@ namespace Dominio
         public string FotoPerfil { get; set; }
         public Dominio.Prestador Prestador { get; set; }
         public decimal PrecioServicio { get; set; }
+        public float CalificacionPrestador { get; set; }
     }
 }

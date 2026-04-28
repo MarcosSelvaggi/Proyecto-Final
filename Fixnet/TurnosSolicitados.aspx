@@ -21,7 +21,8 @@
 
         <asp:Repeater ID="rptTurnos" runat="server">
             <ItemTemplate>
-                <div class='turno-card <%# Eval("Estado").ToString() == "Aceptado" ? "turno-aceptado" : Eval("Estado").ToString() == "Rechazado" ? "turno-rechazado" : "" %>'>
+                <!-- <div class='turno-card <%# Eval("Estado").ToString() == "Aceptado" ? "turno-aceptado" : Eval("Estado").ToString() == "Rechazado" ? "turno-rechazado" : "" %>'> -->
+                <div class='<%# ObtenerEstadoDelTurno(Eval("Estado").ToString()) %>' runat="server">
                     <div class="turno-card-header">
                         <span class="turno-servicio"><%# Eval("Servicio") %></span>
                         <span class='badge-estado <%# ObtenerClaseEstado(Eval("Estado").ToString()) %>'>
@@ -52,13 +53,15 @@
                             🕐 Solicitud recibida el <%# Eval("FechaSolicitud", "{0:dd/MM/yyyy HH:mm}") %>
                         </div>
                     </div>
-                    <div class="turno-acciones" runat="server" visible='<%# Eval("Estado").ToString() != "Rechazado" %>'>
-                        <button type="button" class="btn-aceptar" onclick="abrirModalFecha('<%# Eval("IdTurno") %>')">
-                            <%# Eval("Estado").ToString() == "Aceptado" ? "🔁 Reagendar" : "✔ Aceptar" %>
-                        </button>
-                        <asp:Button ID="btnRechazar" runat="server" Text="✖ Rechazar" CssClass="btn-rechazar"
-                            CommandArgument='<%# Eval("IdTurno") %>' OnCommand="RechazarTurno"
-                            Visible='<%# Eval("Estado").ToString() == "Pendiente" %>' />
+                    <div class="turno-acciones" runat="server" visible='<%# Eval("Estado").ToString() != "Calificado" %>'>
+                        <div class="turno-acciones" runat="server" visible='<%# Eval("Estado").ToString() != "Rechazado" %>'>
+                            <button type="button" class="btn-aceptar" onclick="abrirModalFecha('<%# Eval("IdTurno") %>')">
+                                <%# Eval("Estado").ToString() == "Aceptado" ? "🔁 Reagendar" : "✔ Aceptar" %>
+                            </button>
+                            <asp:Button ID="btnRechazar" runat="server" Text="✖ Rechazar" CssClass="btn-rechazar"
+                                CommandArgument='<%# Eval("IdTurno") %>' OnCommand="RechazarTurno"
+                                Visible='<%# Eval("Estado").ToString() == "Pendiente" %>' />
+                        </div>
                     </div>
                 </div>
             </ItemTemplate>

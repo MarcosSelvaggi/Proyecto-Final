@@ -80,7 +80,8 @@ namespace Fixnet
                     TelefonoUsuario = p.TelefonoUsuario,
                     Prestador = p.Prestador,
                     FotoPerfil = p.FotoPerfil,
-                    PrecioServicio = precio
+                    PrecioServicio = precio,
+                    CalificacionPrestador = p.Prestador.CalificacionPrestador
                 };
             });
 
@@ -108,6 +109,11 @@ namespace Fixnet
             if (!string.IsNullOrEmpty(foto))
                 return "<img src='" + foto + "' class='avatar-foto' alt='Foto' />";
             return "<div class='avatar-iniciales'>" + ObtenerIniciales(nombre, apellido) + "</div>";
+        }
+
+        protected bool MostrarCalificaciones(float Calificacion)
+        {
+            return Calificacion != 0; 
         }
 
     }

@@ -64,7 +64,7 @@
             <div class="perfil-card cliente">
 
                 <div class="card-title">
-                    <span><i class="bi bi-geo-alt-fill"></i>Perfil cliente</span>
+                    <span><i class="bi bi-geo-alt-fill"></i> Perfil cliente</span>
 
                     <asp:Panel ID="pnlBadgeClienteOk" runat="server">
                         <span class="badge ok">Completo</span>
@@ -119,7 +119,7 @@
             <div class="perfil-card prestador">
 
                 <div class="card-title">
-                    <span><i class="bi bi-tools"></i>Perfil prestador</span>
+                    <span><i class="bi bi-tools"></i> Perfil prestador</span>
 
                     <asp:Panel ID="pnlBadgePrestadorOk" runat="server">
                         <span class="badge ok">Activo</span>

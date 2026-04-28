@@ -41,8 +41,6 @@ namespace Fixnet
             UsuarioManager bd = new UsuarioManager();
             var tabla = bd.TraerTurnosCliente(usuario.Cliente.IdCliente);
 
-
-
             rptTurnos.DataSource = tabla;
             rptTurnos.DataBind();
         }
@@ -91,6 +89,23 @@ namespace Fixnet
             Response.Redirect("/PerfilUsuario.aspx", false);
             Context.ApplicationInstance.CompleteRequest();
             return;
+        }
+
+        protected bool HabilitarBotonCalificar(string Estado)
+        {
+            switch (Estado)
+            {
+                case "Aceptado": return true;
+                case "Rechazado": return false;
+                case "Pendiente": return false;
+                case "Calificado": return false; 
+                default: return false;
+            }
+        }
+
+        protected void BtnConfirmarCalificacion_Click(object sender, EventArgs e)
+        {
+            Response.Redirect(Request.RawUrl);
         }
     }
 }
