@@ -104,7 +104,22 @@ function enviarMensaje() {
         hub.server.enviarMensaje(convActual, miIdUsuario, texto, miNombre, miApellido)
             .done(function () {
                 txt.value = '';
-                console.log('Mensaje enviado!');
+                var body = document.getElementById('chatBody');
+                if (body) {
+                    var mensajeLocal = {
+                        idEmisor: miIdUsuario,
+                        texto: texto,
+                        hora: new Date().toTimeString().substring(0, 5),
+                        leido: false,
+                        nombre: miNombre,
+                        apellido: miApellido,
+                        foto: miFoto
+                    };
+                    body.innerHTML += renderMensaje(mensajeLocal);
+                    scrollFondo();
+                }
+                ultimoHashConvs = '';
+                pollConversaciones();
             })
             .fail(function (err) {
                 // Reintentar enviar el mensaje cuando el hub se reconecte
@@ -153,11 +168,16 @@ $(document).ready(function () {
         onNuevoMensaje = function (m) {
             var body = document.getElementById('chatBody');
             if (!body) return;
-            body.innerHTML += renderMensaje(m);
+            var lastMsg = body.lastElementChild;
+            if (lastMsg && lastMsg.dataset.msgId === String(m.idEmisor + m.hora + m.texto)) return;
+            var wrapper = document.createElement('div');
+            wrapper.innerHTML = renderMensaje(m);
+            var el = wrapper.firstElementChild;
+            el.dataset.msgId = m.idEmisor + m.hora + m.texto;
+            body.appendChild(el);
             scrollFondo();
             if (m.idEmisor !== miIdUsuario) {
                 hub.server.marcarLeidos(convActual, miIdUsuario);
-                mostrarToast(m.nombre, m.apellido, m.texto, m.foto, m.idConversacion);
             }
             ultimoHashConvs = '';
             pollConversaciones();
@@ -174,7 +194,7 @@ $(document).ready(function () {
         $(document).on('hubConectado', function () {
             if (convActual && hub) {
                 hub.server.unirseAConversacion(convActual)
-                    .done(function () { console.log('Me uni al grupo conv-' + convActual); })
+                    .done(function () { })
                     .fail(function () { });
             }
         });
@@ -185,22 +205,3 @@ $(document).ready(function () {
         }
     }
 });
-function mostrarToast(m) {
-    var existing = document.querySelector('.toast-mensaje');
-    if (existing) existing.remove();
-    var iniciales = (m.nombre[0] || '') + (m.apellido[0] || '');
-    var avatarHtml = m.foto
-        ? "<img src='" + m.foto + "' style='width:38px;height:38px;border-radius:50%;object-fit:cover;' />"
-        : "<div class='toast-avatar'>" + iniciales.toUpperCase() + "</div>";
-    var texto = m.texto.length > 50 ? m.texto.substring(0, 50) + '…' : m.texto;
-    var toast = document.createElement('div');
-    toast.className = 'toast-mensaje';
-    toast.innerHTML = avatarHtml +
-        "<div class='toast-info'>" +
-        "<strong>" + m.nombre + " " + m.apellido + "</strong>" +
-        "<span>" + texto + "</span>" +
-        "</div>";
-    toast.onclick = function () { toast.remove(); };
-    document.body.appendChild(toast);
-    setTimeout(function () { if (toast.parentNode) toast.remove(); }, 4000);
-}

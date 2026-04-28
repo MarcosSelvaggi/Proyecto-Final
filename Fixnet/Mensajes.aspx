@@ -139,8 +139,6 @@
 
     </div>
     <script>
-        console.log('Email usuario:', '<%= Session["Usuario"] != null ? ((Dominio.Usuario)Session["Usuario"]).EmailUsuario : "null" %>');
-        console.log('Nombre usuario:', '<%= Session["Usuario"] != null ? ((Dominio.Usuario)Session["Usuario"]).NombreUsuario : "null" %>');
         var miIdUsuario = <%= Session["Usuario"] != null ? ((Dominio.Usuario)Session["Usuario"]).IdUsuario : 0 %>;
         var convActual = <%= ConvSeleccionada %>;
         var miNombre = '<%= Session["Usuario"] != null ? ((Dominio.Usuario)Session["Usuario"]).NombreUsuario : "" %>';

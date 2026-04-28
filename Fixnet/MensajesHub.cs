@@ -56,11 +56,13 @@ namespace Fixnet
                 foto = foto
             };
 
-            await Clients.Group("conv-" + idConversacion).nuevoMensaje(mensaje);
+            await Clients.OthersInGroup("conv-" + idConversacion).nuevoMensaje(mensaje);
 
             int otroUsuarioId = _mgr.ObtenerOtroUsuarioDeConversacion(idConversacion, idEmisor);
             if (otroUsuarioId > 0)
             {
+                await Clients.Group("user-" + otroUsuarioId).nuevoMensaje(mensaje);
+
                 int noLeidos = _mgr.ContarMensajesNoLeidos(otroUsuarioId);
                 await Clients.Group("user-" + otroUsuarioId).actualizarBadge(noLeidos);
             }

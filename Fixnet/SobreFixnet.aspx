@@ -50,6 +50,12 @@
                     <p>Los clientes pueden pedir turnos y contratar servicios rápidamente.</p>
                 </div>
 
+                <div class="func-card">
+                    <i class="fa fa-comments text-info"></i>
+                    <h5>Mensajería integrada</h5>
+                    <p>Chateá directamente con el profesional antes de confirmar tu servicio.</p>
+                </div>
+
             </div>
         </div>
     </section>

@@ -208,12 +208,12 @@
             var hubGlobal = $.connection.mensajesHub;
 
             hubGlobal.client.nuevoMensaje = function (m) {
-                if (typeof onNuevoMensaje === 'function') {
-                    // Estamos en Mensajes.aspx, delegar a la función
+                var convAbierta = typeof convActual !== 'undefined' ? parseInt(convActual) : 0;
+
+                if (parseInt(m.idConversacion) === convAbierta && typeof onNuevoMensaje === 'function') {
                     onNuevoMensaje(m);
                 } else {
-                    // Estamos en otra página, mostrar toast
-                    mostrarToast(m.nombre, m.apellido, m.texto, m.foto);
+                    mostrarToast(m.nombre, m.apellido, m.texto, m.foto, m.idConversacion);
                     fetch('/MensajesHandler.ashx?accion=noLeidos')
                         .then(function (r) { return r.text(); })
                         .then(function (n) { actualizarBadgeNoLeidos(parseInt(n)); })
@@ -262,20 +262,20 @@
             $.connection.hub.qs = { userId: idUsuarioActual };
 
             $.connection.hub.disconnected(function () {
-                console.log('Hub desconectado, reconectando en 5s...');
                 setTimeout(function () {
                     // Solo reconectar si realmente está desconectado
                     if ($.connection.hub.state === $.signalR.connectionState.disconnected) {
                         $.connection.hub.start().done(function () {
-                            console.log('Hub reconectado');
                             $(document).trigger('hubConectado');
                         });
                     }
-                }, 5000);
+                }, 1000);
             });
 
-            $.connection.hub.start({ transport: ['longPolling'] }).done(function () {
-                console.log('Hub conectado en MasterPage');
+            $.connection.hub.start({
+                transport: ['longPolling'],
+                longPolling: { pollInterval: 2000 }
+            }).done(function () {
                 $(document).trigger('hubConectado');
             }).fail(function () {
                 console.log('SignalR no disponible');
@@ -294,8 +294,7 @@
             backdrops.forEach(function (b) { b.remove(); });
             document.body.classList.remove('modal-open');
             document.body.style.overflow = '';
-        } 
-        
+        }
     </script>
     <% }
         else

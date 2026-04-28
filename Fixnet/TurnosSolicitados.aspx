@@ -84,7 +84,7 @@
                                onchange="validarFecha()"  />
                     </div>
                     <div id="msgDiaNoLaboral" class="alert alert-warning py-2 mb-0" style="display:none; font-size:0.85rem;">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>El prestador no trabaja este día.
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>No tenés este día de la semana habilitado como laboral.
                     </div>
                 </div>
                 <div class="modal-footer border-0 pb-4 px-4">

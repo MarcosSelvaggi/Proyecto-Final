@@ -15,6 +15,10 @@ namespace Fixnet
             typeof(IUserIdProvider),
             () => new SignalRUserIdProvider());
 
+            GlobalHost.Configuration.ConnectionTimeout = TimeSpan.FromSeconds(110);
+            GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(30);
+            GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(10);
+
             var hubConfiguration = new HubConfiguration
             {
                 EnableDetailedErrors = true

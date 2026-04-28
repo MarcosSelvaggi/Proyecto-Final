@@ -17,7 +17,8 @@ namespace Fixnet
             // Solo usuarios logueados
             if (Session["Usuario"] == null)
             {
-                Response.Redirect("~/Logearse.aspx");
+                Response.Redirect("~/Logearse.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 

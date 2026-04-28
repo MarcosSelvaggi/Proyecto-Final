@@ -11,7 +11,7 @@
         <div class="page-header">
             <span style="font-size: 2rem;">📅</span>
             <div>
-                <h4 style="text-align: left !important;">Mis turnos</h4>
+                <h4>Mis turnos</h4>
                 <p>Seguí el estado de tus solicitudes a prestadores.</p>
             </div>
         </div>

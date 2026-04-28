@@ -15,7 +15,8 @@ namespace Fixnet
 
             if (usuario == null)
             {
-                Response.Redirect("/Logearse.aspx");
+                Response.Redirect("~/Logearse.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
@@ -24,7 +25,8 @@ namespace Fixnet
 
             if (!esPrestador)
             {
-                Response.Redirect("/PerfilUsuario.aspx");
+                Response.Redirect("~/PerfilUsuario.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
