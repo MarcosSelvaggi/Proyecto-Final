@@ -24,5 +24,14 @@ namespace Fixnet
 
             return bd.ContarPrestadores(idServicio, localidad);
         }
+        [System.Web.Services.WebMethod]
+        public static List<object> TraerServicios()
+        {
+            UsuarioManager mgr = new UsuarioManager();
+            return mgr.TraerServicios()
+                .Select(s => new { id = s.IdServicio, nombre = s.Nombre })
+                .Cast<object>()
+                .ToList();
+        }
     }
 }

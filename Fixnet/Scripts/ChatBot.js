@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (estadoGuardado === "true") {
         toggleChat();
     }
+    if (window.innerWidth <= 576) {
+        chatMinimizado = true;
+        document.getElementById("chatbot").classList.add("minimizado");
+    }
+    agregarMensaje("bot", "Hola, soy Fixi 👋 ¿Qué servicio necesitás?");
+    mostrarServicios();
 });
 
 function toggleChat(e) {
@@ -106,7 +112,6 @@ function seleccionarServicio(servicio) {
 
     agregarMensaje("usuario", servicio);
     agregarMensaje("bot", "Perfecto 👍 Ahora elegí tu provincia: ");
-
     mostrarProvincias();
 }
 
@@ -244,21 +249,36 @@ function reiniciarChat() {
     estadoChat.servicio = null;
     estadoChat.provincia = null;
 
-    let contenedor = document.getElementById("chat-opciones");
-    contenedor.innerHTML = `
-        <button onclick="seleccionarServicio('Electricista')">Electricista</button>
-        <button onclick="seleccionarServicio('Plomero')">Plomero</button>
-        <button onclick="seleccionarServicio('Técnico de PC')">PC</button>
-        <button onclick="seleccionarServicio('Técnico de aires acondicionados')">Aire</button>
-        <button onclick="seleccionarServicio('Albañil')">Albañil</button>
-    `;
-
     agregarMensaje("bot", "¿Qué servicio necesitás?");
+    mostrarServicios();
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    if (window.innerWidth <= 576) {
-        chatMinimizado = true;
-        document.getElementById("chatbot").classList.add("minimizado");
+async function mostrarServicios() {
+    let contenedor = document.getElementById("chat-opciones");
+    contenedor.innerHTML = "Cargando servicios... ⏳";
+
+    try {
+        let res = await fetch("Default.aspx/TraerServicios", {
+            method: "POST",
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+            body: JSON.stringify({})
+        });
+        let data = await res.json();
+        let servicios = data.d;
+
+        let select = document.createElement("select");
+        select.className = "form-select";
+        select.innerHTML = `<option selected disabled>Seleccioná un servicio</option>`;
+
+        servicios.forEach(s => {
+            select.innerHTML += `<option value="${s.nombre}">${s.nombre}</option>`;
+        });
+
+        select.onchange = () => seleccionarServicio(select.value);
+
+        contenedor.innerHTML = "";
+        contenedor.appendChild(select);
+    } catch {
+        contenedor.innerHTML = "Error al cargar servicios 😕";
     }
-});
+}
