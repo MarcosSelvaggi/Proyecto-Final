@@ -80,6 +80,8 @@ BEGIN
 
             Update Prestador set Calificacion = @PromedioCalificaciones
 
+            Update Turno set Estado = 'Calificado' where IdTurno = @IdTurno
+
         Commit Transaction 
     END TRY 
     BEGIN CATCH 
