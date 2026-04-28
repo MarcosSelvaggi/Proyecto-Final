@@ -33,7 +33,7 @@ namespace Servicios
                 <div style='font-family: Arial, sans-serif; color: #333;'>
 
                     <div style='text-align:center; margin-bottom:20px;'>
-                        <img src='https://i.ibb.co/QvY9Kgwt/logo.png' alt='Logo' style='max-width:150px;' />
+                        <img src='https://i.ibb.co/MxJbxS8f/logo.png' alt='Logo' style='max-width:150px;' />
                     </div>
 
                     <h2 style='color:#2c3e50;'>Hola</h2>
@@ -98,7 +98,7 @@ namespace Servicios
                 <div style='font-family: Arial, sans-serif; color: #333;'>
 
                     <div style='text-align:center; margin-bottom:20px;'>
-                        <img src='https://i.ibb.co/QvY9Kgwt/logo.png' alt='Logo' style='max-width:150px;' />
+                        <img src='https://i.ibb.co/MxJbxS8f/logo.png' alt='Logo' style='max-width:150px;' />
                     </div>
 
                     <h2 style='color:#2c3e50;'>Hola, " + NombrePrestador + @"</h2>
@@ -167,7 +167,7 @@ namespace Servicios
             <div style='font-family: Arial, sans-serif; color: #333;'>
 
                 <div style='text-align:center; margin-bottom:20px;'>
-                    <img src='https://i.ibb.co/QvY9Kgwt/logo.png' alt='Logo' style='max-width:150px;' />
+                    <img src='https://i.ibb.co/MxJbxS8f/logo.png' alt='Logo' style='max-width:150px;' />
                 </div>
 
                 <h2 style='color:#2c3e50;'>Hola, " + NombreCliente + @"</h2>
@@ -235,7 +235,7 @@ namespace Servicios
                 <div style='font-family: Arial, sans-serif; color: #333;'>
 
                     <div style='text-align:center; margin-bottom:20px;'>
-                        <img src='https://i.ibb.co/QvY9Kgwt/logo.png' alt='Logo' style='max-width:150px;' />
+                        <img src='https://i.ibb.co/MxJbxS8f/logo.png' alt='Logo' style='max-width:150px;' />
                     </div>
 
                     <h2 style='color:#2c3e50;'>Hola, " + NombreCliente + @"</h2>
